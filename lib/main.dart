@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pasaraja_mobile/config/colors.dart';
+import 'package:pasaraja_mobile/config/fonts.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pasaraja_mobile/config/icons.dart';
+import 'package:pasaraja_mobile/config/images.dart';
 
 void main() {
   runApp(const MyApp());
@@ -107,10 +112,22 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             const Text(
               'You have pushed the button this many times:',
+              style: TextStyle(
+                color: PasarAjaColor.hex008B00,
+                fontSize: 15,
+              ),
             ),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            Image.asset(
+              PasarAjaImage.ilWelcome3,
+              width: 200,
+              height: 200,
+            ),
+            SvgPicture.asset(
+              PasarAjaIcon.icGoogle,
             ),
           ],
         ),
