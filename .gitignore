@@ -1,0 +1,127 @@
+# See https://www.gitignore.io/api/flutter for more examples
+
+# Flutter/Dart specific
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub/
+/build/
+
+.dart_tool/package_config.json
+.dart_tool/package_config_subset
+
+# Android specific
+/android/
+/key.properties
+
+# iOS specific
+/ios/Pods/
+/ios/Runner.xcworkspace/
+/ios/.symlinks/
+/ios/Flutter/Generated.xcconfig
+/ios/Flutter/AppFrameworkInfo.plist
+/ios/Flutter/Debug.xcconfig
+/ios/Flutter/Release.xcconfig
+
+# macOS specific
+/macos/Flutter/Debug.xcconfig
+/macos/Flutter/Release.xcconfig
+
+# Windows specific
+/windows/Flutter/ephemeral/.plugin_symlinks/
+/windows/Flutter/ephemeral/.plugin_registry
+/windows/Flutter/flutter_assets/
+/windows/Flutter/flutter_export_environment.sh
+
+# Web specific
+/webdev/
+
+# VS Code specific
+.vscode/
+
+# IntelliJ/Android Studio specific
+.idea/
+*.iml
+*.iws
+*.iws.*
+*.ipr
+
+# Visual Studio specific
+.vs/
+
+# Test specific
+/test/
+
+# Dart
+*.dart.js
+*.dart.js.map
+*.g.dart
+*.freezed.dart
+*.template.dart
+
+# Android
+/build/
+
+# Gradle
+.gradle/
+**/build/
+**/local.properties
+
+# Temporary files
+.dart_tool/
+.packages
+.pub/
+
+# Generated files
+.dart_tool/build/
+.dart_tool/checkouts/
+.dart_tool/sdk/
+
+# Web
+webdev/
+
+# VS Code
+.vscode/
+
+# Android
+**/android/**/gradlew
+**/android/**/gradle-wrapper.properties
+**/android/**/gradle-wrapper.jar
+
+# iOS
+**/ios/**/Podfile.lock
+**/ios/**/Pods/
+**/ios/**/Runner.xcodeproj/
+**/ios/Flutter/AppFrameworkInfo.plist
+**/ios/Flutter/Debug.xcconfig
+**/ios/Flutter/Release.xcconfig
+
+# macOS
+**/macos/Flutter/Debug.xcconfig
+**/macos/Flutter/Release.xcconfig
+
+# Windows
+**/windows/Flutter/ephemeral/Generated.xcconfig
+**/windows/Flutter/ephemeral/Debug.xcconfig
+**/windows/Flutter/ephemeral/Release.xcconfig
+**/windows/Flutter/flutter_export_environment.sh
+**/windows/Flutter/ephemeral/flutter_export_environment.sh
+**/windows/Flutter/flutter_assets/
+
+# Dependencies
+**/.dart_tool/
+**/.pub/
+**/.idea/
+**/.vscode/
+**/build/
+
+# Flutter intellij Plugin
+.idea/*
+*.iml
+*.ipr
+
+# Keystore files
+*.jks
+*.keystore
+*.key
