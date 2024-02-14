@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pasaraja_mobile/config/colors.dart';
-import 'package:pasaraja_mobile/config/fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pasaraja_mobile/config/icons.dart';
-import 'package:pasaraja_mobile/config/images.dart';
+import 'package:pasaraja_mobile/config/themes/colors.dart';
+import 'package:pasaraja_mobile/config/themes/fonts.dart';
+import 'package:pasaraja_mobile/config/themes/icons.dart';
+import 'package:pasaraja_mobile/config/themes/images.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      debugShowCheckedModeBanner: false,
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -110,11 +111,11 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
+            Text(
               'You have pushed the button this many times:',
-              style: TextStyle(
-                color: PasarAjaColor.hex008B00,
-                fontSize: 15,
+              textAlign: TextAlign.center,
+              style: PasarAjaFont.sfpdBold_30.copyWith(
+                color: PasarAjaColor.green1,
               ),
             ),
             Text(
