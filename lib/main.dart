@@ -1,12 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pasaraja_mobile/config/routes/routes.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
-import 'package:pasaraja_mobile/config/themes/fonts.dart';
+import 'package:pasaraja_mobile/config/themes/typography.dart';
 import 'package:pasaraja_mobile/config/themes/icons.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/pages/welcome_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MyWidget());
+}
+
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'PasarAja',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      debugShowCheckedModeBanner: true,
+      onGenerateRoute: AppRoutes.onGenerateRoute,
+      home: const WelcomePage(),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -37,6 +57,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
+      onGenerateRoute: AppRoutes.onGenerateRoute,
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -114,9 +135,13 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               'You have pushed the button this many times:',
               textAlign: TextAlign.center,
-              style: PasarAjaFont.sfpdBold_30.copyWith(
+              style: PasarAjaTypography.sfpdBold.copyWith(
                 color: PasarAjaColor.green1,
               ),
+            ),
+            const Icon(
+              Icons.woman_rounded,
+              size: 50,
             ),
             Text(
               '$_counter',
