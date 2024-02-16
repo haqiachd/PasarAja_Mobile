@@ -17,37 +17,39 @@ class AuthImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.all(
-        Radius.circular(radius),
-      ),
-      child: Image.asset(
-        image ?? '',
-        width: width ?? widthDef,
-        height: height ?? heightDef,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          return SizedBox(
-            width: width ?? widthDef,
-            height: height ?? heightDef,
-            child: Material(
-              color: PasarAjaColor.gray3,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(radius),
+    return Center(
+      child: ClipRRect(
+        borderRadius: BorderRadius.all(
+          Radius.circular(radius),
+        ),
+        child: Image.asset(
+          image ?? '',
+          width: width ?? widthDef,
+          height: height ?? heightDef,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return SizedBox(
+              width: width ?? widthDef,
+              height: height ?? heightDef,
+              child: Material(
+                color: PasarAjaColor.gray3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(radius),
+                  ),
                 ),
-              ),
-              child: Center(
-                child: Text(
-                  'Gambar tidak ditemukan',
-                  style: PasarAjaTypography.sfpdBold.copyWith(
-                    fontSize: 15,
+                child: Center(
+                  child: Text(
+                    'Gambar tidak ditemukan',
+                    style: PasarAjaTypography.sfpdBold.copyWith(
+                      fontSize: 15,
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

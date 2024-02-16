@@ -12,7 +12,7 @@ class AuthDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       description ?? '[description]',
-      textAlign: TextAlign.center,
+      textAlign: TextAlign.start,
       style: PasarAjaTypography.sfpdAuthDescription,
     );
   }

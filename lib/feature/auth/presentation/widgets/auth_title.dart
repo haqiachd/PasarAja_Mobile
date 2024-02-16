@@ -12,7 +12,7 @@ class AuthTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title ?? '[judul]',
-      textAlign: TextAlign.center,
+      textAlign: TextAlign.start,
       style: PasarAjaTypography.sfpdAuthTitle,
     );
   }

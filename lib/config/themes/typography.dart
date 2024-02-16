@@ -13,6 +13,11 @@ class PasarAjaTypography {
     fontSize: 16,
   );
 
+  static TextStyle sfpdAuthInputTitle = sfpdRegular.copyWith(
+    color: Colors.black,
+    fontSize: 12,
+  );
+
   static TextStyle sfpdMedium = sfProDisplay.copyWith(
     fontWeight: FontWeight.w500,
   );
