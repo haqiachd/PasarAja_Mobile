@@ -20,6 +20,7 @@ class AuthInit extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AuthImage(image: image),
+        const SizedBox(height: 19),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

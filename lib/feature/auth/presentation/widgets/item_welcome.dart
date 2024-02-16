@@ -25,7 +25,10 @@ class ItemWelcome extends StatelessWidget {
           AuthTitle(title: title),
           Padding(
             padding: const EdgeInsets.only(left: 24, right: 24),
-            child: AuthDescription(description: description),
+            child: AuthDescription(
+              description: description,
+              textAlign: TextAlign.center,
+            ),
           ),
         ],
       ),

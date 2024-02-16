@@ -3,6 +3,10 @@ import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constant/constants.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/countries.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/filled_button.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/helper_text.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/input.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/input_title.dart';
 
 class LoginGooglePage extends StatefulWidget {
@@ -39,11 +43,37 @@ class _LoginGooglePageState extends State<LoginGooglePage> {
                     'Silakan masukkan nomor HP Anda untuk masuk ke dalam aplikasi.',
               ),
               const SizedBox(height: 19),
-              Column(
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AuthInputTitle(title: 'Masukan Nomor Hp'),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: AuthCountries(),
+                      ),
+                      SizedBox(width: 13),
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 5,
+                        child: AuthInput(),
+                      ),
+                      SizedBox(width: 10),
+                    ],
+                  )
                 ],
-              )
+              ),
+              const SizedBox(height: 7),
+              const AuthHelperText(title: 'ssfdsf'),
+              const SizedBox(height: 25),
+              const Center(
+                child: AuthFilledButton(
+                    onPressed: _nextOnPressed, title: 'Berikutnya'),
+              ),
+              const SizedBox(height: 25),
             ],
           ),
         ),
@@ -51,3 +81,5 @@ class _LoginGooglePageState extends State<LoginGooglePage> {
     );
   }
 }
+
+_nextOnPressed() {}

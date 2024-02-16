@@ -1,5 +1,10 @@
 class PasarAjaImage {
   static const String _dir = 'assets/images/';
+    static const String icBack = '${_dir}ic-back.png';
+  static const String icGoogle = '${_dir}ic-google.png';
+  static const String icIndonesianFlag = '${_dir}ic-indonesian-flag.png';
+  static const String icMoreThan = '${_dir}ic-more-than.png';
+  static const String icNumber = '${_dir}ic-number.png';
   static const String ilConfirmPin = '${_dir}il-confirm-pin.png';
   static const String ilCreate = '${_dir}il-create.png';
   static const String ilInputPin = '${_dir}il-input-pin.png';
