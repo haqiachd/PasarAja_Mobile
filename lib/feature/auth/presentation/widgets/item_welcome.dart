@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:pasaraja_mobile/config/themes/images.dart';
-import 'package:pasaraja_mobile/config/themes/typography.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_description.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_image.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_title.dart';
 
 class ItemWelcome extends StatelessWidget {
   final String? image;
   final String? title;
   final String? description;
-  const ItemWelcome({super.key, this.image, this.title, this.description});
+  const ItemWelcome({
+    super.key,
+    required this.image,
+    required this.title,
+    this.description,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,24 +20,12 @@ class ItemWelcome extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
-          Image.asset(
-            image ?? PasarAjaImage.ilConfirmPin,
-            width: 348,
-            height: 212,
-          ),
+          AuthImage(image: image),
           const SizedBox(height: 27),
-          Text(
-            title ?? '',
-            textAlign: TextAlign.center,
-            style: PasarAjaTypography.sfpdAuthTitle,
-          ),
+          AuthTitle(title: title),
           Padding(
             padding: const EdgeInsets.only(left: 24, right: 24),
-            child: Text(
-              'Nikmati kemudahan berbelanja di pasar melalui aplikasi PasarAja, yang selalu siap membantu memenuhi semua kebutuhanmu.',
-              textAlign: TextAlign.center,
-              style: PasarAjaTypography.sfpdAuthDescription,
-            ),
+            child: AuthDescription(description: description),
           ),
         ],
       ),

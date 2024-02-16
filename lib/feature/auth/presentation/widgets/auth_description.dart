@@ -5,7 +5,7 @@ class AuthDescription extends StatelessWidget {
   final String? description;
   const AuthDescription({
     super.key,
-    this.description,
+    required this.description,
   });
 
   @override

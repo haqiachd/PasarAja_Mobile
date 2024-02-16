@@ -5,7 +5,7 @@ class AuthTitle extends StatelessWidget {
   final String? title;
   const AuthTitle({
     super.key,
-    this.title,
+    required this.title,
   });
 
   @override
