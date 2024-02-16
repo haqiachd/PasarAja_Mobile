@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
-import 'package:pasaraja_mobile/config/themes/typography.dart';
-import 'package:pasaraja_mobile/core/constant/constants.dart';
 import 'package:pasaraja_mobile/core/utils/local_data.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/copyright_text.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/filled_button.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/item_welcome.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/outlined_button.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -83,70 +84,32 @@ class _WelcomePageState extends State<WelcomePage> {
                 ],
               ),
               const SizedBox(height: 20),
-              SizedBox(
-                width: 329,
-                height: 43,
-                child: ElevatedButton(
-                  onPressed: () {
-                    print('button pressed');
-                    Navigator.pushNamed(context, RouteName.loginGoogle);
-                  },
-                  style: const ButtonStyle(
-                    backgroundColor:
-                        MaterialStatePropertyAll(PasarAjaColor.green2),
-                    foregroundColor: MaterialStatePropertyAll(Colors.white),
-                  ),
-                  child: Text(
-                    'Ayo Masuk',
-                    style: PasarAjaTypography.sfpdAuthFilledButton,
-                  ),
-                ),
+              AuthFilledButton(
+                onPressed: _masukOnPressed(context),
+                title: 'Ayo Masuk',
               ),
               const SizedBox(height: 16),
-              SizedBox(
-                width: 329,
-                height: 43,
-                child: OutlinedButton(
-                  onPressed: () {},
-                  style: ButtonStyle(
-                      side: const MaterialStatePropertyAll(
-                        BorderSide(
-                          width: 1.8,
-                        ),
-                      ),
-                      foregroundColor: MaterialStateProperty.all(
-                        PasarAjaColor.green2,
-                      ),
-                      overlayColor: MaterialStateProperty.all(
-                        PasarAjaColor.green2.withOpacity(0.1),
-                      ),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                      )),
-                  child: const Text(
-                    'Daftarkan Diri Anda',
-                    style: TextStyle(
-                      // Sesuaikan dengan gaya teks yang diinginkan
-                      color: PasarAjaColor.green2, // Ubah ke warna yang sesuai
-                      fontSize: 16, // Ubah ke ukuran font yang diinginkan
-                      fontWeight: FontWeight
-                          .bold, // Sesuaikan dengan ketebalan font yang diinginkan
-                    ),
-                  ),
-                ),
+              AuthOutlinedButton(
+                onPressed: _registerOnPressed(context),
+                title: 'Daftarkan Diri Anda',
               ),
               const SizedBox(height: 40),
-              Text(
-                PasarAjaConstant.rights,
-                textAlign: TextAlign.center,
-                style: PasarAjaTypography.sfpdRightText,
-              )
+              const CopyrightText()
             ],
           ),
         ),
       ),
     );
   }
+}
+
+_masukOnPressed(BuildContext context) {
+  return () {
+    print('button pressed');
+    Navigator.pushNamed(context, RouteName.loginGoogle);
+  };
+}
+
+_registerOnPressed(BuildContext context) {
+  return () {};
 }
