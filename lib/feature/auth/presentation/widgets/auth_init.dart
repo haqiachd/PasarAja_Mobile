@@ -7,11 +7,13 @@ class AuthInit extends StatelessWidget {
   final String? image;
   final String? title;
   final String? description;
+  final bool? haveImage;
   const AuthInit({
     super.key,
     required this.image,
     required this.title,
     this.description,
+    this.haveImage = true,
   });
 
   @override
@@ -19,8 +21,7 @@ class AuthInit extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AuthImage(image: image),
-        const SizedBox(height: 19),
+        (haveImage == true) ? _image(image) : const Material(),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -32,4 +33,13 @@ class AuthInit extends StatelessWidget {
       ],
     );
   }
+}
+
+_image(String? image) {
+  return Column(
+    children: [
+      AuthImage(image: image),
+      const SizedBox(height: 19),
+    ],
+  );
 }

@@ -111,6 +111,6 @@ _masukOnPressed(BuildContext context) {
 
 _registerOnPressed(BuildContext context) {
   return () {
-    Navigator.pushNamed(context, RouteName.loginGoogle);
+    Navigator.pushNamed(context, RouteName.register);
   };
 }
