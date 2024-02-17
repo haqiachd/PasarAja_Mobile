@@ -16,8 +16,11 @@ class AuthInputText extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AuthInputTitle(title: title),
-        const SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.only(left: 4),
+          child: AuthInputTitle(title: title),
+        ),
+        const SizedBox(height: 5),
         textField,
       ],
     );

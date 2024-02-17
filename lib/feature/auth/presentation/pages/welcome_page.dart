@@ -105,11 +105,12 @@ class _WelcomePageState extends State<WelcomePage> {
 
 _masukOnPressed(BuildContext context) {
   return () {
-    print('button pressed');
     Navigator.pushNamed(context, RouteName.loginPhone);
   };
 }
 
 _registerOnPressed(BuildContext context) {
-  return () {};
+  return () {
+    Navigator.pushNamed(context, RouteName.loginGoogle);
+  };
 }

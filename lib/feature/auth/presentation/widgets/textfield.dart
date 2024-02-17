@@ -18,7 +18,7 @@ class AuthTextField extends StatelessWidget {
   final VoidCallback? suffixAction;
   const AuthTextField({
     super.key,
-    this.controller,
+    required this.controller,
     this.onChanged,
     this.keyboardType,
     this.textInputAction,
