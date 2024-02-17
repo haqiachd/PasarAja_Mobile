@@ -5,4 +5,5 @@ class PasarAjaIcon {
   static const String icIndonesianFlag = '${_dir}ic-indonesian-flag.svg';
   static const String icMoreThan = '${_dir}ic-more-than.svg';
   static const String icNumber = '${_dir}ic-number.svg';
+  static const String icClearText = '${_dir}ic-clear-text.svg';
 }

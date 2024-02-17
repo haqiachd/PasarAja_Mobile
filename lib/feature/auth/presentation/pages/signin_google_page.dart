@@ -5,7 +5,6 @@ import 'package:pasaraja_mobile/core/constant/constants.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/countries.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/filled_button.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/helper_text.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/input.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/input_title.dart';
 
@@ -67,7 +66,7 @@ class _LoginGooglePageState extends State<LoginGooglePage> {
                 ],
               ),
               const SizedBox(height: 7),
-              const AuthHelperText(title: 'ssfdsf'),
+              // const AuthHelperText(title: 'Nomor HP tidak valid'),
               const SizedBox(height: 25),
               const Center(
                 child: AuthFilledButton(
