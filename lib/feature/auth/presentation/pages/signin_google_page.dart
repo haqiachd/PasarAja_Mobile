@@ -66,7 +66,7 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
               const SizedBox(height: 40),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, RouteName.changePin);
+                  Navigator.pushNamed(context, RouteName.verifyPin);
                 },
                 child: Text(
                   'Lupa Kata Sandi',
