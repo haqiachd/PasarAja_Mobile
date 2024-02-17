@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/Typography.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
@@ -63,9 +64,14 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
               const SizedBox(height: 40),
               AuthFilledButton(onPressed: () {}, title: 'Masuk'),
               const SizedBox(height: 40),
-              Text(
-                'Lupa Kata Sandi',
-                style: PasarAjaTypography.sfpdMedium,
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, RouteName.changePin);
+                },
+                child: Text(
+                  'Lupa Kata Sandi',
+                  style: PasarAjaTypography.sfpdMedium,
+                ),
               ),
               const SizedBox(height: 15),
               Image.asset(
