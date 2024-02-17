@@ -33,6 +33,9 @@ class _SingUpCreatePinState extends State<SingUpCreatePin> {
                 description:
                     'Buatlah PIN yang kuat dan jangan bagikan PIN Anda kepada orang lain.',
               ),
+              const SizedBox(
+                height: 19,
+              ),
               const Padding(
                 padding: EdgeInsets.only(left: 5, right: 5),
                 child: Column(),

@@ -29,7 +29,7 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
           child: Column(
             children: [
               const AuthInit(
-                image: PasarAjaImage.icNumber,
+                image: PasarAjaImage.ilVerifyOtp,
                 title: 'Verifikasi OTP',
                 description:
                     'Silakan masukkan kode OTP yang telah kami kirimkan ke nomor HP Anda.',
