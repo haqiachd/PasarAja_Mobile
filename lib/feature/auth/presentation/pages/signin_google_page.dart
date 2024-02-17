@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
+import 'package:pasaraja_mobile/config/themes/icons.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constant/constants.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
@@ -16,6 +18,7 @@ class LoginGooglePage extends StatefulWidget {
 }
 
 class _LoginGooglePageState extends State<LoginGooglePage> {
+  TextEditingController noHpController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,23 +45,33 @@ class _LoginGooglePageState extends State<LoginGooglePage> {
                     'Silakan masukkan nomor HP Anda untuk masuk ke dalam aplikasi.',
               ),
               const SizedBox(height: 19),
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AuthInputTitle(title: 'Masukan Nomor Hp'),
-                  SizedBox(height: 10),
+                  const AuthInputTitle(title: 'Masukan Nomor Hp'),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(
+                      const Expanded(
                         child: AuthCountries(),
                       ),
-                      SizedBox(width: 13),
+                      const SizedBox(width: 13),
                       Flexible(
                         fit: FlexFit.tight,
                         flex: 5,
-                        child: AuthInput(),
+                        child: AuthInput(
+                          controller: noHpController,
+                          hintText: '85-xxxx-xxxx',
+                          maxLength: 10,
+                          suffixAction: () {
+                            noHpController.text = '';
+                          },
+                          suffixIcon: SvgPicture.asset(
+                            PasarAjaIcon.icClearText,
+                          ),
+                        ),
                       ),
                       SizedBox(width: 10),
                     ],

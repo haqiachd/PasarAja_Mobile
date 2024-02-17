@@ -5,41 +5,66 @@ import 'package:pasaraja_mobile/config/themes/icons.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
 
 class AuthInput extends StatelessWidget {
-  const AuthInput({super.key});
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
+  final Iterable<String>? autofillHints;
+  final bool? obscureText;
+  final int? maxLength;
+  final String? hintText;
+  final String? errorText;
+  final Widget? suffixIcon;
+  final VoidCallback? suffixAction;
+  const AuthInput({
+    super.key,
+    this.controller,
+    this.keyboardType,
+    this.textInputAction,
+    this.autofillHints,
+    this.obscureText,
+    this.maxLength,
+    this.hintText,
+    this.errorText,
+    this.suffixIcon,
+    this.suffixAction,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       maxLines: 1,
       style: PasarAjaTypography.sfpdBoldAuthInput.copyWith(
         color: PasarAjaColor.black,
       ),
-      keyboardType: TextInputType.number,
-      textInputAction: TextInputAction.done,
+      maxLength: maxLength,
+      keyboardType: keyboardType,
+      textInputAction: textInputAction,
+      autofillHints: autofillHints,
       obscureText: true,
       cursorColor: PasarAjaColor.green1,
       cursorWidth: 2.5,
       decoration: InputDecoration(
+        counter: const Material(),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 7.5,
           vertical: 4.7,
         ),
-        hintText: '85-xxxx-xxxx',
+        hintText: hintText,
         hintStyle: PasarAjaTypography.sfpdBoldAuthInput.copyWith(
           color: PasarAjaColor.gray5,
         ),
         enabledBorder: _enabledBorder(),
         focusedBorder: _focusedBorder(),
         errorBorder: _errorBorder(),
-        // errorText: 'Nomor Hp Tidak Valid',
+        errorText: errorText,
         errorStyle: PasarAjaTypography.sfpdAuthHelper,
         suffixIcon: IconButton(
-          onPressed: () {},
-          icon: SvgPicture.asset(
-            PasarAjaIcon.icClearText,
-            width: 15,
-            height: 15,
-          ),
+          onPressed: suffixAction,
+          icon: suffixIcon ??
+              SvgPicture.asset(
+                PasarAjaIcon.icClearText,
+              ),
         ),
       ),
     );
