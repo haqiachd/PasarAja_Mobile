@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
@@ -67,7 +68,9 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                     ),
                     const SizedBox(height: 40),
                     AuthFilledButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, RouteName.signupThird);
+                      },
                       title: 'Berikutnya',
                     )
                   ],

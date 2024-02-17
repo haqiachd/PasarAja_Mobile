@@ -6,6 +6,7 @@ import 'package:pasaraja_mobile/feature/auth/presentation/pages/signin_google_pa
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/signin_phone_page.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/signup_first_page.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/signup_second_page.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/pages/signup_third_page.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/verify_otp_page.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/verify_pin_page.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/welcome_page.dart';
@@ -31,6 +32,8 @@ class AppRoutes {
         return _materialRoute(const SignUpPhonePage());
       case RouteName.signupSecond:
         return _materialRoute(const SignUpCreatePage());
+      case RouteName.signupThird:
+        return _materialRoute(const SingUpCreatePin());
       default:
         return _materialRoute(const WelcomePage());
     }
