@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
@@ -8,16 +7,16 @@ import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_input_tex
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/filled_button.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/textfield.dart';
 
-class ChangePinPage extends StatefulWidget {
-  const ChangePinPage({super.key});
+class ChangePasswordPage extends StatefulWidget {
+  const ChangePasswordPage({super.key});
 
   @override
-  State<ChangePinPage> createState() => _ChangePinPageState();
+  State<ChangePasswordPage> createState() => _ChangePasswordPageState();
 }
 
-class _ChangePinPageState extends State<ChangePinPage> {
-  TextEditingController pinCont = TextEditingController();
-  TextEditingController konfCont = TextEditingController();
+class _ChangePasswordPageState extends State<ChangePasswordPage> {
+  final TextEditingController pwCont = TextEditingController();
+  final TextEditingController konfCont = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,28 +33,28 @@ class _ChangePinPageState extends State<ChangePinPage> {
             children: [
               const AuthInit(
                 image: PasarAjaImage.ilCreate,
-                title: 'Ganti PIN',
+                title: 'Ganti Kata Sandi',
                 description:
-                    'Buatlah PIN yang kuat dan jangan bagikan PIN Anda kepada orang lain.',
+                    'Buatlah sebuah kata sandi yang rumit dan sulit ditebak oleh orang lain.',
               ),
               const SizedBox(height: 19),
               Padding(
-                padding: const EdgeInsets.only(left: 5, right: 140),
+                padding: const EdgeInsets.only(left: 5, right: 5),
                 child: Column(
                   children: [
                     AuthInputText(
-                      title: 'Masukan PIN',
+                      title: 'Masukan Kata Sandi',
                       textField: AuthTextField(
-                        controller: pinCont,
-                        hintText: 'xxxxxxx',
+                        controller: pwCont,
+                        hintText: 'xxxxxxxx',
                       ),
                     ),
                     const SizedBox(height: 12),
                     AuthInputText(
-                      title: 'Konfirmasi PIN',
+                      title: 'Konfirmasi Kata Sandi',
                       textField: AuthTextField(
                         controller: konfCont,
-                        hintText: 'xxxxxxx',
+                        hintText: 'xxxxxxxx',
                       ),
                     )
                   ],
@@ -63,10 +62,9 @@ class _ChangePinPageState extends State<ChangePinPage> {
               ),
               const SizedBox(height: 40),
               AuthFilledButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, RouteName.changePw);
-                  },
-                  title: 'Ganti PIN')
+                onPressed: () {},
+                title: 'Ganti Kata Sandi',
+              ),
             ],
           ),
         ),
