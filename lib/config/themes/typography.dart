@@ -10,16 +10,17 @@ class PasarAjaTypography {
 
   static TextStyle sfpdAuthDescription = sfpdRegular.copyWith(
     color: PasarAjaColor.gray1,
+    height: 1.2,
     fontSize: 16,
-  );
-
-  static TextStyle sfpdAuthInputTitle = sfpdRegular.copyWith(
-    color: Colors.black,
-    fontSize: 12,
   );
 
   static TextStyle sfpdMedium = sfProDisplay.copyWith(
     fontWeight: FontWeight.w500,
+  );
+
+  static TextStyle sfpdAuthInputTitle = sfpdSemibold.copyWith(
+    color: Colors.black,
+    fontSize: 12,
   );
 
   static TextStyle sfpdAuthHelper = sfProDisplay.copyWith(

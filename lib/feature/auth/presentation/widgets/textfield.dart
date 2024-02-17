@@ -4,8 +4,9 @@ import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/icons.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
 
-class AuthInput extends StatelessWidget {
+class AuthTextField extends StatelessWidget {
   final TextEditingController? controller;
+  final Function(String)? onChanged;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final Iterable<String>? autofillHints;
@@ -15,9 +16,10 @@ class AuthInput extends StatelessWidget {
   final String? errorText;
   final Widget? suffixIcon;
   final VoidCallback? suffixAction;
-  const AuthInput({
+  const AuthTextField({
     super.key,
     this.controller,
+    this.onChanged,
     this.keyboardType,
     this.textInputAction,
     this.autofillHints,
@@ -33,6 +35,7 @@ class AuthInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      onChanged: onChanged,
       maxLines: 1,
       style: PasarAjaTypography.sfpdBoldAuthInput.copyWith(
         color: PasarAjaColor.black,
@@ -41,7 +44,7 @@ class AuthInput extends StatelessWidget {
       keyboardType: keyboardType,
       textInputAction: textInputAction,
       autofillHints: autofillHints,
-      obscureText: true,
+      obscureText: obscureText ?? false,
       cursorColor: PasarAjaColor.green1,
       cursorWidth: 2.5,
       decoration: InputDecoration(
@@ -57,7 +60,7 @@ class AuthInput extends StatelessWidget {
         enabledBorder: _enabledBorder(),
         focusedBorder: _focusedBorder(),
         errorBorder: _errorBorder(),
-        errorText: errorText,
+        errorText: errorText != '' ? errorText : null,
         errorStyle: PasarAjaTypography.sfpdAuthHelper,
         suffixIcon: IconButton(
           onPressed: suffixAction,

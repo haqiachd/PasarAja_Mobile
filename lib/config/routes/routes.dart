@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pasaraja_mobile/config/routes/route_names.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/pages/signin_google_page.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/pages/signin_phone_page.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/welcome_page.dart';
 
 class AppRoutes {
@@ -8,8 +8,8 @@ class AppRoutes {
     switch (settings.name) {
       case RouteName.defRoute:
         return _materialRoute(const WelcomePage());
-      case RouteName.loginGoogle:
-        return _materialRoute(const LoginGooglePage());
+      case RouteName.loginPhone:
+        return _materialRoute(const SignInPhonePage());
       default:
         return _materialRoute(const WelcomePage());
     }

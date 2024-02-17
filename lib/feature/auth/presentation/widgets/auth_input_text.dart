@@ -1,0 +1,25 @@
+import 'package:flutter/material.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/input_title.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/textfield.dart';
+
+class AuthInputText extends StatelessWidget {
+  final String? title;
+  final AuthTextField textField;
+  const AuthInputText({
+    super.key,
+    required this.title,
+    required this.textField,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AuthInputTitle(title: title),
+        const SizedBox(height: 10),
+        textField,
+      ],
+    );
+  }
+}

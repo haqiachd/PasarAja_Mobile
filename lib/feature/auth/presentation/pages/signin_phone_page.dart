@@ -7,18 +7,19 @@ import 'package:pasaraja_mobile/core/constant/constants.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/countries.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/filled_button.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/input.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/textfield.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/input_title.dart';
 
-class LoginGooglePage extends StatefulWidget {
-  const LoginGooglePage({super.key});
+class SignInPhonePage extends StatefulWidget {
+  const SignInPhonePage({super.key});
 
   @override
-  State<LoginGooglePage> createState() => _LoginGooglePageState();
+  State<SignInPhonePage> createState() => _SignInPhonePageState();
 }
 
-class _LoginGooglePageState extends State<LoginGooglePage> {
+class _SignInPhonePageState extends State<SignInPhonePage> {
   TextEditingController noHpController = TextEditingController();
+  String error = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +30,7 @@ class _LoginGooglePageState extends State<LoginGooglePage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(19, 19, 19, 0),
+          padding: const EdgeInsets.fromLTRB(19, 0, 19, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -61,26 +62,37 @@ class _LoginGooglePageState extends State<LoginGooglePage> {
                       Flexible(
                         fit: FlexFit.tight,
                         flex: 5,
-                        child: AuthInput(
+                        child: AuthTextField(
                           controller: noHpController,
+                          onChanged: (text) {
+                            if (text.length <= 8) {
+                              error = 'No HP tidak valid bang';
+                            } else {
+                              error = '';
+                            }
+                            setState(() {});
+                          },
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.done,
+                          autofillHints: const [AutofillHints.telephoneNumber],
+                          obscureText: false,
                           hintText: '85-xxxx-xxxx',
-                          maxLength: 10,
+                          maxLength: 15,
                           suffixAction: () {
                             noHpController.text = '';
                           },
+                          errorText: error,
                           suffixIcon: SvgPicture.asset(
                             PasarAjaIcon.icClearText,
                           ),
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                     ],
                   )
                 ],
               ),
-              const SizedBox(height: 7),
-              // const AuthHelperText(title: 'Nomor HP tidak valid'),
-              const SizedBox(height: 25),
+              const SizedBox(height: 32),
               const Center(
                 child: AuthFilledButton(
                     onPressed: _nextOnPressed, title: 'Berikutnya'),
