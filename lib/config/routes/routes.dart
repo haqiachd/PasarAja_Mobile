@@ -8,6 +8,7 @@ import 'package:pasaraja_mobile/feature/auth/presentation/pages/signup_first_pag
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/signup_fourth_page.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/signup_second_page.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/signup_third_page.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/pages/test_page.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/verify_otp_page.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/verify_pin_page.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/welcome_page.dart';
@@ -37,6 +38,8 @@ class AppRoutes {
         return _materialRoute(const SingUpCreatePin());
       case RouteName.signupFourth:
         return _materialRoute(const SignUpConfirmPage());
+      case RouteName.testpage:
+        return _materialRoute(const MyTestPage());
       default:
         return _materialRoute(const WelcomePage());
     }

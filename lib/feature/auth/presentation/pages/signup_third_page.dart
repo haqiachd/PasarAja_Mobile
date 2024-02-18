@@ -42,10 +42,11 @@ class _SingUpCreatePinState extends State<SingUpCreatePin> {
               ),
               const SizedBox(height: 40),
               AuthFilledButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, RouteName.signupFourth);
-                  },
-                  title: 'Berikutnya')
+                onPressed: () {
+                  Navigator.pushNamed(context, RouteName.signupFourth);
+                },
+                title: 'Berikutnya',
+              )
             ],
           ),
         ),

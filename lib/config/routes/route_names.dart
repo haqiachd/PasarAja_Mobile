@@ -10,4 +10,5 @@ class RouteName {
   static const String signupSecond = '/signupcreate';
   static const String signupThird = '/signuppin';
   static const String signupFourth = '/signkonf';
+  static const String testpage = '/test';
 }
