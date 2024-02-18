@@ -42,6 +42,11 @@ class PasarAjaTypography {
     fontSize: 15,
   );
 
+  static TextStyle sfpdOtp = sfProDisplay.copyWith(
+    fontSize: 23,
+    color: PasarAjaColor.black,
+  );
+
   static TextStyle sfpdBold = sfProDisplay.copyWith(
     fontWeight: FontWeight.w700,
   );

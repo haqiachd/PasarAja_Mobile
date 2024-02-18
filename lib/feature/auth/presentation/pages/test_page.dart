@@ -4,6 +4,8 @@ import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/item_otp_view.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/otp_view.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/pin_view.dart';
+import 'package:pinput/pinput.dart';
 
 class MyTestPage extends StatefulWidget {
   const MyTestPage({super.key});
@@ -22,9 +24,20 @@ class _MyTestPageState extends State<MyTestPage> {
     return Scaffold(
       backgroundColor: PasarAjaColor.white,
       appBar: authAppbar(),
-      body: const SingleChildScrollView(
-        child: AuthOtpView(
-          length: 6,
+      body: SingleChildScrollView(
+        child: Center(
+          child: AuthPinTheme(
+            length: 6,
+            onCompleted: (value) {
+              if (value == '000111') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('yes'),
+                  ),
+                );
+              }
+            },
+          ),
         ),
       ),
     );

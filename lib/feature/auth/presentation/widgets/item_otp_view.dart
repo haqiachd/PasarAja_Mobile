@@ -5,30 +5,46 @@ import 'package:pasaraja_mobile/config/themes/typography.dart';
 
 class ItemOtpView extends StatelessWidget {
   final TextEditingController? controller;
-  final Function(String pin)? onChanged;
   final double? width;
   final double? height;
   final bool? error;
+  final bool? obscureText;
+  final bool? first;
+  final bool? last;
   const ItemOtpView({
     super.key,
     this.controller,
-    this.onChanged,
     this.width,
     this.height,
     this.error = false,
+    this.obscureText = false,
+    this.first = false,
+    this.last = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width ?? 49,
-      height: height ?? 49,
+      width: width,
+      height: width,
       child: TextField(
         controller: controller,
-        onChanged: (value) {},
-        style: PasarAjaTypography.sfpdBold.copyWith(
-          fontSize: 20,
-        ),
+        onChanged: (value) {
+          if (value.length == 1 && last == false) {
+            FocusScope.of(context).nextFocus();
+          }
+
+          if (value.length != 1 && first == false) {
+            FocusScope.of(context).previousFocus();
+          }
+          setState() {}
+        },
+        autofocus: true,
+        showCursor: false,
+        readOnly: false,
+        obscureText: obscureText ?? false,
+        obscuringCharacter: "•",
+        style: PasarAjaTypography.sfpdOtp,
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         inputFormatters: [
@@ -50,7 +66,7 @@ class ItemOtpView extends StatelessWidget {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(7),
       borderSide: const BorderSide(
-        color: PasarAjaColor.gray1,
+        color: PasarAjaColor.gray3,
         width: 1.5,
       ),
     );
@@ -61,8 +77,8 @@ OutlineInputBorder _focusedBorder() {
   return OutlineInputBorder(
     borderRadius: BorderRadius.circular(7),
     borderSide: const BorderSide(
-      color: Colors.black,
-      width: 1.5,
+      color: PasarAjaColor.gray4,
+      width: 2,
     ),
   );
 }
