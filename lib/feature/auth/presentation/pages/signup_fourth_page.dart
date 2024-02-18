@@ -40,7 +40,7 @@ class _SignUpConfirmPageState extends State<SignUpConfirmPage> {
                 child: Column(
                   children: [
                     AuthInputPin(
-                      title: 'Konfirmasi PIN',
+                      title: 'Masukan PIN',
                       authPin: AuthPin(
                         length: 6,
                       ),
@@ -50,7 +50,13 @@ class _SignUpConfirmPageState extends State<SignUpConfirmPage> {
               ),
               const SizedBox(height: 40),
               AuthFilledButton(
-                onPressed: () {},
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Sudah sampai disini saja.'),
+                    ),
+                  );
+                },
                 title: 'Buat Akun',
               )
             ],

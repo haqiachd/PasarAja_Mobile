@@ -62,7 +62,15 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                 ),
               ),
               const SizedBox(height: 40),
-              AuthFilledButton(onPressed: () {}, title: 'Masuk'),
+              AuthFilledButton(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Goto Main'),
+                      ),
+                    );
+                  },
+                  title: 'Masuk'),
               const SizedBox(height: 40),
               GestureDetector(
                 onTap: () {

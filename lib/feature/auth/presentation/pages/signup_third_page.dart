@@ -30,7 +30,7 @@ class _SingUpCreatePinState extends State<SingUpCreatePin> {
           child: Column(
             children: [
               const AuthInit(
-                image: PasarAjaImage.ilInputPin,
+                image: PasarAjaImage.ilNewPin,
                 title: 'Buat PIN Baru',
                 description:
                     'Buatlah PIN yang kuat dan jangan bagikan PIN Anda kepada orang lain.',
@@ -38,18 +38,15 @@ class _SingUpCreatePinState extends State<SingUpCreatePin> {
               const SizedBox(
                 height: 19,
               ),
-              const Padding(
-                padding: EdgeInsets.only(left: 0, right: 0),
-                child: Column(
-                  children: [
-                    AuthInputPin(
-                      title: 'Buat PIN',
-                      authPin: AuthPin(
-                        length: 6,
-                      ),
+              const Column(
+                children: [
+                  AuthInputPin(
+                    title: 'Masukan PIN',
+                    authPin: AuthPin(
+                      length: 6,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               const SizedBox(height: 40),
               AuthFilledButton(
@@ -57,7 +54,8 @@ class _SingUpCreatePinState extends State<SingUpCreatePin> {
                   Navigator.pushNamed(context, RouteName.signupFourth);
                 },
                 title: 'Berikutnya',
-              )
+              ),
+              const SizedBox(height: 20),
             ],
           ),
         ),

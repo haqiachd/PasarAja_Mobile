@@ -35,7 +35,7 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
                 image: PasarAjaImage.ilLoginPhone,
                 title: 'Daftar Akun',
                 description:
-                    'Silakan masukkan nomor HP Anda untuk masuk ke dalam aplikasi.',
+                    'Silakan masukkan nomor HP Anda untuk mendaftar akun pada Aplikasi.',
               ),
               const SizedBox(height: 19),
               const Align(
