@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:otp_text_field/otp_field_style.dart';
-import 'package:otp_text_field/style.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
-import 'package:pasaraja_mobile/config/themes/typography.dart';
 import 'package:pasaraja_mobile/core/constant/constants.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
 import 'package:otp_text_field/otp_field.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_input_pin.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/pin_view.dart';
 
 class VerifyPinPage extends StatefulWidget {
   const VerifyPinPage({super.key});
@@ -42,26 +41,12 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
               ),
               const SizedBox(height: 19),
               Padding(
-                padding: const EdgeInsets.only(left: 5, right: 5),
-                child: OTPTextField(
-                  controller: otpCont,
-                  isDense: true,
-                  length: 4, // Set the length to 6 for a 6-digit OTP
-                  width: MediaQuery.of(context).size.width,
-                  obscureText: false,
-                  textFieldAlignment: MainAxisAlignment.center,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 10,
+                padding: const EdgeInsets.only(left: 0, right: 0),
+                child: AuthInputPin(
+                  title: 'Masukan PIN',
+                  authPin: AuthPin(
+                    length: 6,
                   ),
-                  otpFieldStyle: OtpFieldStyle(
-                    backgroundColor: Colors.white,
-                  ),
-                  style: PasarAjaTypography.sfpdBold,
-                  fieldStyle: FieldStyle.box,
-                  fieldWidth: 50,
-                  spaceBetween: 5,
-                  onCompleted: (pin) {},
                 ),
               )
             ],

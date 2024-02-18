@@ -3,7 +3,9 @@ import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_input_pin.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/filled_button.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/pin_view.dart';
 
 class SignUpConfirmPage extends StatefulWidget {
   const SignUpConfirmPage({super.key});
@@ -36,7 +38,14 @@ class _SignUpConfirmPageState extends State<SignUpConfirmPage> {
               const Padding(
                 padding: EdgeInsets.only(left: 5, right: 5),
                 child: Column(
-                  children: [],
+                  children: [
+                    AuthInputPin(
+                      title: 'Konfirmasi PIN',
+                      authPin: AuthPin(
+                        length: 6,
+                      ),
+                    )
+                  ],
                 ),
               ),
               const SizedBox(height: 40),

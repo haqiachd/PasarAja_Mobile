@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/icons.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
@@ -93,9 +94,11 @@ class _SignInPhonePageState extends State<SignInPhonePage> {
                 ],
               ),
               const SizedBox(height: 32),
-              const Center(
+              Center(
                 child: AuthFilledButton(
-                    onPressed: _nextOnPressed, title: 'Berikutnya'),
+                  onPressed: _nextOnPressed(context),
+                  title: 'Berikutnya',
+                ),
               ),
               const SizedBox(height: 25),
             ],
@@ -106,4 +109,6 @@ class _SignInPhonePageState extends State<SignInPhonePage> {
   }
 }
 
-_nextOnPressed() {}
+_nextOnPressed(BuildContext context) {
+  Navigator.pushNamed(context, RouteName.verifyPin);
+}

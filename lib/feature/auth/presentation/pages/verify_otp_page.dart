@@ -4,7 +4,9 @@ import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_input_pin.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/filled_button.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/pin_view.dart';
 
 class VerifyOtpPage extends StatefulWidget {
   const VerifyOtpPage({super.key});
@@ -35,10 +37,28 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                     'Silakan masukkan kode OTP yang telah kami kirimkan ke nomor HP Anda.',
               ),
               const SizedBox(height: 19),
-              const Padding(
-                padding: EdgeInsets.only(left: 5, right: 5),
+              Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
                 child: Column(
-                  children: [],
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: AuthInputPin(
+                        title: 'Masukan OTP',
+                        authPin: AuthPin(
+                          length: 4,
+                          onCompleted: (value) {
+                            if (value == '1234') {
+                              Navigator.pushNamed(
+                                  context, RouteName.signupSecond);
+                            }
+                          },
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
               const SizedBox(height: 40),

@@ -4,7 +4,7 @@ import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
 import 'package:pinput/pinput.dart';
 
-class AuthPinTheme extends StatelessWidget {
+class AuthPin extends StatelessWidget {
   final int? length;
   final double? width;
   final double? height;
@@ -12,7 +12,7 @@ class AuthPinTheme extends StatelessWidget {
   final void Function(String)? onCompleted;
   final void Function(String)? onSubmitted;
   final bool? obscureText;
-  const AuthPinTheme({
+  const AuthPin({
     super.key,
     this.length,
     this.width,
