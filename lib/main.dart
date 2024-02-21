@@ -24,13 +24,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'PasarAja',
       theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: PasarAjaColor.green2,
-          ),
-          appBarTheme: const AppBarTheme(
-            surfaceTintColor: Colors.white,
-          )),
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: PasarAjaColor.green2,
+        ),
+        appBarTheme: const AppBarTheme(
+          surfaceTintColor: Colors.white,
+        ),
+      ),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: AppRoutes.onGenerateRoute,
       home: const WelcomePage(),

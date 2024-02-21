@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/pin_view.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_button.dart';
 
 class MyTestPage extends StatefulWidget {
   const MyTestPage({super.key});
@@ -18,17 +18,11 @@ class _MyTestPageState extends State<MyTestPage> {
       appBar: authAppbar(),
       body: SingleChildScrollView(
         child: Center(
-          child: AuthPin(
-            length: 6,
-            onCompleted: (value) {
-              if (value == '000111') {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('yes'),
-                  ),
-                );
-              }
+          child: AuthButton(
+            onTap: () {
+              setState(() {});
             },
+            state: AuthButton.stateLoadingButton,
           ),
         ),
       ),
