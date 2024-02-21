@@ -58,7 +58,16 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
               ),
               const SizedBox(height: 40),
               AuthFilledButton(
-                onPressed: () {
+                onPressed: () async {
+                  setState(
+                    () => state = AuthFilledButton.stateLoadingButton,
+                  );
+                  await Future.delayed(
+                    const Duration(seconds: PasarAjaConstant.initLoading),
+                  );
+                  setState(
+                    () => state = AuthFilledButton.stateEnabledButton,
+                  );
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Sudah sampai disini saja.'),

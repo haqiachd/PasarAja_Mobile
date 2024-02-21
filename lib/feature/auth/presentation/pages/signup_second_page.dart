@@ -72,12 +72,14 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                     AuthFilledButton(
                       onPressed: () async {
                         setState(
-                            () => state = AuthFilledButton.stateLoadingButton);
+                          () => state = AuthFilledButton.stateLoadingButton,
+                        );
                         await Future.delayed(
                           const Duration(seconds: PasarAjaConstant.initLoading),
                         );
                         setState(
-                            () => state = AuthFilledButton.stateEnabledButton);
+                          () => state = AuthFilledButton.stateEnabledButton,
+                        );
                         Navigator.pushNamed(context, RouteName.signupThird);
                       },
                       state: state,

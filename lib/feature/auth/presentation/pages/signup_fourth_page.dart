@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
+import 'package:pasaraja_mobile/core/constant/constants.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_input_pin.dart';
@@ -51,7 +52,16 @@ class _SignUpConfirmPageState extends State<SignUpConfirmPage> {
               ),
               const SizedBox(height: 40),
               AuthFilledButton(
-                onPressed: () {
+                onPressed: () async {
+                  setState(
+                    () => state = AuthFilledButton.stateLoadingButton,
+                  );
+                  await Future.delayed(
+                    const Duration(seconds: PasarAjaConstant.initLoading),
+                  );
+                  setState(
+                    () => state = AuthFilledButton.stateEnabledButton,
+                  );
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Sudah sampai disini saja.'),
