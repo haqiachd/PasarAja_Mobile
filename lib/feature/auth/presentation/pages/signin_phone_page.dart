@@ -18,6 +18,7 @@ class SignInPhonePage extends StatefulWidget {
 
 class _SignInPhonePageState extends State<SignInPhonePage> {
   final TextEditingController nohpCont = TextEditingController();
+  int state = AuthFilledButton.stateEnabledButton;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,6 +66,7 @@ class _SignInPhonePageState extends State<SignInPhonePage> {
                 onPressed: () {
                   Navigator.pushNamed(context, RouteName.verifyPin);
                 },
+                state: state,
                 title: 'Berikutnya',
               ),
             ],

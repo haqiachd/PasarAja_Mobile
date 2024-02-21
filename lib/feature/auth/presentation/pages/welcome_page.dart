@@ -15,6 +15,7 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  int state = AuthFilledButton.stateEnabledButton;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,6 +87,7 @@ class _WelcomePageState extends State<WelcomePage> {
               const SizedBox(height: 20),
               AuthFilledButton(
                 onPressed: _masukOnPressed(context),
+                state: state,
                 title: 'Ayo Masuk',
               ),
               const SizedBox(height: 16),

@@ -18,6 +18,7 @@ class ChangePinPage extends StatefulWidget {
 class _ChangePinPageState extends State<ChangePinPage> {
   TextEditingController pinCont = TextEditingController();
   TextEditingController konfCont = TextEditingController();
+  int state = AuthFilledButton.stateEnabledButton;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,6 +67,7 @@ class _ChangePinPageState extends State<ChangePinPage> {
                   onPressed: () {
                     Navigator.pushNamed(context, RouteName.changePw);
                   },
+                  state: state,
                   title: 'Ganti PIN')
             ],
           ),

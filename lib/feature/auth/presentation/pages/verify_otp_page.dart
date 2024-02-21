@@ -16,6 +16,7 @@ class VerifyOtpPage extends StatefulWidget {
 }
 
 class _VerifyOtpPageState extends State<VerifyOtpPage> {
+  int state = AuthFilledButton.stateEnabledButton;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,6 +67,7 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                 onPressed: () {
                   Navigator.pushNamed(context, RouteName.signupSecond);
                 },
+                state: state,
                 title: 'Kirim Ulang',
               )
             ],

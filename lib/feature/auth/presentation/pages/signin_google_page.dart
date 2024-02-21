@@ -18,6 +18,7 @@ class SignInGooglePage extends StatefulWidget {
 
 class _SignInGooglePageState extends State<SignInGooglePage> {
   TextEditingController emailCont = TextEditingController();
+  int state = AuthFilledButton.stateEnabledButton;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,6 +71,7 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                       ),
                     );
                   },
+                  state: state,
                   title: 'Masuk'),
               const SizedBox(height: 40),
               GestureDetector(

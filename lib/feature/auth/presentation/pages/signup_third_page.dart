@@ -16,6 +16,7 @@ class SingUpCreatePin extends StatefulWidget {
 }
 
 class _SingUpCreatePinState extends State<SingUpCreatePin> {
+  int state = AuthFilledButton.stateEnabledButton;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +54,7 @@ class _SingUpCreatePinState extends State<SingUpCreatePin> {
                 onPressed: () {
                   Navigator.pushNamed(context, RouteName.signupFourth);
                 },
+                state: state,
                 title: 'Berikutnya',
               ),
               const SizedBox(height: 20),

@@ -17,6 +17,7 @@ class ChangePasswordPage extends StatefulWidget {
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final TextEditingController pwCont = TextEditingController();
   final TextEditingController konfCont = TextEditingController();
+  int state = AuthFilledButton.stateEnabledButton;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +64,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               const SizedBox(height: 40),
               AuthFilledButton(
                 onPressed: () {},
+                state: state,
                 title: 'Ganti Kata Sandi',
               ),
             ],

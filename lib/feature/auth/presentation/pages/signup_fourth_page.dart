@@ -15,6 +15,7 @@ class SignUpConfirmPage extends StatefulWidget {
 }
 
 class _SignUpConfirmPageState extends State<SignUpConfirmPage> {
+  int state = AuthFilledButton.stateEnabledButton;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,6 +58,7 @@ class _SignUpConfirmPageState extends State<SignUpConfirmPage> {
                     ),
                   );
                 },
+                state: state,
                 title: 'Buat Akun',
               )
             ],

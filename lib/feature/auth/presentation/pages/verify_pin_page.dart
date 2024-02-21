@@ -16,6 +16,7 @@ class VerifyPinPage extends StatefulWidget {
 }
 
 class _VerifyPinPageState extends State<VerifyPinPage> {
+  int state = AuthFilledButton.stateEnabledButton;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,6 +65,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
                     ),
                   );
                 },
+                state: state,
                 title: 'Masuk',
               )
             ],

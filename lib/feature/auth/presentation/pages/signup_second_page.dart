@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
+import 'package:pasaraja_mobile/core/constant/constants.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_input_text.dart';
@@ -18,6 +19,7 @@ class _SignUpPageState extends State<SignUpCreatePage> {
   final TextEditingController emailCont = TextEditingController();
   final TextEditingController pwCont = TextEditingController();
   final TextEditingController konfCont = TextEditingController();
+  int state = AuthFilledButton.stateEnabledButton;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,9 +70,17 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                     ),
                     const SizedBox(height: 40),
                     AuthFilledButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        setState(
+                            () => state = AuthFilledButton.stateLoadingButton);
+                        await Future.delayed(
+                          const Duration(seconds: PasarAjaConstant.initLoading),
+                        );
+                        setState(
+                            () => state = AuthFilledButton.stateEnabledButton);
                         Navigator.pushNamed(context, RouteName.signupThird);
                       },
+                      state: state,
                       title: 'Berikutnya',
                     )
                   ],
