@@ -5,11 +5,7 @@ import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constant/constants.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_input_text.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/filled_button.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/textfield.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/widgets.dart';
 
 class SignInGooglePage extends StatefulWidget {
   const SignInGooglePage({super.key});
@@ -22,8 +18,10 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
   TextEditingController emailCont = TextEditingController();
   TextEditingController pwCont = TextEditingController();
   ValidationModel vEmail = PasarAjaValidation.email(null);
+  ValidationModel vPass = PasarAjaValidation.password(null);
   //
   int state = AuthFilledButton.stateEnabledButton;
+  bool obscure = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,14 +57,11 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
                         fontSize: 18,
-                        isError: vEmail.status,
                         errorText: vEmail.message,
                         onChanged: (value) {
-                          setState(
-                            () {
-                              vEmail = PasarAjaValidation.email(value);
-                            },
-                          );
+                          vEmail = PasarAjaValidation.email(value);
+                          state = _buttonState(vEmail.status, vPass.status);
+                          setState(() {});
                         },
                         suffixAction: () {
                           setState(() {
@@ -82,7 +77,28 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                       textField: AuthTextField(
                         controller: pwCont,
                         hintText: 'xxxxxxxx',
+                        errorText: vPass.message,
+                        obscureText: obscure,
                         fontSize: 18,
+                        suffixIcon: obscure
+                            ? const Icon(
+                                Icons.visibility_off,
+                                color: Colors.black,
+                              )
+                            : const Icon(
+                                Icons.visibility,
+                                color: Colors.black,
+                              ),
+                        onChanged: (value) {
+                          vPass = PasarAjaValidation.password(value);
+                          state = _buttonState(vEmail.status, vPass.status);
+                          setState(() {});
+                        },
+                        suffixAction: () {
+                          setState(() {
+                            obscure = !obscure;
+                          });
+                        },
                       ),
                     )
                   ],
@@ -90,15 +106,16 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
               ),
               const SizedBox(height: 40),
               AuthFilledButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Goto Main'),
-                      ),
-                    );
-                  },
-                  state: state,
-                  title: 'Masuk'),
+                state: state,
+                title: 'Masuk',
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Goto Main'),
+                    ),
+                  );
+                },
+              ),
               const SizedBox(height: 40),
               GestureDetector(
                 onTap: () async {
@@ -115,10 +132,12 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                 },
                 child: Text(
                   'Lupa Kata Sandi',
-                  style: PasarAjaTypography.sfpdMedium,
+                  style: PasarAjaTypography.sfpdSemibold.copyWith(
+                    color: Colors.black,
+                  ),
                 ),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 20),
               Image.asset(
                 PasarAjaImage.icGoogle,
                 width: 38,
@@ -129,5 +148,22 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
         ),
       ),
     );
+  }
+}
+
+// int _buttonState(bool? v1, bool? v2) {
+//   return !((v1 ?? false) || !(v2 ?? false))
+//       ? AuthFilledButton.stateDisabledButton
+//       : AuthFilledButton.stateEnabledButton;
+// }
+
+int _buttonState(bool? v1, bool? v2) {
+  if (v1 == null || v2 == null) {
+    return AuthFilledButton.stateDisabledButton;
+  }
+  if (!v1 || !v2) {
+    return AuthFilledButton.stateDisabledButton;
+  } else {
+    return AuthFilledButton.stateEnabledButton;
   }
 }

@@ -137,7 +137,10 @@ class PasarAjaValidation {
     }
   }
 
-  static ValidationModel password(String password) {
+  static ValidationModel password(String? password) {
+    if (password == null) {
+      return const ValidationModel(message: 'Password null.');
+    }
     // Password tidak boleh kosong
     if (password.isEmpty || password.trim().isEmpty) {
       return const ValidationModel(

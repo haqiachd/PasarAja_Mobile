@@ -64,7 +64,6 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
                         errorText: validate.message,
                         keyboardType: TextInputType.number,
                         formatters: AuthTextField.numberFormatter(),
-                        isError: validate.status,
                         suffixAction: () {
                           setState(() => nohpCont.text = '');
                         },

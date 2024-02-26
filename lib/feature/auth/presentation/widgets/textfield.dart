@@ -13,7 +13,6 @@ class AuthTextField extends StatelessWidget {
   final List<TextInputFormatter>? formatters;
   final Iterable<String>? autofillHints;
   final bool? obscureText;
-  final bool? isError;
   final int? maxLength;
   final double? fontSize;
   final String? hintText;
@@ -29,7 +28,6 @@ class AuthTextField extends StatelessWidget {
     this.autofillHints,
     this.formatters,
     this.obscureText,
-    this.isError,
     this.maxLength,
     this.fontSize,
     this.hintText,
@@ -68,7 +66,7 @@ class AuthTextField extends StatelessWidget {
           fontSize: fontSize,
         ),
         enabledBorder: _enabledBorder(),
-        focusedBorder: _focusBorderBuilder(isError),
+        focusedBorder: _focusedBorder(),
         errorBorder: _errorBorder(),
         errorText: _errorBuilder(errorText),
         errorStyle: PasarAjaTypography.sfpdAuthHelper,
@@ -87,19 +85,6 @@ class AuthTextField extends StatelessWidget {
 
   static List<TextInputFormatter> numberFormatter() {
     return [FilteringTextInputFormatter.digitsOnly];
-  }
-}
-
-UnderlineInputBorder _focusBorderBuilder(bool? isError) {
-  print("isError -> $isError");
-  if (isError == null) {
-    return _errorBorder();
-  }
-
-  if (isError) {
-    return _errorBorder();
-  } else {
-    return _errorBorder();
   }
 }
 
