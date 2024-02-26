@@ -4,6 +4,7 @@ import 'package:pasaraja_mobile/config/themes/Typography.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constant/constants.dart';
+import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_input_text.dart';
@@ -19,6 +20,10 @@ class SignInGooglePage extends StatefulWidget {
 
 class _SignInGooglePageState extends State<SignInGooglePage> {
   TextEditingController emailCont = TextEditingController();
+  TextEditingController pwCont = TextEditingController();
+  ValidationModel vEmail = PasarAjaValidation.email('');
+  ValidationModel vPass = PasarAjaValidation.password('');
+  //
   int state = AuthFilledButton.stateEnabledButton;
   @override
   Widget build(BuildContext context) {
@@ -28,7 +33,7 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
-            top: 94 - MediaQuery.of(context).padding.top,
+            top: 70 - MediaQuery.of(context).padding.top,
             left: 19,
             right: 19,
           ),
@@ -37,6 +42,7 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
               const AuthInit(
                 image: PasarAjaImage.ilLoginEmail,
                 title: 'Masuk Akun',
+                haveImage: false,
                 description:
                     'Silakan masukkan email dan kata sandi Anda untuk masuk ke dalam aplikasi.',
               ),
@@ -50,13 +56,28 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                       textField: AuthTextField(
                         controller: emailCont,
                         hintText: 'pasaraja@email.com',
+                        errorText: vEmail.message,
+                        isError: vEmail.status,
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              vEmail = PasarAjaValidation.email(value);
+                              print("${vEmail.status} ---> ${vEmail.message}");
+                            },
+                          );
+                        },
+                        suffixAction: () {
+                          emailCont.text = '';
+                          vEmail = PasarAjaValidation.email('');
+                          setState(() {});
+                        },
                       ),
                     ),
                     const SizedBox(height: 12),
                     AuthInputText(
                       title: 'Masukan Password',
                       textField: AuthTextField(
-                        controller: emailCont,
+                        controller: pwCont,
                         hintText: 'xxxxxxxx',
                       ),
                     )

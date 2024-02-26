@@ -64,8 +64,13 @@ class AuthTextField extends StatelessWidget {
           color: PasarAjaColor.gray5,
         ),
         enabledBorder: _enabledBorder(),
-        focusedBorder: isError ?? false ? _focusedBorder() : _errorBorder(),
-        // errorText: (errorText != '' || errorText != 'valid') ? errorText : null,
+        // focusedBorder: _focusedBorder(),
+        focusedBorder: _focusedBorder(),
+        errorBorder: _errorBorder(),
+        errorText:
+            (errorText == '' || errorText == 'Data valid' || isError == true)
+                ? errorText
+                : null,
         errorStyle: PasarAjaTypography.sfpdAuthHelper,
         suffixIcon: controller!.text.isNotEmpty
             ? IconButton(
@@ -106,7 +111,7 @@ UnderlineInputBorder _focusedBorder() {
 UnderlineInputBorder _errorBorder() {
   return const UnderlineInputBorder(
     borderSide: BorderSide(
-      color: PasarAjaColor.red1,
+      color: Colors.blue,
       width: 1.8,
     ),
   );

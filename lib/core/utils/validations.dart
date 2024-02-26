@@ -52,7 +52,7 @@ class PasarAjaValidation {
     // Phone valid
     return const ValidationModel(
       status: true,
-      message: 'valid',
+      message: 'Data valid',
     );
   }
 
@@ -81,7 +81,7 @@ class PasarAjaValidation {
     // Nama valid
     return const ValidationModel(
       status: true,
-      message: 'Nama valid',
+      message: 'Data valid',
     );
   }
 
@@ -110,7 +110,7 @@ class PasarAjaValidation {
     // PIN valid
     return const ValidationModel(
       status: true,
-      message: 'PIN valid',
+      message: 'Data valid',
     );
   }
 
@@ -128,7 +128,7 @@ class PasarAjaValidation {
 
     // cek validasi karakter
     if (emailRegex.hasMatch(email)) {
-      return const ValidationModel(message: "Email valid");
+      return const ValidationModel(status: true, message: "Data valid");
     } else {
       return const ValidationModel(message: "Email tidak valid");
     }
@@ -180,7 +180,7 @@ class PasarAjaValidation {
     // Password valid
     return const ValidationModel(
       status: true,
-      message: 'Password valid',
+      message: 'Data valid',
     );
   }
 
@@ -218,7 +218,7 @@ class PasarAjaValidation {
 
     return const ValidationModel(
       status: true,
-      message: 'Harga valid',
+      message: 'Data valid',
     );
   }
 }
