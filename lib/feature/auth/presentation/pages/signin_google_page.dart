@@ -121,7 +121,9 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                 onTap: () async {
                   // Navigator.pushNamed(context, RouteName.verifyPin);
                   Get.to(
-                    const VerifyOtpPage(),
+                    const VerifyOtpPage(
+                      from: VerifyOtpPage.fromLoginGoogle,
+                    ),
                     transition: Transition.downToUp,
                   );
                 },

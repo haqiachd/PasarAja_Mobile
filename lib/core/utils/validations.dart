@@ -91,7 +91,12 @@ class PasarAjaValidation {
     );
   }
 
-  static ValidationModel pin(String pin) {
+  static ValidationModel pin(String? pin) {
+    if (pin == null) {
+      return const ValidationModel(
+        message: 'PIN null',
+      );
+    }
     // PIN tidak boleh kosong
     if (pin.isEmpty || pin.trim().isEmpty) {
       return const ValidationModel(

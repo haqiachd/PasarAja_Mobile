@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constant/constants.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_input_pin.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/filled_button.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/pin_view.dart';
+import 'package:pasaraja_mobile/core/utils/utils.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/pages/change_password_page.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/pages/signup_second_page.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/widgets.dart';
 
 class VerifyOtpPage extends StatefulWidget {
-  const VerifyOtpPage({super.key});
+  static const int fromLoginGoogle = 1;
+  static const int fromRegister = 2;
+  //
+  final int? from;
+  const VerifyOtpPage({
+    super.key,
+    this.from,
+  });
 
   @override
-  State<VerifyOtpPage> createState() => _VerifyOtpPageState();
+  State<VerifyOtpPage> createState() => _VerifyOtpPageState(from: from);
 }
 
 class _VerifyOtpPageState extends State<VerifyOtpPage> {
-  int state = AuthFilledButton.stateEnabledButton;
+  int state = AuthFilledButton.stateDisabledButton;
+  String otp = '2602';
+  String? errMessage;
+  final int? from;
+
+  _VerifyOtpPageState({this.from});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,10 +63,30 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                         title: 'Masukan OTP',
                         authPin: AuthPin(
                           length: 4,
-                          onCompleted: (value) {
-                            if (value == '1234') {
-                              Navigator.pushNamed(
-                                  context, RouteName.signupSecond);
+                          onChanged: (value) {
+                            errMessage = null;
+                            setState(() {});
+                          },
+                          onCompleted: (value) async {
+                            if (value == otp) {
+                              await Future.delayed(const Duration(seconds: 1));
+                              switch (from) {
+                                case VerifyOtpPage.fromLoginGoogle:
+                                  Get.off(
+                                    const ChangePasswordPage(),
+                                    transition: Transition.leftToRight,
+                                  );
+                                case VerifyOtpPage.fromRegister:
+                                  Get.off(
+                                    const SignUpCreatePage(),
+                                    transition: Transition.leftToRight,
+                                  );
+                                default:
+                                  print('anjing');
+                              }
+                            } else {
+                              errMessage = 'Kode OTP tidak cocok!';
+                              PasarAjaUtils.triggerVibration();
                             }
                           },
                         ),
@@ -63,7 +95,14 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 10),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: AuthHelperText(
+                  title: errMessage,
+                ),
+              ),
+              const SizedBox(height: 30),
               AuthFilledButton(
                 onPressed: () async {
                   setState(
@@ -78,8 +117,9 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                   Navigator.pushNamed(context, RouteName.signupSecond);
                 },
                 state: state,
-                title: 'Kirim Ulang',
-              )
+                title: 'Kirim Ulang (3 menit)',
+              ),
+              const SizedBox(height: 40),
             ],
           ),
         ),

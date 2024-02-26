@@ -40,6 +40,7 @@ dependencies:
   equatable: ^2.0.5
   lottie: ^3.0.0
   get: ^4.6.6
+  vibration: ^1.8.4
 
 dev_dependencies:
   flutter_test:

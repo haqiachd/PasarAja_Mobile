@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
+import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_input_text.dart';
@@ -18,7 +19,10 @@ class ChangePinPage extends StatefulWidget {
 class _ChangePinPageState extends State<ChangePinPage> {
   TextEditingController pinCont = TextEditingController();
   TextEditingController konfCont = TextEditingController();
+  //
+  ValidationModel vPin = PasarAjaValidation.pin(null);
   int state = AuthFilledButton.stateEnabledButton;
+  String pin = '123456';
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constant/constants.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/pages/verify_otp_page.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/countries.dart';
@@ -98,7 +100,13 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
                     const Duration(seconds: PasarAjaConstant.initLoading),
                   );
                   setState(() => state = AuthFilledButton.stateEnabledButton);
-                  Navigator.pushNamed(context, RouteName.verifyCode);
+                  // Navigator.pushNamed(context, RouteName.verifyCode);
+                  Get.to(
+                    const VerifyOtpPage(
+                      from: VerifyOtpPage.fromRegister,
+                    ),
+                    transition: Transition.leftToRight,
+                  );
                 },
                 state: state,
                 title: 'Berikutnya',
