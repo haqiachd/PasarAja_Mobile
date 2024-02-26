@@ -52,7 +52,7 @@ class PasarAjaValidation {
     // Phone valid
     return const ValidationModel(
       status: true,
-      message: 'Nomor hp valid',
+      message: 'valid',
     );
   }
 
