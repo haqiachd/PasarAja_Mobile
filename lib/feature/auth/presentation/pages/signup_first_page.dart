@@ -21,9 +21,9 @@ class SignUpPhonePage extends StatefulWidget {
 
 class _SignUpPhonePageState extends State<SignUpPhonePage> {
   final TextEditingController nohpCont = TextEditingController();
+  ValidationModel vPhone = PasarAjaValidation.phone(null);
+  //
   int state = AuthFilledButton.stateEnabledButton;
-  bool isError = false;
-  ValidationModel validate = PasarAjaValidation.phone('');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,21 +61,23 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
                       child: AuthTextField(
                         controller: nohpCont,
                         hintText: '82-xxxx-xxxx',
-                        errorText: validate.message,
+                        errorText: vPhone.message,
                         keyboardType: TextInputType.number,
+                        showHelper: false,
                         formatters: AuthTextField.numberFormatter(),
+                        onChanged: (value) {
+                          // valdasi data
+                          vPhone = PasarAjaValidation.phone(value);
+                          // enable and disable button
+                          if (vPhone.status == true) {
+                            state = AuthFilledButton.stateEnabledButton;
+                          } else {
+                            state = AuthFilledButton.stateDisabledButton;
+                          }
+                          setState(() {});
+                        },
                         suffixAction: () {
                           setState(() => nohpCont.text = '');
-                        },
-                        onChanged: (value) {
-                          validate = PasarAjaValidation.phone(value);
-                          if (validate.status == false) {
-                            setState(() =>
-                                state = AuthFilledButton.stateDisabledButton);
-                          } else {
-                            setState(() =>
-                                state = AuthFilledButton.stateEnabledButton);
-                          }
                         },
                       ),
                     ),
@@ -85,7 +87,7 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: AuthHelperText(
-                  title: validate.message,
+                  title: vPhone.message != 'Data valid' ? vPhone.message : null,
                 ),
               ),
               const SizedBox(height: 40),

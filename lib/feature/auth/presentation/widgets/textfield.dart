@@ -13,6 +13,7 @@ class AuthTextField extends StatelessWidget {
   final List<TextInputFormatter>? formatters;
   final Iterable<String>? autofillHints;
   final bool? obscureText;
+  final bool? showHelper;
   final int? maxLength;
   final double? fontSize;
   final String? hintText;
@@ -28,6 +29,7 @@ class AuthTextField extends StatelessWidget {
     this.autofillHints,
     this.formatters,
     this.obscureText,
+    this.showHelper,
     this.maxLength,
     this.fontSize,
     this.hintText,
@@ -68,7 +70,7 @@ class AuthTextField extends StatelessWidget {
         enabledBorder: _enabledBorder(),
         focusedBorder: _focusedBorder(),
         errorBorder: _errorBorder(),
-        errorText: _errorBuilder(errorText),
+        errorText: (showHelper ?? true) ? _errorBuilder(errorText) : null,
         errorStyle: PasarAjaTypography.sfpdAuthHelper,
         suffixIcon: controller!.text.isNotEmpty
             ? IconButton(
@@ -125,7 +127,7 @@ UnderlineInputBorder _focusedBorder() {
 UnderlineInputBorder _errorBorder() {
   return const UnderlineInputBorder(
     borderSide: BorderSide(
-      color: Colors.blue,
+      color: PasarAjaColor.red1,
       width: 1.8,
     ),
   );

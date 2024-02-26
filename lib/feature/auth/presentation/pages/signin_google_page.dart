@@ -15,8 +15,8 @@ class SignInGooglePage extends StatefulWidget {
 }
 
 class _SignInGooglePageState extends State<SignInGooglePage> {
-  TextEditingController emailCont = TextEditingController();
-  TextEditingController pwCont = TextEditingController();
+  final TextEditingController emailCont = TextEditingController();
+  final TextEditingController pwCont = TextEditingController();
   ValidationModel vEmail = PasarAjaValidation.email(null);
   ValidationModel vPass = PasarAjaValidation.password(null);
   //

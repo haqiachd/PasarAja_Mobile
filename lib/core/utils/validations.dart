@@ -27,7 +27,10 @@ class PasarAjaValidation {
 
   static bool containsUpperCase(String text) => regexUpperCase.hasMatch(text);
 
-  static ValidationModel phone(String phone) {
+  static ValidationModel phone(String? phone) {
+    if (phone == null) {
+      return const ValidationModel(message: 'Phone null');
+    }
     // Phone tidak boleh kosong
     if (phone.isEmpty) {
       return const ValidationModel(

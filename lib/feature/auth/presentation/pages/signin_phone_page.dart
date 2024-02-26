@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
@@ -9,6 +8,7 @@ import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/countries.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/filled_button.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/helper_text.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/textfield.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/input_title.dart';
 
@@ -20,9 +20,9 @@ class SignInPhonePage extends StatefulWidget {
 }
 
 class _SignInPhonePageState extends State<SignInPhonePage> {
-  final TextEditingController nohpCont = TextEditingController();
+  final TextEditingController phoneCont = TextEditingController();
+  ValidationModel vPhone = PasarAjaValidation.phone(null);
   int state = AuthFilledButton.stateEnabledButton;
-  ValidationModel validate = PasarAjaValidation.phone('');
   String error = '';
   @override
   Widget build(BuildContext context) {
@@ -59,34 +59,37 @@ class _SignInPhonePageState extends State<SignInPhonePage> {
                       fit: FlexFit.tight,
                       flex: 5,
                       child: AuthTextField(
-                        controller: nohpCont,
+                        controller: phoneCont,
                         hintText: '82-xxxx-xxxx',
-                        errorText: error,
                         keyboardType: TextInputType.number,
                         formatters: AuthTextField.numberFormatter(),
+                        errorText: vPhone.message,
+                        showHelper: false,
                         onChanged: (value) {
-                          validate = PasarAjaValidation.phone(value);
-                          if (validate.status == false) {
-                            setState(() {
-                              state = AuthFilledButton.stateDisabledButton;
-                              error = validate.message ?? '';
-                            });
+                          // valdasi data
+                          vPhone = PasarAjaValidation.phone(value);
+                          // enable and disable button
+                          if (vPhone.status == true) {
+                            state = AuthFilledButton.stateEnabledButton;
                           } else {
-                            setState(
-                              () {
-                                state = AuthFilledButton.stateEnabledButton;
-                                error = '';
-                              },
-                            );
+                            state = AuthFilledButton.stateDisabledButton;
                           }
+                          setState(() {});
                         },
                         suffixAction: () {
-                          error = '';
+                          phoneCont.text = '';
+                          vPhone = PasarAjaValidation.phone('');
                           setState(() {});
                         },
                       ),
                     )
                   ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: AuthHelperText(
+                  title: vPhone.message != 'Data valid' ? vPhone.message : null,
                 ),
               ),
               const SizedBox(height: 40),
@@ -113,8 +116,4 @@ class _SignInPhonePageState extends State<SignInPhonePage> {
       ),
     );
   }
-}
-
-_nextOnPressed(BuildContext context) {
-  Navigator.pushNamed(context, RouteName.verifyPin);
 }
