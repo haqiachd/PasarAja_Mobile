@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
+import 'package:pasaraja_mobile/config/themes/icons.dart';
+import 'package:pasaraja_mobile/config/themes/typography.dart';
 import 'package:pasaraja_mobile/core/utils/local_data.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/choose_button.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/copyright_text.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/filled_button.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/item_welcome.dart';
@@ -107,7 +111,75 @@ class _WelcomePageState extends State<WelcomePage> {
 
 _masukOnPressed(BuildContext context) {
   return () {
-    Navigator.pushNamed(context, RouteName.loginPhone);
+    // Navigator.pushNamed(context, RouteName.loginPhone);
+    showModalBottomSheet(
+      context: context,
+      builder: ((context) {
+        return Container(
+          width: double.infinity,
+          height: 230,
+          decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25),
+                topRight: Radius.circular(25),
+              )),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              SvgPicture.asset(PasarAjaIcon.icLineIndicator),
+              const SizedBox(height: 17),
+              Padding(
+                padding: const EdgeInsets.only(left: 18, right: 18),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Pilih Tipe Masuk',
+                        textAlign: TextAlign.left,
+                        style: PasarAjaTypography.sfpdBold.copyWith(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Anda ingin masuk lewat apa?',
+                        textAlign: TextAlign.left,
+                        style: PasarAjaTypography.sfpdRegular.copyWith(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ChooseButton(
+                      image: PasarAjaIcon.icGoogle,
+                      title: 'Masuk Dengan Google',
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.pushNamed(context, RouteName.loginGoogle);
+                      },
+                    ),
+                    const SizedBox(height: 11),
+                    ChooseButton(
+                      image: PasarAjaIcon.icNumber,
+                      title: 'Masuk Dengan Nomor HP',
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.pushNamed(context, RouteName.loginPhone);
+                      },
+                    ),
+                    const SizedBox(height: 27),
+                  ],
+                ),
+              )
+            ],
+          ),
+        );
+      }),
+    );
   };
 }
 
