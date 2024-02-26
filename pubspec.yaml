@@ -39,6 +39,7 @@ dependencies:
   pinput: ^3.0.1
   equatable: ^2.0.5
   lottie: ^3.0.0
+  get: ^4.6.6
 
 dev_dependencies:
   flutter_test:

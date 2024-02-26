@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/Typography.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
-import 'package:pasaraja_mobile/core/constant/constants.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/pages/verify_otp_page.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/widgets.dart';
+import 'package:get/get.dart';
 
 class SignInGooglePage extends StatefulWidget {
   const SignInGooglePage({super.key});
@@ -20,8 +20,8 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
   ValidationModel vEmail = PasarAjaValidation.email(null);
   ValidationModel vPass = PasarAjaValidation.password(null);
   //
-  int state = AuthFilledButton.stateEnabledButton;
-  bool obscure = false;
+  int state = AuthFilledButton.stateDisabledButton;
+  bool obscure = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +39,7 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
               const AuthInit(
                 image: PasarAjaImage.ilLoginEmail,
                 title: 'Masuk Akun',
-                haveImage: false,
+                haveImage: true,
                 description:
                     'Silakan masukkan email dan kata sandi Anda untuk masuk ke dalam aplikasi.',
               ),
@@ -119,16 +119,11 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
               const SizedBox(height: 40),
               GestureDetector(
                 onTap: () async {
-                  setState(
-                    () => state = AuthFilledButton.stateLoadingButton,
+                  // Navigator.pushNamed(context, RouteName.verifyPin);
+                  Get.to(
+                    const VerifyOtpPage(),
+                    transition: Transition.downToUp,
                   );
-                  await Future.delayed(
-                    const Duration(seconds: PasarAjaConstant.initLoading),
-                  );
-                  setState(
-                    () => state = AuthFilledButton.stateEnabledButton,
-                  );
-                  Navigator.pushNamed(context, RouteName.verifyPin);
                 },
                 child: Text(
                   'Lupa Kata Sandi',
@@ -150,12 +145,6 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
     );
   }
 }
-
-// int _buttonState(bool? v1, bool? v2) {
-//   return !((v1 ?? false) || !(v2 ?? false))
-//       ? AuthFilledButton.stateDisabledButton
-//       : AuthFilledButton.stateEnabledButton;
-// }
 
 int _buttonState(bool? v1, bool? v2) {
   if (v1 == null || v2 == null) {
