@@ -28,7 +28,7 @@ class AuthPin extends StatelessWidget {
     return Pinput(
       length: length ?? 4,
       showCursor: false,
-      autofocus: true,
+      autofocus: false,
       obscureText: obscureText ?? false,
       onChanged: onChanged,
       onCompleted: onCompleted,

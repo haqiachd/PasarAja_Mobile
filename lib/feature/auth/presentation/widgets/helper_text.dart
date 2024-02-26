@@ -8,7 +8,7 @@ class AuthHelperText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      title ?? '',
+      title != 'valid' ? title ?? '' : '',
       style: PasarAjaTypography.sfpdAuthHelper,
     );
   }

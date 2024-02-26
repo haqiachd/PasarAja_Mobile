@@ -3,10 +3,12 @@ import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constant/constants.dart';
+import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/countries.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/filled_button.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/helper_text.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/input_title.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/textfield.dart';
 
@@ -20,6 +22,8 @@ class SignUpPhonePage extends StatefulWidget {
 class _SignUpPhonePageState extends State<SignUpPhonePage> {
   final TextEditingController nohpCont = TextEditingController();
   int state = AuthFilledButton.stateEnabledButton;
+  bool isError = false;
+  ValidationModel validate = PasarAjaValidation.phone('');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,9 +61,32 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
                       child: AuthTextField(
                         controller: nohpCont,
                         hintText: '82-xxxx-xxxx',
+                        errorText: validate.message,
+                        keyboardType: TextInputType.number,
+                        formatters: AuthTextField.numberFormatter(),
+                        isError: validate.status,
+                        suffixAction: () {
+                          setState(() => nohpCont.text = '');
+                        },
+                        onChanged: (value) {
+                          validate = PasarAjaValidation.phone(value);
+                          if (validate.status == false) {
+                            setState(() =>
+                                state = AuthFilledButton.stateDisabledButton);
+                          } else {
+                            setState(() =>
+                                state = AuthFilledButton.stateEnabledButton);
+                          }
+                        },
                       ),
-                    )
+                    ),
                   ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: AuthHelperText(
+                  title: validate.message,
                 ),
               ),
               const SizedBox(height: 40),
@@ -75,6 +102,7 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
                 state: state,
                 title: 'Berikutnya',
               ),
+              const SizedBox(height: 100),
             ],
           ),
         ),

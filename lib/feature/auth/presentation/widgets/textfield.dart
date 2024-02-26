@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/icons.dart';
@@ -9,8 +10,10 @@ class AuthTextField extends StatelessWidget {
   final Function(String)? onChanged;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
+  final List<TextInputFormatter>? formatters;
   final Iterable<String>? autofillHints;
   final bool? obscureText;
+  final bool? isError;
   final int? maxLength;
   final String? hintText;
   final String? errorText;
@@ -23,7 +26,9 @@ class AuthTextField extends StatelessWidget {
     this.keyboardType,
     this.textInputAction,
     this.autofillHints,
+    this.formatters,
     this.obscureText,
+    this.isError,
     this.maxLength,
     this.hintText,
     this.errorText,
@@ -47,6 +52,7 @@ class AuthTextField extends StatelessWidget {
       obscureText: obscureText ?? false,
       cursorColor: PasarAjaColor.green1,
       cursorWidth: 2.5,
+      inputFormatters: formatters,
       decoration: InputDecoration(
         counter: const Material(),
         contentPadding: const EdgeInsets.symmetric(
@@ -58,19 +64,24 @@ class AuthTextField extends StatelessWidget {
           color: PasarAjaColor.gray5,
         ),
         enabledBorder: _enabledBorder(),
-        focusedBorder: _focusedBorder(),
-        errorBorder: _errorBorder(),
-        errorText: errorText != '' ? errorText : null,
+        focusedBorder: isError ?? false ? _focusedBorder() : _errorBorder(),
+        // errorText: (errorText != '' || errorText != 'valid') ? errorText : null,
         errorStyle: PasarAjaTypography.sfpdAuthHelper,
-        suffixIcon: IconButton(
-          onPressed: suffixAction,
-          icon: suffixIcon ??
-              SvgPicture.asset(
-                PasarAjaIcon.icClearText,
-              ),
-        ),
+        suffixIcon: controller!.text.isNotEmpty
+            ? IconButton(
+                onPressed: suffixAction,
+                icon: suffixIcon ??
+                    SvgPicture.asset(
+                      PasarAjaIcon.icClearText,
+                    ),
+              )
+            : null,
       ),
     );
+  }
+
+  static List<TextInputFormatter> numberFormatter() {
+    return [FilteringTextInputFormatter.digitsOnly];
   }
 }
 

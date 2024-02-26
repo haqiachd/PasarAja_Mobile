@@ -32,7 +32,7 @@ class AuthFilledButton extends StatelessWidget {
         color: _background(state),
         shape: const StadiumBorder(),
         shadowColor: _background(state),
-        elevation: 4,
+        elevation: 2,
         child: InkWell(
           onTap: state == stateEnabledButton ? onPressed : null,
           splashColor: PasarAjaColor.gray2,

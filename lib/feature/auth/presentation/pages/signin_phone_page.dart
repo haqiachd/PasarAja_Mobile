@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constant/constants.dart';
+import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/countries.dart';
@@ -20,6 +22,8 @@ class SignInPhonePage extends StatefulWidget {
 class _SignInPhonePageState extends State<SignInPhonePage> {
   final TextEditingController nohpCont = TextEditingController();
   int state = AuthFilledButton.stateEnabledButton;
+  ValidationModel validate = PasarAjaValidation.phone('');
+  String error = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,6 +61,29 @@ class _SignInPhonePageState extends State<SignInPhonePage> {
                       child: AuthTextField(
                         controller: nohpCont,
                         hintText: '82-xxxx-xxxx',
+                        errorText: error,
+                        keyboardType: TextInputType.number,
+                        formatters: AuthTextField.numberFormatter(),
+                        onChanged: (value) {
+                          validate = PasarAjaValidation.phone(value);
+                          if (validate.status == false) {
+                            setState(() {
+                              state = AuthFilledButton.stateDisabledButton;
+                              error = validate.message ?? '';
+                            });
+                          } else {
+                            setState(
+                              () {
+                                state = AuthFilledButton.stateEnabledButton;
+                                error = '';
+                              },
+                            );
+                          }
+                        },
+                        suffixAction: () {
+                          error = '';
+                          setState(() {});
+                        },
                       ),
                     )
                   ],
@@ -79,6 +106,7 @@ class _SignInPhonePageState extends State<SignInPhonePage> {
                 state: state,
                 title: 'Berikutnya',
               ),
+              const SizedBox(height: 100),
             ],
           ),
         ),
