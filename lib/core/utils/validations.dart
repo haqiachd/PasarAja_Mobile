@@ -114,7 +114,10 @@ class PasarAjaValidation {
     );
   }
 
-  static ValidationModel email(String email) {
+  static ValidationModel email(String? email) {
+    if (email == null) {
+      return const ValidationModel(message: 'Email null.');
+    }
     // Periksa apakah email null atau tidak
     if (email.isEmpty || email.trim().isEmpty) {
       return const ValidationModel(message: 'Email tidak boleh kosong.');
@@ -239,36 +242,4 @@ class ValidationModel extends Equatable {
       message!,
     ];
   }
-}
-
-void main() {
-  // print("PHONE");
-  // ValidationModel phone = PasarAjaValidation.phone('954353583808');
-  // print(phone.status);
-  // print(phone.message);
-
-  // print("NAME");
-  // ValidationModel name = PasarAjaValidation.name("Achmad Baihaqi");
-  // print(name.status);
-  // print(name.message);
-
-  // print("PASSWORD");
-  // ValidationModel pw = PasarAjaValidation.password("afkassdDf-1");
-  // print(pw.status);
-  // print(pw.message);
-
-  print("HARGA");
-  ValidationModel pc = PasarAjaValidation.price("9999999");
-  print(pc.status);
-  print(pc.message);
-
-  // print("PIN");
-  // ValidationModel pin = PasarAjaValidation.pin("234902");
-  // print(pin.status);
-  // print(pin.message);
-
-  // print("EMAIL");
-  // ValidationModel email = PasarAjaValidation.email("hakiahmad756@gmail.com");
-  // print(email.status);
-  // print(email.message);
 }
