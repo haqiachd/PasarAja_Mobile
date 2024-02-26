@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/core/constant/constants.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_input_text.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/filled_button.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/textfield.dart';
+import 'package:pasaraja_mobile/core/utils/validations.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/widgets.dart';
 
 class SignUpCreatePage extends StatefulWidget {
   const SignUpCreatePage({super.key});
@@ -19,7 +16,13 @@ class _SignUpPageState extends State<SignUpCreatePage> {
   final TextEditingController emailCont = TextEditingController();
   final TextEditingController pwCont = TextEditingController();
   final TextEditingController konfCont = TextEditingController();
-  int state = AuthFilledButton.stateEnabledButton;
+  //
+  ValidationModel vName = PasarAjaValidation.name(null);
+  ValidationModel VPass = PasarAjaValidation.password(null);
+  String? errKonf = null;
+  //
+  int state = AuthFilledButton.stateDisabledButton;
+  bool obscurePass = false, obscureKonf = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,6 +53,31 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                       textField: AuthTextField(
                         controller: emailCont,
                         hintText: 'Nama Anda',
+                        fontSize: 20,
+                        keyboardType: TextInputType.name,
+                        autofillHints: const [AutofillHints.name],
+                        errorText: vName.message,
+                        onChanged: (value) {
+                          vName = PasarAjaValidation.name(value);
+                          // upate state
+                          state = _buttonState(
+                            vName.status,
+                            VPass.status,
+                            errKonf != null,
+                          );
+                          setState(() {});
+                        },
+                        suffixAction: () {
+                          emailCont.text = '';
+                          vName = PasarAjaValidation.name('');
+                          // update state
+                          state = _buttonState(
+                            vName.status,
+                            VPass.status,
+                            errKonf != null,
+                          );
+                          setState(() {});
+                        },
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -58,6 +86,38 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                       textField: AuthTextField(
                         controller: pwCont,
                         hintText: 'xxxxxxxx',
+                        fontSize: 20,
+                        obscureText: obscurePass,
+                        errorText: VPass.message,
+                        suffixIcon: obscurePass
+                            ? const Icon(
+                                Icons.visibility_off,
+                                color: Colors.black,
+                              )
+                            : const Icon(
+                                Icons.visibility,
+                                color: Colors.black,
+                              ),
+                        onChanged: (value) {
+                          VPass = PasarAjaValidation.password(value);
+                          // check apakah password cocok atau tidak
+                          if (value != konfCont.text) {
+                            errKonf = 'Konfirmasi password tidak cocok';
+                          } else {
+                            errKonf = null;
+                          }
+                          // update state button
+                          state = _buttonState(
+                            vName.status,
+                            VPass.status,
+                            errKonf != null,
+                          );
+                          setState(() {});
+                        },
+                        suffixAction: () {
+                          obscurePass = !obscurePass;
+                          setState(() {});
+                        },
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -66,6 +126,29 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                       textField: AuthTextField(
                         controller: konfCont,
                         hintText: 'xxxxxxxx',
+                        errorText: errKonf,
+                        fontSize: 20,
+                        obscureText: obscureKonf,
+                        suffixIcon: AuthTextField.hiddenPassword(obscureKonf),
+                        onChanged: (value) {
+                          // cek apakah password cocok atau tidak
+                          if (value != pwCont.text) {
+                            errKonf = 'Konfirmasi password tidak cocok';
+                          } else {
+                            errKonf = null;
+                          }
+                          // update state
+                          state = _buttonState(
+                            vName.status,
+                            VPass.status,
+                            errKonf != null,
+                          );
+                          setState(() {});
+                        },
+                        suffixAction: () {
+                          obscureKonf = !obscureKonf;
+                          setState(() {});
+                        },
                       ),
                     ),
                     const SizedBox(height: 40),
@@ -93,5 +176,16 @@ class _SignUpPageState extends State<SignUpCreatePage> {
         ),
       ),
     );
+  }
+}
+
+int _buttonState(bool? v1, bool? v2, bool? v3) {
+  if (v1 == null || v2 == null || v3 == null) {
+    return AuthFilledButton.stateDisabledButton;
+  }
+  if (!v1 || !v2 || v3) {
+    return AuthFilledButton.stateDisabledButton;
+  } else {
+    return AuthFilledButton.stateEnabledButton;
   }
 }

@@ -59,7 +59,10 @@ class PasarAjaValidation {
     );
   }
 
-  static ValidationModel name(String name) {
+  static ValidationModel name(String? name) {
+    if (name == null) {
+      return const ValidationModel(message: 'Name null');
+    }
     // Nama tidak boleh kosong
     if (name.isEmpty || name.trim().isEmpty) {
       return const ValidationModel(

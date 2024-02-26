@@ -88,6 +88,18 @@ class AuthTextField extends StatelessWidget {
   static List<TextInputFormatter> numberFormatter() {
     return [FilteringTextInputFormatter.digitsOnly];
   }
+
+  static hiddenPassword(bool password) {
+    return password
+        ? const Icon(
+            Icons.visibility_off,
+            color: Colors.black,
+          )
+        : const Icon(
+            Icons.visibility,
+            color: Colors.black,
+          );
+  }
 }
 
 String? _errorBuilder(String? errMessage) {
