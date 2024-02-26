@@ -21,8 +21,7 @@ class SignInGooglePage extends StatefulWidget {
 class _SignInGooglePageState extends State<SignInGooglePage> {
   TextEditingController emailCont = TextEditingController();
   TextEditingController pwCont = TextEditingController();
-  ValidationModel vEmail = PasarAjaValidation.email('');
-  ValidationModel vPass = PasarAjaValidation.password('');
+  ValidationModel vEmail = PasarAjaValidation.email(null);
   //
   int state = AuthFilledButton.stateEnabledButton;
   @override
@@ -56,20 +55,24 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                       textField: AuthTextField(
                         controller: emailCont,
                         hintText: 'pasaraja@email.com',
-                        errorText: vEmail.message,
+                        autofillHints: const [AutofillHints.email],
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        fontSize: 18,
                         isError: vEmail.status,
+                        errorText: vEmail.message,
                         onChanged: (value) {
                           setState(
                             () {
                               vEmail = PasarAjaValidation.email(value);
-                              print("${vEmail.status} ---> ${vEmail.message}");
                             },
                           );
                         },
                         suffixAction: () {
-                          emailCont.text = '';
-                          vEmail = PasarAjaValidation.email('');
-                          setState(() {});
+                          setState(() {
+                            emailCont.text = '';
+                            vEmail = PasarAjaValidation.email('');
+                          });
                         },
                       ),
                     ),
@@ -79,6 +82,7 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                       textField: AuthTextField(
                         controller: pwCont,
                         hintText: 'xxxxxxxx',
+                        fontSize: 18,
                       ),
                     )
                   ],

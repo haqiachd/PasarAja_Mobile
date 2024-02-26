@@ -15,6 +15,7 @@ class AuthTextField extends StatelessWidget {
   final bool? obscureText;
   final bool? isError;
   final int? maxLength;
+  final double? fontSize;
   final String? hintText;
   final String? errorText;
   final Widget? suffixIcon;
@@ -30,6 +31,7 @@ class AuthTextField extends StatelessWidget {
     this.obscureText,
     this.isError,
     this.maxLength,
+    this.fontSize,
     this.hintText,
     this.errorText,
     this.suffixIcon,
@@ -44,6 +46,7 @@ class AuthTextField extends StatelessWidget {
       maxLines: 1,
       style: PasarAjaTypography.sfpdBoldAuthInput.copyWith(
         color: PasarAjaColor.black,
+        fontSize: fontSize,
       ),
       maxLength: maxLength,
       keyboardType: keyboardType,
@@ -62,15 +65,12 @@ class AuthTextField extends StatelessWidget {
         hintText: hintText,
         hintStyle: PasarAjaTypography.sfpdBoldAuthInput.copyWith(
           color: PasarAjaColor.gray5,
+          fontSize: fontSize,
         ),
         enabledBorder: _enabledBorder(),
-        // focusedBorder: _focusedBorder(),
-        focusedBorder: _focusedBorder(),
+        focusedBorder: _focusBorderBuilder(isError),
         errorBorder: _errorBorder(),
-        errorText:
-            (errorText == '' || errorText == 'Data valid' || isError == true)
-                ? errorText
-                : null,
+        errorText: _errorBuilder(errorText),
         errorStyle: PasarAjaTypography.sfpdAuthHelper,
         suffixIcon: controller!.text.isNotEmpty
             ? IconButton(
@@ -88,6 +88,35 @@ class AuthTextField extends StatelessWidget {
   static List<TextInputFormatter> numberFormatter() {
     return [FilteringTextInputFormatter.digitsOnly];
   }
+}
+
+UnderlineInputBorder _focusBorderBuilder(bool? isError) {
+  print("isError -> $isError");
+  if (isError == null) {
+    return _errorBorder();
+  }
+
+  if (isError) {
+    return _errorBorder();
+  } else {
+    return _errorBorder();
+  }
+}
+
+String? _errorBuilder(String? errMessage) {
+  if (errMessage == null) {
+    return null;
+  }
+
+  if (errMessage == '') {
+    return null;
+  }
+
+  if (errMessage == 'Data valid' || errMessage.contains('null')) {
+    return null;
+  }
+
+  return errMessage;
 }
 
 UnderlineInputBorder _enabledBorder() {
