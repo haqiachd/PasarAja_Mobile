@@ -23,7 +23,7 @@ class PasarAjaTypography {
     fontSize: 12,
   );
 
-  static TextStyle sfpdAuthHelper = sfProDisplay.copyWith(
+  static TextStyle sfpdAuthHelper = sfpdSemibold.copyWith(
     fontSize: 12,
     color: PasarAjaColor.red1,
   );
