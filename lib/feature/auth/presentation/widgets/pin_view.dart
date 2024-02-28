@@ -5,6 +5,7 @@ import 'package:pasaraja_mobile/config/themes/typography.dart';
 import 'package:pinput/pinput.dart';
 
 class AuthPin extends StatelessWidget {
+  final TextEditingController? controller;
   final int? length;
   final double? width;
   final double? height;
@@ -14,6 +15,7 @@ class AuthPin extends StatelessWidget {
   final bool? obscureText;
   const AuthPin({
     super.key,
+    this.controller,
     this.length,
     this.width,
     this.height,
