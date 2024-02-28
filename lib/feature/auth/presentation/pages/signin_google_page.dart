@@ -6,6 +6,8 @@ import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/verify_otp_page.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/widgets.dart';
 import 'package:get/get.dart';
+import 'package:pasaraja_mobile/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 class SignInGooglePage extends StatefulWidget {
   const SignInGooglePage({super.key});
@@ -19,6 +21,7 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
   final TextEditingController pwCont = TextEditingController();
   ValidationModel vEmail = PasarAjaValidation.email(null);
   ValidationModel vPass = PasarAjaValidation.password(null);
+  String email = '';
   //
   int state = AuthFilledButton.stateDisabledButton;
   bool obscure = true;
@@ -61,12 +64,14 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                         onChanged: (value) {
                           vEmail = PasarAjaValidation.email(value);
                           state = _buttonState(vEmail.status, vPass.status);
+                          emailCont.text = value;
                           setState(() {});
                         },
                         suffixAction: () {
                           setState(() {
                             emailCont.text = '';
                             vEmail = PasarAjaValidation.email('');
+                            state = _buttonState(vEmail.status, vPass.status);
                           });
                         },
                       ),
@@ -119,13 +124,21 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
               const SizedBox(height: 40),
               GestureDetector(
                 onTap: () async {
-                  // Navigator.pushNamed(context, RouteName.verifyPin);
-                  Get.to(
-                    const VerifyOtpPage(
-                      from: VerifyOtpPage.fromLoginGoogle,
-                    ),
-                    transition: Transition.downToUp,
-                  );
+                  if (PasarAjaValidation.email(emailCont.text).status == true) {
+                    Get.to(
+                      VerifyOtpPage(
+                        from: VerifyOtpPage.fromLoginGoogle,
+                        recipient: emailCont.text,
+                      ),
+                      transition: Transition.downToUp,
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Email tidak valid'),
+                      ),
+                    );
+                  }
                 },
                 child: Text(
                   'Lupa Kata Sandi',
@@ -135,10 +148,34 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                 ),
               ),
               const SizedBox(height: 20),
-              Image.asset(
-                PasarAjaImage.icGoogle,
-                width: 38,
-                height: 38,
+              InkWell(
+                onTap: () {
+                  final provider =
+                      Provider.of<GoogleSignProvider>(context, listen: false);
+                  provider.googleLogin();
+
+                  setState(() => email = provider.user.email);
+
+                  // provider.logout();
+                },
+                child: Image.asset(
+                  PasarAjaImage.icGoogle,
+                  width: 38,
+                  height: 38,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  final provider =
+                      Provider.of<GoogleSignProvider>(context, listen: false);
+                  provider.logout();
+                  setState(() => email = '');
+                },
+                child: Text(
+                  email,
+                  style:
+                      PasarAjaTypography.sfpdBold.copyWith(color: Colors.red),
+                ),
               )
             ],
           ),

@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constant/constants.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/verify_otp_page.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/countries.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/filled_button.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/helper_text.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/input_title.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/textfield.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/widgets.dart';
 
 class SignUpPhonePage extends StatefulWidget {
   const SignUpPhonePage({super.key});
@@ -25,7 +18,7 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
   final TextEditingController nohpCont = TextEditingController();
   ValidationModel vPhone = PasarAjaValidation.phone(null);
   //
-  int state = AuthFilledButton.stateEnabledButton;
+  int state = AuthFilledButton.stateDisabledButton;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,6 +66,7 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
                           // enable and disable button
                           if (vPhone.status == true) {
                             state = AuthFilledButton.stateEnabledButton;
+                            nohpCont.text = value;
                           } else {
                             state = AuthFilledButton.stateDisabledButton;
                           }
@@ -89,7 +83,7 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: AuthHelperText(
-                  title: vPhone.message != 'Data valid' ? vPhone.message : null,
+                  title: _showHelperText(vPhone.message),
                 ),
               ),
               const SizedBox(height: 40),
@@ -102,8 +96,9 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
                   setState(() => state = AuthFilledButton.stateEnabledButton);
                   // Navigator.pushNamed(context, RouteName.verifyCode);
                   Get.to(
-                    const VerifyOtpPage(
+                    VerifyOtpPage(
                       from: VerifyOtpPage.fromRegister,
+                      recipient: nohpCont.text,
                     ),
                     transition: Transition.leftToRight,
                   );
@@ -117,5 +112,13 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
         ),
       ),
     );
+  }
+}
+
+String? _showHelperText(String? message) {
+  if (message == null || message != 'Phone null' && message != 'Data valid') {
+    return message;
+  } else {
+    return null;
   }
 }

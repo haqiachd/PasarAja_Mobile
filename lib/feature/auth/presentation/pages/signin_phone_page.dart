@@ -89,7 +89,7 @@ class _SignInPhonePageState extends State<SignInPhonePage> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: AuthHelperText(
-                  title: vPhone.message != 'Data valid' ? vPhone.message : null,
+                  title: _showHelperText(vPhone.message),
                 ),
               ),
               const SizedBox(height: 40),
@@ -115,5 +115,13 @@ class _SignInPhonePageState extends State<SignInPhonePage> {
         ),
       ),
     );
+  }
+}
+
+String? _showHelperText(String? message) {
+  if (message == null || message != 'Phone null' && message != 'Data valid') {
+    return message;
+  } else {
+    return null;
   }
 }

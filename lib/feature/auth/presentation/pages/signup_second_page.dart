@@ -6,19 +6,26 @@ import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/widgets/widgets.dart';
 
 class SignUpCreatePage extends StatefulWidget {
-  const SignUpCreatePage({super.key});
+  final String? phone;
+  const SignUpCreatePage({
+    super.key,
+    required this.phone,
+  });
 
   @override
-  State<SignUpCreatePage> createState() => _SignUpPageState();
+  State<SignUpCreatePage> createState() => _SignUpPageState(phone);
 }
 
 class _SignUpPageState extends State<SignUpCreatePage> {
+  final String? phone;
+  _SignUpPageState(this.phone);
+  //
   final TextEditingController emailCont = TextEditingController();
   final TextEditingController pwCont = TextEditingController();
   final TextEditingController konfCont = TextEditingController();
   //
   ValidationModel vName = PasarAjaValidation.name(null);
-  ValidationModel VPass = PasarAjaValidation.password(null);
+  ValidationModel vPass = PasarAjaValidation.password(null);
   String? errKonf = null;
   //
   int state = AuthFilledButton.stateDisabledButton;
@@ -55,6 +62,7 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                         hintText: 'Nama Anda',
                         fontSize: 20,
                         keyboardType: TextInputType.name,
+                        textInputAction: TextInputAction.next,
                         autofillHints: const [AutofillHints.name],
                         errorText: vName.message,
                         onChanged: (value) {
@@ -62,7 +70,7 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                           // upate state
                           state = _buttonState(
                             vName.status,
-                            VPass.status,
+                            vPass.status,
                             errKonf != null,
                           );
                           setState(() {});
@@ -73,7 +81,7 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                           // update state
                           state = _buttonState(
                             vName.status,
-                            VPass.status,
+                            vPass.status,
                             errKonf != null,
                           );
                           setState(() {});
@@ -87,8 +95,10 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                         controller: pwCont,
                         hintText: 'xxxxxxxx',
                         fontSize: 20,
+                        keyboardType: TextInputType.visiblePassword,
+                        textInputAction: TextInputAction.next,
                         obscureText: obscurePass,
-                        errorText: VPass.message,
+                        errorText: vPass.message,
                         suffixIcon: obscurePass
                             ? const Icon(
                                 Icons.visibility_off,
@@ -99,17 +109,19 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                                 color: Colors.black,
                               ),
                         onChanged: (value) {
-                          VPass = PasarAjaValidation.password(value);
+                          vPass = PasarAjaValidation.password(value);
                           // check apakah password cocok atau tidak
-                          if (value != konfCont.text) {
-                            errKonf = 'Konfirmasi password tidak cocok';
-                          } else {
-                            errKonf = null;
+                          if (vPass.status == true) {
+                            if (value != konfCont.text) {
+                              errKonf = 'Konfirmasi password tidak cocok';
+                            } else {
+                              errKonf = null;
+                            }
                           }
                           // update state button
                           state = _buttonState(
                             vName.status,
-                            VPass.status,
+                            vPass.status,
                             errKonf != null,
                           );
                           setState(() {});
@@ -129,9 +141,11 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                         errorText: errKonf,
                         fontSize: 20,
                         obscureText: obscureKonf,
+                        keyboardType: TextInputType.visiblePassword,
+                        textInputAction: TextInputAction.done,
                         suffixIcon: AuthTextField.hiddenPassword(obscureKonf),
                         onChanged: (value) {
-                          // cek apakah password cocok atau tidak
+                          // check apakah password cocok atau tidak
                           if (value != pwCont.text) {
                             errKonf = 'Konfirmasi password tidak cocok';
                           } else {
@@ -140,7 +154,7 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                           // update state
                           state = _buttonState(
                             vName.status,
-                            VPass.status,
+                            vPass.status,
                             errKonf != null,
                           );
                           setState(() {});
@@ -167,7 +181,8 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                       },
                       state: state,
                       title: 'Berikutnya',
-                    )
+                    ),
+                    const SizedBox(height: 40),
                   ],
                 ),
               )

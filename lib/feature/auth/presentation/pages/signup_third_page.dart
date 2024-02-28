@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:pasaraja_mobile/config/routes/route_names.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constant/constants.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_init.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_input_pin.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/filled_button.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/pin_view.dart';
+import 'package:pasaraja_mobile/core/utils/validations.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/pages/signup_fourth_page.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/widgets/widgets.dart';
 
 class SingUpCreatePin extends StatefulWidget {
   const SingUpCreatePin({super.key});
@@ -17,7 +15,10 @@ class SingUpCreatePin extends StatefulWidget {
 }
 
 class _SingUpCreatePinState extends State<SingUpCreatePin> {
-  int state = AuthFilledButton.stateEnabledButton;
+  final TextEditingController pinCont = TextEditingController();
+  ValidationModel vPin = PasarAjaValidation.pin(null);
+  int state = AuthFilledButton.stateDisabledButton;
+  String? errMessage;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,12 +41,20 @@ class _SingUpCreatePinState extends State<SingUpCreatePin> {
               const SizedBox(
                 height: 19,
               ),
-              const Column(
+              Column(
                 children: [
                   AuthInputPin(
                     title: 'Masukan PIN',
                     authPin: AuthPin(
+                      controller: pinCont,
                       length: 6,
+                      onChanged: (value) {
+                        vPin = PasarAjaValidation.pin(value);
+                        state = _buttonState(vPin.status);
+                        pinCont.text = value;
+                        print(pinCont.text);
+                        setState(() {});
+                      },
                     ),
                   ),
                 ],
@@ -62,7 +71,12 @@ class _SingUpCreatePinState extends State<SingUpCreatePin> {
                   setState(
                     () => state = AuthFilledButton.stateEnabledButton,
                   );
-                  Navigator.pushNamed(context, RouteName.signupFourth);
+                  Get.to(
+                    SignUpConfirmPage(createdPin: pinCont.text),
+                    transition: Transition.downToUp,
+                  );
+                  // Navigator.pushNamed(context, RouteName.signupFourth);
+                  // Navigator.pop(context);
                 },
                 state: state,
                 title: 'Berikutnya',
@@ -74,4 +88,14 @@ class _SingUpCreatePinState extends State<SingUpCreatePin> {
       ),
     );
   }
+}
+
+int _buttonState(bool? v1) {
+  if (v1 == null) {
+    return AuthFilledButton.stateDisabledButton;
+  }
+
+  return v1
+      ? AuthFilledButton.stateEnabledButton
+      : AuthFilledButton.stateDisabledButton;
 }

@@ -12,24 +12,28 @@ import 'package:pasaraja_mobile/feature/auth/presentation/widgets/widgets.dart';
 class VerifyOtpPage extends StatefulWidget {
   static const int fromLoginGoogle = 1;
   static const int fromRegister = 2;
+  final String? recipient;
   //
   final int? from;
   const VerifyOtpPage({
     super.key,
-    this.from,
+    required this.from,
+    required this.recipient,
   });
 
   @override
-  State<VerifyOtpPage> createState() => _VerifyOtpPageState(from: from);
+  State<VerifyOtpPage> createState() => _VerifyOtpPageState(from, recipient);
 }
 
 class _VerifyOtpPageState extends State<VerifyOtpPage> {
+  final int? from;
+  final String? recipient;
+  _VerifyOtpPageState(this.from, this.recipient);
+  //
   int state = AuthFilledButton.stateDisabledButton;
   String otp = '2602';
   String? errMessage;
-  final int? from;
 
-  _VerifyOtpPageState({this.from});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +82,7 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                                   );
                                 case VerifyOtpPage.fromRegister:
                                   Get.off(
-                                    const SignUpCreatePage(),
+                                    SignUpCreatePage(phone: recipient),
                                     transition: Transition.leftToRight,
                                   );
                                 default:
