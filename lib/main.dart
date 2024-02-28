@@ -1,11 +1,19 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/routes/routes.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
+import 'package:pasaraja_mobile/firebase_options.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/welcome_page.dart';
+import 'package:pasaraja_mobile/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.white,
@@ -22,20 +30,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'PasarAja',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: PasarAjaColor.green2,
+    return ChangeNotifierProvider(
+      create: (context) => GoogleSignProvider(),
+      child: GetMaterialApp(
+        title: 'PasarAja',
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: PasarAjaColor.green2,
+          ),
+          appBarTheme: const AppBarTheme(
+            surfaceTintColor: Colors.white,
+          ),
         ),
-        appBarTheme: const AppBarTheme(
-          surfaceTintColor: Colors.white,
-        ),
+        debugShowCheckedModeBanner: false,
+        onGenerateRoute: AppRoutes.onGenerateRoute,
+        home: const WelcomePage(),
       ),
-      debugShowCheckedModeBanner: false,
-      onGenerateRoute: AppRoutes.onGenerateRoute,
-      home: const WelcomePage(),
     );
   }
 }
