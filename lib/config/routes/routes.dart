@@ -29,11 +29,16 @@ class AppRoutes {
       case RouteName.verifyPin:
         return _materialRoute(const VerifyPinPage());
       case RouteName.verifyCode:
-        return _materialRoute(const VerifyOtpPage());
+        return _materialRoute(VerifyOtpPage(
+          from: settings.arguments as int,
+          recipient: settings.arguments as String,
+        ));
       case RouteName.signupFirst:
         return _materialRoute(const SignUpPhonePage());
       case RouteName.signupSecond:
-        return _materialRoute(const SignUpCreatePage());
+        return _materialRoute(SignUpCreatePage(
+          phone: settings.arguments as String,
+        ));
       case RouteName.signupThird:
         return _materialRoute(const SingUpCreatePin());
       case RouteName.signupFourth:
