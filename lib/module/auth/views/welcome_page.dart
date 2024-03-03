@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/icons.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
 import 'package:pasaraja_mobile/core/utils/local_data.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/choose_button.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/copyright_text.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/filled_button.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/item_welcome.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/outlined_button.dart';
+import 'package:pasaraja_mobile/feature/auth/presentation/pages/signin_google_page.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
+import 'package:pasaraja_mobile/module/auth/views/signin/signin_phone_page.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -160,7 +158,9 @@ _masukOnPressed(BuildContext context) {
                       title: 'Masuk Dengan Google',
                       onTap: () {
                         Navigator.of(context).pop();
-                        Navigator.pushNamed(context, RouteName.loginGoogle);
+                        // Navigator.pushNamed(context, RouteName.loginGoogle);
+                        Get.to(const SignInGooglePage(),
+                            transition: Transition.downToUp);
                       },
                     ),
                     const SizedBox(height: 11),
@@ -169,7 +169,10 @@ _masukOnPressed(BuildContext context) {
                       title: 'Masuk Dengan Nomor HP',
                       onTap: () {
                         Navigator.of(context).pop();
-                        Navigator.pushNamed(context, RouteName.loginPhone);
+                        Get.to(
+                          const SignInPhonePage(),
+                          transition: Transition.downToUp,
+                        );
                       },
                     ),
                     const SizedBox(height: 27),

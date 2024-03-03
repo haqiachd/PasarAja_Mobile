@@ -7,7 +7,7 @@ import 'package:pasaraja_mobile/core/constant/constants.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/change_password_page.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/signup_second_page.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/widgets.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
 class VerifyOtpPage extends StatefulWidget {
   static const int fromLoginGoogle = 1;

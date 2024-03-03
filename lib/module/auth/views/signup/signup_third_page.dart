@@ -5,7 +5,7 @@ import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constant/constants.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/signup_fourth_page.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/widgets.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
 class SingUpCreatePin extends StatefulWidget {
   const SingUpCreatePin({super.key});

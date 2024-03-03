@@ -12,7 +12,7 @@
 .dart_tool/package_config_subset
 
 # Android specific
-/android/
+# /android/
 /key.properties
 
 # iOS specific
@@ -125,3 +125,11 @@ webdev/
 *.jks
 *.keystore
 *.key
+
+
+firebase_options.dart
+google-services.json
+GoogleService-info.plist
+firebase_app_id_file.json
+Info.plist
+AndroidManifest.xml

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/appbar.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/filled_button.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/test_button.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
 class MyTestPage extends StatefulWidget {
   const MyTestPage({super.key});

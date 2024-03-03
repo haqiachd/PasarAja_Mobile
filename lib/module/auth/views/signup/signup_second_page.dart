@@ -3,7 +3,7 @@ import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/core/constant/constants.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/widgets.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
 class SignUpCreatePage extends StatefulWidget {
   final String? phone;

@@ -5,7 +5,7 @@ import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constant/constants.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/feature/auth/presentation/pages/verify_otp_page.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/widgets.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
 class SignUpPhonePage extends StatefulWidget {
   const SignUpPhonePage({super.key});

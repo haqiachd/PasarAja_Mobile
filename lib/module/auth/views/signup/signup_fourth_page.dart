@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/widgets.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
 class SignUpConfirmPage extends StatefulWidget {
   final String? createdPin;
