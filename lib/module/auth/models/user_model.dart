@@ -1,9 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 class UserModel extends Equatable {
-  final String? status;
-  final String? message;
-  final dynamic data;
   final int? id;
   final String? phoneNumber;
   final String? email;
@@ -17,9 +14,6 @@ class UserModel extends Equatable {
   final String? updatedAt;
 
   const UserModel({
-    this.status,
-    this.message,
-    this.data,
     this.id,
     this.phoneNumber,
     this.email,
@@ -35,9 +29,6 @@ class UserModel extends Equatable {
 
   factory UserModel.fromJson(Map<String, dynamic> map) {
     return UserModel(
-      status: map['status'] ?? '',
-      message: map['message'] ?? '',
-      data: map,
       id: map['id'] ?? 0,
       phoneNumber: map['phone_number'] ?? '',
       email: map['email'] ?? '',

@@ -3,21 +3,21 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/data/data_state.dart';
+import 'package:pasaraja_mobile/module/auth/models/verification_model.dart';
 
-class ChangeController {
+class VerificationController {
   final Dio _dio = Dio();
-  final String _authRoute = "${PasarAjaConstant.baseUrl}/auth";
-  Future<DataState<bool>> changePassword({
-    required String email,
-    required String password,
-  }) async {
+  final String _verifyRoute = '${PasarAjaConstant.baseUrl}/messenger';
+
+  Future<DataState<VerificationModel>> requestOtp(
+      {required String email}) async {
     try {
       // send request
       final response = await _dio.post(
-        "$_authRoute/updatepw",
+        "$_verifyRoute/otp",
         data: {
           "email": email,
-          "password": password,
+          "type": "Forgot",
         },
         options: Options(
           validateStatus: (status) {
@@ -26,14 +26,11 @@ class ChangeController {
         ),
       );
 
-      // get payload
       final Map<String, dynamic> payload = response.data;
 
       if (response.statusCode == HttpStatus.ok) {
-        // jika pw berhasil diubah
-        return const DataSuccess(true);
+        return DataSuccess(VerificationModel.fromJson(payload['data']));
       } else {
-        // jika pw gagal diubah
         return DataFailed(
           DioError(
             requestOptions: response.requestOptions,
@@ -49,3 +46,18 @@ class ChangeController {
   }
 }
 
+void main(List<String> args) async {
+  VerificationController verificationController = VerificationController();
+  DataState dataState = await verificationController.requestOtp(
+    email: "arenafinder.app@gmail.com",
+  );
+
+  if (dataState is DataSuccess) {
+    var verify = dataState.data as VerificationModel;
+    print('OTP is : ${verify.otp}');
+  }
+
+  if (dataState is DataFailed) {
+    print(dataState.error!.message);
+  }
+}
