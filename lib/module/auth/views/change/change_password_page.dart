@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/pages/signin_google_page.dart';
+import 'package:pasaraja_mobile/module/auth/views/signin/signin_google_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
 class ChangePasswordPage extends StatefulWidget {

@@ -4,21 +4,21 @@ import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
-import 'package:pasaraja_mobile/module/auth/views/verify/verify_otp_page.dart';
+import 'package:pasaraja_mobile/module/auth/views/verify/verify_pin_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
-class SignUpPhonePage extends StatefulWidget {
-  const SignUpPhonePage({super.key});
+class SignInPhonePage extends StatefulWidget {
+  const SignInPhonePage({super.key});
 
   @override
-  State<SignUpPhonePage> createState() => _SignUpPhonePageState();
+  State<SignInPhonePage> createState() => _SignInPhonePageState();
 }
 
-class _SignUpPhonePageState extends State<SignUpPhonePage> {
-  final TextEditingController nohpCont = TextEditingController();
+class _SignInPhonePageState extends State<SignInPhonePage> {
+  final TextEditingController phoneCont = TextEditingController();
   ValidationModel vPhone = PasarAjaValidation.phone(null);
-  //
   int state = AuthFilledButton.stateDisabledButton;
+  String error = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,9 +34,9 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
             children: [
               const AuthInit(
                 image: PasarAjaImage.ilLoginPhone,
-                title: 'Daftar Akun',
+                title: 'Masuk Akun (Remote)',
                 description:
-                    'Silakan masukkan nomor HP Anda untuk mendaftar akun pada Aplikasi.',
+                    'Silakan masukkan nomor HP Anda untuk masuk ke dalam aplikasi.',
               ),
               const SizedBox(height: 19),
               const Align(
@@ -54,29 +54,30 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
                       fit: FlexFit.tight,
                       flex: 5,
                       child: AuthTextField(
-                        controller: nohpCont,
+                        controller: phoneCont,
                         hintText: '82-xxxx-xxxx',
-                        errorText: vPhone.message,
                         keyboardType: TextInputType.number,
-                        showHelper: false,
                         formatters: AuthTextField.numberFormatter(),
+                        errorText: vPhone.message,
+                        showHelper: false,
                         onChanged: (value) {
                           // valdasi data
                           vPhone = PasarAjaValidation.phone(value);
                           // enable and disable button
                           if (vPhone.status == true) {
                             state = AuthFilledButton.stateEnabledButton;
-                            nohpCont.text = value;
                           } else {
                             state = AuthFilledButton.stateDisabledButton;
                           }
                           setState(() {});
                         },
                         suffixAction: () {
-                          setState(() => nohpCont.text = '');
+                          phoneCont.text = '';
+                          vPhone = PasarAjaValidation.phone('');
+                          setState(() {});
                         },
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -89,19 +90,17 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
               const SizedBox(height: 40),
               AuthFilledButton(
                 onPressed: () async {
-                  setState(() => state = AuthFilledButton.stateLoadingButton);
+                  setState(
+                    () => state = AuthFilledButton.stateLoadingButton,
+                  );
                   await Future.delayed(
                     const Duration(seconds: PasarAjaConstant.initLoading),
                   );
-                  setState(() => state = AuthFilledButton.stateEnabledButton);
-                  // Navigator.pushNamed(context, RouteName.verifyCode);
-                  Get.to(
-                    VerifyOtpPage(
-                      from: VerifyOtpPage.fromRegister,
-                      recipient: nohpCont.text,
-                    ),
-                    transition: Transition.leftToRight,
+                  setState(
+                    () => state = AuthFilledButton.stateEnabledButton,
                   );
+                  // Navigator.pushNamed(context, RouteName.verifyPin);
+                  Get.to(VerifyPinPage(), transition: Transition.leftToRight);
                 },
                 state: state,
                 title: 'Berikutnya',

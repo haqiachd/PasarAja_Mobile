@@ -5,10 +5,11 @@ import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/icons.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
-import 'package:pasaraja_mobile/core/utils/local_data.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/pages/signin_google_page.dart';
+import 'package:pasaraja_mobile/core/constants/local_data.dart';
+import 'package:pasaraja_mobile/module/auth/views/signin/signin_google_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 import 'package:pasaraja_mobile/module/auth/views/signin/signin_phone_page.dart';
+
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
