@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:pasaraja_mobile/config/routes/route_names.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/pages/change_password_page.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/pages/change_pin_page.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/pages/signin_google_page.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/pages/signin_phone_page.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/pages/signup_first_page.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/pages/signup_fourth_page.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/pages/signup_second_page.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/pages/signup_third_page.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/pages/test_page.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/pages/verify_otp_page.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/pages/verify_pin_page.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/pages/welcome_page.dart';
+import 'package:pasaraja_mobile/module/auth/views/change/change_password_page.dart';
+import 'package:pasaraja_mobile/module/auth/views/change/change_pin_page.dart';
+import 'package:pasaraja_mobile/module/auth/views/signin/signin_google_page.dart';
+import 'package:pasaraja_mobile/module/auth/views/signin/signin_phone_page.dart';
+import 'package:pasaraja_mobile/module/auth/views/signup/signup_first_page.dart';
+import 'package:pasaraja_mobile/module/auth/views/signup/signup_fourth_page.dart';
+import 'package:pasaraja_mobile/module/auth/views/signup/signup_second_page.dart';
+import 'package:pasaraja_mobile/module/auth/views/signup/signup_third_page.dart';
+import 'package:pasaraja_mobile/module/auth/views/test_page.dart';
+import 'package:pasaraja_mobile/module/auth/views/verify/verify_otp_page.dart';
+import 'package:pasaraja_mobile/module/auth/views/verify/verify_pin_page.dart';
+import 'package:pasaraja_mobile/module/auth/views/welcome_page.dart';
 
 class AppRoutes {
   static Route onGenerateRoute(RouteSettings settings) {
