@@ -27,7 +27,9 @@ class AppRoutes {
       case RouteName.changePw:
         return _materialRoute(const ChangePasswordPage());
       case RouteName.verifyPin:
-        return _materialRoute(const VerifyPinPage());
+        return _materialRoute(const VerifyPinPage(
+          phone: '',
+        ));
       case RouteName.verifyCode:
         return _materialRoute(VerifyOtpPage(
           from: settings.arguments as int,

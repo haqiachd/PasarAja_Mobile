@@ -1,23 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
+import 'package:pasaraja_mobile/core/data/data_state.dart';
+import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
+import 'package:pasaraja_mobile/module/auth/controllers/signin_controller.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
 class VerifyPinPage extends StatefulWidget {
-  const VerifyPinPage({super.key});
+  final String phone;
+  const VerifyPinPage({
+    super.key,
+    required this.phone,
+  });
 
   @override
-  State<VerifyPinPage> createState() => _VerifyPinPageState();
+  State<VerifyPinPage> createState() => _VerifyPinPageState(phone);
 }
 
 class _VerifyPinPageState extends State<VerifyPinPage> {
-  int state = AuthFilledButton.stateDisabledButton;
+  final SignInController _signInController = SignInController();
+  //
   ValidationModel vPin = PasarAjaValidation.pin(null);
-  String pin = '123456';
+  //
+  final String phone;
+  int state = AuthFilledButton.stateDisabledButton;
   String? errMessage;
+  //
+  _VerifyPinPageState(this.phone);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +49,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
             children: [
               const AuthInit(
                 image: PasarAjaImage.ilInputPin,
-                title: 'Masukan PIN (remote)',
+                title: 'Masukan PIN',
                 description:
                     'Silakan masukkan PIN Anda untuk memverifikasi identitas Anda.',
               ),
@@ -51,19 +64,26 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
                         title: 'Masukan PIN',
                         authPin: AuthPin(
                           length: 6,
+                          onChanged: (value) {
+                            setState(() => errMessage = null);
+                          },
                           onCompleted: (value) async {
-                            if (value != pin) {
-                              errMessage = 'PIN tidak cocok';
-                            } else {
-                              errMessage = null;
-                              await Future.delayed(
-                                const Duration(microseconds: 500),
-                              );
-                              _showMyDialog(
-                                context,
-                                'Informasi',
-                                'Login Berhasil',
-                              );
+                            // send request to login
+                            DataState dataState =
+                                await _signInController.signInPhone(
+                              phone: "62$phone",
+                              pin: value,
+                            );
+
+                            if (dataState is DataSuccess) {
+                              Fluttertoast.showToast(msg: "Login Berhasil");
+                            }
+
+                            if (dataState is DataFailed) {
+                              PasarAjaUtils.triggerVibration();
+                              errMessage = dataState.error!.message;
+                              Fluttertoast.showToast(
+                                  msg: dataState.error!.message);
                             }
                             setState(() {});
                           },

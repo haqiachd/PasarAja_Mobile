@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pasaraja_mobile/config/themes/Typography.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
+import 'package:pasaraja_mobile/core/data/data_state.dart';
+import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
+import 'package:pasaraja_mobile/module/auth/controllers/auth_controller.dart';
+import 'package:pasaraja_mobile/module/auth/controllers/signin_controller.dart';
 import 'package:pasaraja_mobile/module/auth/views/verify/verify_otp_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 import 'package:get/get.dart';
@@ -17,11 +22,15 @@ class SignInGooglePage extends StatefulWidget {
 }
 
 class _SignInGooglePageState extends State<SignInGooglePage> {
+  //
+  final AuthController _authController = AuthController();
+  final SignInController _signInController = SignInController();
+  //
   final TextEditingController emailCont = TextEditingController();
   final TextEditingController pwCont = TextEditingController();
+  //
   ValidationModel vEmail = PasarAjaValidation.email(null);
   ValidationModel vPass = PasarAjaValidation.password(null);
-  String email = '';
   //
   int state = AuthFilledButton.stateDisabledButton;
   bool obscure = true;
@@ -41,7 +50,7 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
             children: [
               const AuthInit(
                 image: PasarAjaImage.ilLoginEmail,
-                title: 'Masuk Akun (Remote)',
+                title: 'Masuk Akun',
                 haveImage: true,
                 description:
                     'Silakan masukkan email dan kata sandi Anda untuk masuk ke dalam aplikasi.',
@@ -84,6 +93,7 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                         hintText: 'xxxxxxxx',
                         errorText: vPass.message,
                         obscureText: obscure,
+                        keyboardType: TextInputType.visiblePassword,
                         fontSize: 18,
                         suffixIcon: obscure
                             ? const Icon(
@@ -116,6 +126,22 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                 onPressed: () async {
                   setState(() => state = AuthFilledButton.stateLoadingButton);
 
+                  // send login request
+                  final DataState dataState =
+                      await _signInController.signInEmail(
+                    email: emailCont.text,
+                    password: pwCont.text,
+                  );
+
+                  if (dataState is DataSuccess) {
+                    Fluttertoast.showToast(msg: "Login berhasil");
+                  }
+
+                  if (dataState is DataFailed) {
+                    PasarAjaUtils.triggerVibration();
+                    Fluttertoast.showToast(msg: dataState.error!.message);
+                  }
+
                   setState(() => state = AuthFilledButton.stateEnabledButton);
                 },
               ),
@@ -123,13 +149,28 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
               GestureDetector(
                 onTap: () async {
                   if (PasarAjaValidation.email(emailCont.text).status == true) {
-                    Get.to(
-                      VerifyOtpPage(
-                        from: VerifyOtpPage.fromLoginGoogle,
-                        recipient: emailCont.text,
-                      ),
-                      transition: Transition.downToUp,
+                    // send reqeust to check email
+                    DataState dataState = await _authController.isExistEmail(
+                      email: emailCont.text,
                     );
+
+                    if (dataState is DataSuccess) {
+                      if (dataState.data == true) {
+                        Get.to(
+                          VerifyOtpPage(
+                            from: VerifyOtpPage.fromLoginGoogle,
+                            recipient: emailCont.text,
+                          ),
+                          transition: Transition.downToUp,
+                        );
+                      } else {
+                        Fluttertoast.showToast(msg: "Email tidak terdaftar");
+                      }
+                    }
+
+                    if (dataState is DataFailed) {
+                      Fluttertoast.showToast(msg: dataState.error!.message);
+                    }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -148,13 +189,27 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
               const SizedBox(height: 20),
               InkWell(
                 onTap: () async {
-                  final services =
-                      Provider.of<GoogleSignService>(context, listen: false);
-                  await services.googleLogin();
+                  // show google auth
+                  final gServices = Provider.of<GoogleSignService>(
+                    context,
+                    listen: false,
+                  );
+                  await gServices.googleLogin();
 
-                  setState(() => email = services.user.email);
+                  // send login request
+                  DataState dataState = await _signInController.signInGoogle(
+                    email: gServices.user.email,
+                  );
 
-                  services.logout();
+                  if (dataState is DataSuccess) {
+                    Fluttertoast.showToast(msg: "Login Berhasil");
+                  }
+
+                  if (dataState is DataFailed) {
+                    Fluttertoast.showToast(msg: dataState.error!.message);
+                  }
+
+                  gServices.logout();
                 },
                 child: Image.asset(
                   PasarAjaImage.icGoogle,
@@ -162,19 +217,6 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                   height: 38,
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  final provider =
-                      Provider.of<GoogleSignService>(context, listen: false);
-                  provider.logout();
-                  setState(() => email = '');
-                },
-                child: Text(
-                  email,
-                  style:
-                      PasarAjaTypography.sfpdBold.copyWith(color: Colors.red),
-                ),
-              )
             ],
           ),
         ),

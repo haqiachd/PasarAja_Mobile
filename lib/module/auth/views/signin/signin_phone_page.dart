@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
-import 'package:pasaraja_mobile/core/constants/constants.dart';
+import 'package:pasaraja_mobile/core/data/data_state.dart';
+import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
+import 'package:pasaraja_mobile/module/auth/controllers/auth_controller.dart';
 import 'package:pasaraja_mobile/module/auth/views/verify/verify_pin_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
@@ -15,7 +18,11 @@ class SignInPhonePage extends StatefulWidget {
 }
 
 class _SignInPhonePageState extends State<SignInPhonePage> {
+  //
+  final AuthController _authController = AuthController();
+  //
   final TextEditingController phoneCont = TextEditingController();
+  //
   ValidationModel vPhone = PasarAjaValidation.phone(null);
   int state = AuthFilledButton.stateDisabledButton;
   String error = '';
@@ -34,7 +41,7 @@ class _SignInPhonePageState extends State<SignInPhonePage> {
             children: [
               const AuthInit(
                 image: PasarAjaImage.ilLoginPhone,
-                title: 'Masuk Akun (Remote)',
+                title: 'Masuk Akun',
                 description:
                     'Silakan masukkan nomor HP Anda untuk masuk ke dalam aplikasi.',
               ),
@@ -90,17 +97,34 @@ class _SignInPhonePageState extends State<SignInPhonePage> {
               const SizedBox(height: 40),
               AuthFilledButton(
                 onPressed: () async {
-                  setState(
-                    () => state = AuthFilledButton.stateLoadingButton,
+                  setState(() => state = AuthFilledButton.stateLoadingButton);
+
+                  // send request to check phone
+                  DataState dataState = await _authController.isExistPhone(
+                    phone: "62${phoneCont.text}",
                   );
-                  await Future.delayed(
-                    const Duration(seconds: PasarAjaConstant.initLoading),
-                  );
-                  setState(
-                    () => state = AuthFilledButton.stateEnabledButton,
-                  );
-                  // Navigator.pushNamed(context, RouteName.verifyPin);
-                  Get.to(VerifyPinPage(), transition: Transition.leftToRight);
+
+                  if (dataState is DataSuccess) {
+                    if (dataState.data == true) {
+                      Get.to(
+                        VerifyPinPage(
+                          phone: phoneCont.text,
+                        ),
+                        transition: Transition.leftToRight,
+                        duration: const Duration(milliseconds: 500),
+                      );
+                    } else {
+                      PasarAjaUtils.triggerVibration();
+                      Fluttertoast.showToast(msg: "Nomor Hp tidak terdaftar");
+                    }
+                  }
+
+                  if (dataState is DataFailed) {
+                    PasarAjaUtils.triggerVibration();
+                    Fluttertoast.showToast(msg: dataState.error!.message);
+                  }
+
+                  setState(() => state = AuthFilledButton.stateEnabledButton);
                 },
                 state: state,
                 title: 'Berikutnya',
