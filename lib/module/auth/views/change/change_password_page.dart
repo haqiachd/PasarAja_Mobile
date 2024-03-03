@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
+import 'package:pasaraja_mobile/core/data/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
+import 'package:pasaraja_mobile/module/auth/controllers/change_controller.dart';
 import 'package:pasaraja_mobile/module/auth/views/signin/signin_google_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
 class ChangePasswordPage extends StatefulWidget {
-  const ChangePasswordPage({super.key});
+  final String email;
+  const ChangePasswordPage({
+    super.key,
+    required this.email,
+  });
 
   @override
-  State<ChangePasswordPage> createState() => _ChangePasswordPageState();
+  State<ChangePasswordPage> createState() => _ChangePasswordPageState(email);
 }
 
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
+  final ChangeController _changeController = ChangeController();
+  //
   final TextEditingController pwCont = TextEditingController();
   final TextEditingController konfCont = TextEditingController();
   //
@@ -23,6 +32,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   int state = AuthFilledButton.stateDisabledButton;
   bool obscurePass = true, obscureKonf = true;
   String? errKonf;
+  final String email;
+  //
+  _ChangePasswordPageState(this.email);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,16 +128,27 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               const SizedBox(height: 40),
               AuthFilledButton(
                 onPressed: () async {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Password berhasil diganti"),
-                    ),
+                  setState(() => state = AuthFilledButton.stateLoadingButton);
+
+                  final DataState dataState =
+                      await _changeController.changePassword(
+                    email: email,
+                    password: pwCont.text,
                   );
-                  await Future.delayed(const Duration(seconds: 2));
-                  Get.off(
-                    const SignInGooglePage(),
-                    transition: Transition.downToUp,
-                  );
+
+                  if (dataState is DataSuccess) {
+                    Get.off(
+                      const SignInGooglePage(),
+                      transition: Transition.downToUp,
+                      duration: const Duration(milliseconds: 500),
+                    );
+                  }
+
+                  if (dataState is DataFailed) {
+                    Fluttertoast.showToast(msg: dataState.error!.message);
+                  }
+
+                  setState(() => state = AuthFilledButton.stateEnabledButton);
                 },
                 state: state,
                 title: 'Ganti Kata Sandi',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/module/auth/models/user_model.dart';
+import 'package:pasaraja_mobile/module/auth/models/verification_model.dart';
 import 'package:pasaraja_mobile/module/auth/views/change/change_password_page.dart';
 import 'package:pasaraja_mobile/module/auth/views/change/change_pin_page.dart';
 import 'package:pasaraja_mobile/module/auth/views/signin/signin_google_page.dart';
@@ -26,13 +27,16 @@ class AppRoutes {
       case RouteName.changePin:
         return _materialRoute(const ChangePinPage());
       case RouteName.changePw:
-        return _materialRoute(const ChangePasswordPage());
+        return _materialRoute(const ChangePasswordPage(
+          email: '',
+        ));
       case RouteName.verifyPin:
         return _materialRoute(const VerifyPinPage(
           phone: '',
         ));
       case RouteName.verifyCode:
         return _materialRoute(VerifyOtpPage(
+          verificationModel: const VerificationModel(),
           from: settings.arguments as int,
           recipient: settings.arguments as String,
         ));

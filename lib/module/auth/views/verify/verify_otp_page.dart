@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
+import 'package:pasaraja_mobile/module/auth/models/verification_model.dart';
 import 'package:pasaraja_mobile/module/auth/views/change/change_password_page.dart';
 import 'package:pasaraja_mobile/module/auth/views/signup/signup_second_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
@@ -12,26 +14,33 @@ import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 class VerifyOtpPage extends StatefulWidget {
   static const int fromLoginGoogle = 1;
   static const int fromRegister = 2;
-  final String? recipient;
   //
+  final VerificationModel verificationModel;
+  final String? recipient;
   final int? from;
   const VerifyOtpPage({
     super.key,
+    required this.verificationModel,
     required this.from,
     required this.recipient,
   });
 
   @override
-  State<VerifyOtpPage> createState() => _VerifyOtpPageState(from, recipient);
+  State<VerifyOtpPage> createState() =>
+      _VerifyOtpPageState(verificationModel, from, recipient);
 }
 
 class _VerifyOtpPageState extends State<VerifyOtpPage> {
+  final VerificationModel verificationModel;
   final int? from;
   final String? recipient;
-  _VerifyOtpPageState(this.from, this.recipient);
+  _VerifyOtpPageState(
+    this.verificationModel,
+    this.from,
+    this.recipient,
+  );
   //
   int state = AuthFilledButton.stateDisabledButton;
-  String otp = '2602';
   String? errMessage;
 
   @override
@@ -72,12 +81,12 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                             setState(() {});
                           },
                           onCompleted: (value) async {
-                            if (value == otp) {
+                            if (value == verificationModel.otp) {
                               await Future.delayed(const Duration(seconds: 1));
                               switch (from) {
                                 case VerifyOtpPage.fromLoginGoogle:
                                   Get.off(
-                                    const ChangePasswordPage(),
+                                    ChangePasswordPage(email: recipient!),
                                     transition: Transition.leftToRight,
                                   );
                                 case VerifyOtpPage.fromRegister:
@@ -86,7 +95,10 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                                     transition: Transition.leftToRight,
                                   );
                                 default:
-                                  print('anjing');
+                                  {
+                                    Fluttertoast.showToast(
+                                        msg: "default error");
+                                  }
                               }
                             } else {
                               errMessage = 'Kode OTP tidak cocok!';

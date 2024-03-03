@@ -8,6 +8,8 @@ import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/auth_controller.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/signin_controller.dart';
+import 'package:pasaraja_mobile/module/auth/controllers/verification_controller.dart';
+import 'package:pasaraja_mobile/module/auth/models/verification_model.dart';
 import 'package:pasaraja_mobile/module/auth/views/verify/verify_otp_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 import 'package:get/get.dart';
@@ -25,6 +27,8 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
   //
   final AuthController _authController = AuthController();
   final SignInController _signInController = SignInController();
+  final VerificationController _verificationController =
+      VerificationController();
   //
   final TextEditingController emailCont = TextEditingController();
   final TextEditingController pwCont = TextEditingController();
@@ -156,13 +160,26 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
 
                     if (dataState is DataSuccess) {
                       if (dataState.data == true) {
-                        Get.to(
-                          VerifyOtpPage(
-                            from: VerifyOtpPage.fromLoginGoogle,
-                            recipient: emailCont.text,
-                          ),
-                          transition: Transition.downToUp,
+                        // request send otp
+                        dataState = await _verificationController.requestOtp(
+                          email: emailCont.text,
                         );
+
+                        if (dataState is DataSuccess) {
+                          Get.to(
+                            VerifyOtpPage(
+                              verificationModel:
+                                  dataState.data as VerificationModel,
+                              from: VerifyOtpPage.fromLoginGoogle,
+                              recipient: emailCont.text,
+                            ),
+                            transition: Transition.downToUp,
+                          );
+                        }
+
+                        if (dataState is DataFailed) {
+                          Fluttertoast.showToast(msg: dataState.error!.message);
+                        }
                       } else {
                         Fluttertoast.showToast(msg: "Email tidak terdaftar");
                       }

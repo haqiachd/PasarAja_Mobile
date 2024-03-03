@@ -7,6 +7,7 @@ import 'package:pasaraja_mobile/core/data/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/auth_controller.dart';
+import 'package:pasaraja_mobile/module/auth/models/verification_model.dart';
 import 'package:pasaraja_mobile/module/auth/views/verify/verify_otp_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
@@ -110,6 +111,8 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
                     } else {
                       Get.to(
                         VerifyOtpPage(
+                          verificationModel:
+                              const VerificationModel(otp: "1234"),
                           from: VerifyOtpPage.fromRegister,
                           recipient: "62${nohpCont.text}",
                         ),
