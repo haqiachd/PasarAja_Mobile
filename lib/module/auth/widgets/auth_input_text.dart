@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/input_title.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/textfield.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/input_title.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/textfield.dart';
 
 class AuthInputText extends StatelessWidget {
   final String? title;

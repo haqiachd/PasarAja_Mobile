@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_description.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_image.dart';
-import 'package:pasaraja_mobile/feature/auth/presentation/widgets/auth_title.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/auth_description.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/auth_image.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/auth_title.dart';
 
 class ItemWelcome extends StatelessWidget {
   final String? image;
