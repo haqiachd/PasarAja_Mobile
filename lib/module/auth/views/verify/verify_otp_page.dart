@@ -82,7 +82,7 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                                   );
                                 case VerifyOtpPage.fromRegister:
                                   Get.off(
-                                    SignUpCreatePage(phone: recipient),
+                                    SignUpCreatePage(phone: recipient!),
                                     transition: Transition.leftToRight,
                                   );
                                 default:

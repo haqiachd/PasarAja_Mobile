@@ -1,24 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
+import 'package:pasaraja_mobile/core/data/data_state.dart';
+import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
+import 'package:pasaraja_mobile/module/auth/controllers/signup_controller.dart';
+import 'package:pasaraja_mobile/module/auth/models/user_model.dart';
+import 'package:pasaraja_mobile/module/auth/views/welcome_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
 class SignUpConfirmPage extends StatefulWidget {
-  final String? createdPin;
-  const SignUpConfirmPage({super.key, this.createdPin});
+  final UserModel user;
+  final String createdPin;
+  const SignUpConfirmPage({
+    super.key,
+    required this.user,
+    required this.createdPin,
+  });
 
   @override
-  State<SignUpConfirmPage> createState() => _SignUpConfirmPageState(createdPin);
+  State<SignUpConfirmPage> createState() =>
+      _SignUpConfirmPageState(user, createdPin);
 }
 
 class _SignUpConfirmPageState extends State<SignUpConfirmPage> {
-  int state = AuthFilledButton.stateDisabledButton;
+  //
+  final SignUpController _signUpController = SignUpController();
   ValidationModel vPin = PasarAjaValidation.pin(null);
-  String? errMessage;
-  final String? createdPin;
+  //
   bool isMatch = false;
-  _SignUpConfirmPageState(this.createdPin);
+  String? errMessage;
+  int state = AuthFilledButton.stateDisabledButton;
+  final UserModel user;
+  final String createdPin;
+  //
+  _SignUpConfirmPageState(this.user, this.createdPin);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,21 +98,36 @@ class _SignUpConfirmPageState extends State<SignUpConfirmPage> {
               const SizedBox(height: 30),
               AuthFilledButton(
                 onPressed: () async {
-                  print(createdPin);
-                  // setState(
-                  //   () => state = AuthFilledButton.stateLoadingButton,
+                  // Fluttertoast.showToast(
+                  //   msg:
+                  //       "phone : ${user.phoneNumber} | name : ${user.fullName} | password ${user.password} | pin $createdPin",
                   // );
-                  // await Future.delayed(
-                  //   const Duration(seconds: PasarAjaConstant.initLoading),
-                  // );
-                  // setState(
-                  //   () => state = AuthFilledButton.stateEnabledButton,
-                  // );
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                  //   const SnackBar(
-                  //     content: Text('Sudah sampai disini saja.'),
-                  //   ),
-                  // );
+
+                  DataState dataState = await _signUpController.signUp(
+                    phone: user.phoneNumber!,
+                    fullName: user.fullName!,
+                    pin: createdPin,
+                    password: user.password!,
+                  );
+
+                  if (dataState is DataSuccess) {
+                    Fluttertoast.showToast(
+                      msg:
+                          "Register berhasil, Silahkan login dengan akun yang baru",
+                    );
+
+                    await Future.delayed(const Duration(seconds: 2));
+
+                    Get.off(
+                      const WelcomePage(),
+                      transition: Transition.leftToRight,
+                    );
+                  }
+
+                  if (dataState is DataFailed) {
+                    PasarAjaUtils.triggerVibration();
+                    Fluttertoast.showToast(msg: dataState.error!.message);
+                  }
                 },
                 state: state,
                 title: 'Buat Akun',

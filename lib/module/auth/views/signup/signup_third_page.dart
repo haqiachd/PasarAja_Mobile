@@ -4,21 +4,31 @@ import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
+import 'package:pasaraja_mobile/module/auth/models/user_model.dart';
 import 'package:pasaraja_mobile/module/auth/views/signup/signup_fourth_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
 class SingUpCreatePin extends StatefulWidget {
-  const SingUpCreatePin({super.key});
+  final UserModel user;
+  const SingUpCreatePin({
+    super.key,
+    required this.user,
+  });
 
   @override
-  State<SingUpCreatePin> createState() => _SingUpCreatePinState();
+  State<SingUpCreatePin> createState() => _SingUpCreatePinState(user);
 }
 
 class _SingUpCreatePinState extends State<SingUpCreatePin> {
   final TextEditingController pinCont = TextEditingController();
   ValidationModel vPin = PasarAjaValidation.pin(null);
+  //
+  final UserModel user;
   int state = AuthFilledButton.stateDisabledButton;
   String? errMessage;
+  //
+  _SingUpCreatePinState(this.user);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +82,7 @@ class _SingUpCreatePinState extends State<SingUpCreatePin> {
                     () => state = AuthFilledButton.stateEnabledButton,
                   );
                   Get.to(
-                    SignUpConfirmPage(createdPin: pinCont.text),
+                    SignUpConfirmPage(user: user, createdPin: pinCont.text),
                     transition: Transition.downToUp,
                   );
                   // Navigator.pushNamed(context, RouteName.signupFourth);

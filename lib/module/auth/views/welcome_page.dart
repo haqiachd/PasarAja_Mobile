@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/icons.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
 import 'package:pasaraja_mobile/core/constants/local_data.dart';
 import 'package:pasaraja_mobile/module/auth/views/signin/signin_google_page.dart';
+import 'package:pasaraja_mobile/module/auth/views/signup/signup_first_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 import 'package:pasaraja_mobile/module/auth/views/signin/signin_phone_page.dart';
-
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -160,8 +159,11 @@ _masukOnPressed(BuildContext context) {
                       onTap: () {
                         Navigator.of(context).pop();
                         // Navigator.pushNamed(context, RouteName.loginGoogle);
-                        Get.to(const SignInGooglePage(),
-                            transition: Transition.downToUp);
+                        Get.to(
+                          const SignInGooglePage(),
+                          transition: Transition.downToUp,
+                          duration: const Duration(milliseconds: 500),
+                        );
                       },
                     ),
                     const SizedBox(height: 11),
@@ -173,6 +175,7 @@ _masukOnPressed(BuildContext context) {
                         Get.to(
                           const SignInPhonePage(),
                           transition: Transition.downToUp,
+                          duration: const Duration(milliseconds: 500),
                         );
                       },
                     ),
@@ -190,6 +193,10 @@ _masukOnPressed(BuildContext context) {
 
 _registerOnPressed(BuildContext context) {
   return () {
-    Navigator.pushNamed(context, RouteName.testpage);
+    Get.to(
+      const SignUpPhonePage(),
+      transition: Transition.downToUp,
+      duration: const Duration(milliseconds: 500),
+    );
   };
 }

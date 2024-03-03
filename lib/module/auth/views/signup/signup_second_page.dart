@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:pasaraja_mobile/config/routes/route_names.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
+import 'package:pasaraja_mobile/module/auth/models/user_model.dart';
+import 'package:pasaraja_mobile/module/auth/views/signup/signup_third_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
 class SignUpCreatePage extends StatefulWidget {
-  final String? phone;
+  final String phone;
   const SignUpCreatePage({
     super.key,
     required this.phone,
@@ -17,10 +19,8 @@ class SignUpCreatePage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpCreatePage> {
-  final String? phone;
-  _SignUpPageState(this.phone);
   //
-  final TextEditingController emailCont = TextEditingController();
+  final TextEditingController nameCont = TextEditingController();
   final TextEditingController pwCont = TextEditingController();
   final TextEditingController konfCont = TextEditingController();
   //
@@ -30,6 +30,9 @@ class _SignUpPageState extends State<SignUpCreatePage> {
   //
   int state = AuthFilledButton.stateDisabledButton;
   bool obscurePass = false, obscureKonf = false;
+  final String phone;
+  //
+  _SignUpPageState(this.phone);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +61,7 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                     AuthInputText(
                       title: 'Masukan Nama',
                       textField: AuthTextField(
-                        controller: emailCont,
+                        controller: nameCont,
                         hintText: 'Nama Anda',
                         fontSize: 20,
                         keyboardType: TextInputType.name,
@@ -76,7 +79,7 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                           setState(() {});
                         },
                         suffixAction: () {
-                          emailCont.text = '';
+                          nameCont.text = '';
                           vName = PasarAjaValidation.name('');
                           // update state
                           state = _buttonState(
@@ -177,7 +180,15 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                         setState(
                           () => state = AuthFilledButton.stateEnabledButton,
                         );
-                        Navigator.pushNamed(context, RouteName.signupThird);
+                        Get.to(
+                          SingUpCreatePin(
+                            user: UserModel(
+                              phoneNumber: phone,
+                              fullName: nameCont.text,
+                              password: pwCont.text,
+                            ),
+                          ),
+                        );
                       },
                       state: state,
                       title: 'Berikutnya',
