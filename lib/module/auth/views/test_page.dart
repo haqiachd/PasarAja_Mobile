@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
+import 'package:pasaraja_mobile/core/data/data_state.dart';
+import 'package:pasaraja_mobile/module/auth/controllers/test_controller.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
 class MyTestPage extends StatefulWidget {
@@ -11,7 +14,8 @@ class MyTestPage extends StatefulWidget {
 
 class _MyTestPageState extends State<MyTestPage> {
   bool isLoading = true;
-  int state = CustomElevatedButton.stateDisabledButton;
+  int state = CustomElevatedButton.stateEnabledButton;
+  TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,80 +24,35 @@ class _MyTestPageState extends State<MyTestPage> {
       body: Center(
         child: Column(
           children: [
-            const SizedBox(height: 100),
-            AuthFilledButton(
-              title: "Daftar",
-              state: state,
-              onPressed: () async {
-                setState(() => state = CustomElevatedButton.stateLoadingButton);
-                await Future.delayed(const Duration(seconds: 3));
-                setState(() => state = CustomElevatedButton.stateEnabledButton);
-              },
+            AuthInputText(
+              title: 'Input Email',
+              textField: AuthTextField(
+                controller: controller,
+                autofillHints: [AutofillHints.email],
+              ),
             ),
-            const SizedBox(height: 100),
-            testButton(),
-            const SizedBox(height: 100),
-            loginSatu('Masuk'),
-            const SizedBox(height: 100),
-            ElevatedButton(
-              onPressed: () {
-                if (state == AuthFilledButton.stateDisabledButton) {
-                  state = AuthFilledButton.stateEnabledButton;
-                } else {
-                  state = AuthFilledButton.stateDisabledButton;
+            AuthFilledButton(
+              onPressed: () async {
+                TestController testController = TestController();
+                // request login
+                final DataState response = await testController.loginDio(
+                  email: controller.text,
+                );
+
+                if (response is DataSuccess) {
+                  Fluttertoast.showToast(msg: 'Login berhasil');
                 }
 
-                setState(() {});
+                if (response is DataFailed) {
+                  Fluttertoast.showToast(msg: response.error!.message);
+                }
               },
-              child: const Text('Submit'),
+              title: 'Button',
+              state: state,
             )
           ],
         ),
       ),
-    );
-  }
-
-  CustomElevatedButton testButton() {
-    return CustomElevatedButton(
-      title: 'Login',
-      state: state,
-      onPressed: () async {
-        // setState(() => isLoading = true);
-        setState(() => state = CustomElevatedButton.stateLoadingButton);
-        await Future.delayed(const Duration(seconds: 3));
-        // setState(() => isLoading = false);
-        setState(() => state = CustomElevatedButton.stateEnabledButton);
-      },
-    );
-  }
-
-  ElevatedButton loginSatu(String title) {
-    return ElevatedButton(
-      onPressed: () async {
-        isLoading = true;
-        setState(() => isLoading = true);
-        await Future.delayed(const Duration(seconds: 1));
-        setState(() => isLoading = false);
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: PasarAjaColor.green2,
-        foregroundColor: PasarAjaColor.white,
-      ),
-      child: isLoading
-          ? const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 25,
-                  height: 25,
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                    strokeWidth: 2.5,
-                  ),
-                ),
-              ],
-            )
-          : Text(title),
     );
   }
 }

@@ -27,6 +27,7 @@ dependencies:
   firebase_messaging: ^14.7.17
   provider: ^6.1.1
   http: ^1.1.2
+  dio: ^4.0.6
   flutter_native_splash: ^2.2.4
   logger: ^2.0.2+1
   image_picker: ^1.0.7

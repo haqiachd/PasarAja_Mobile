@@ -9,6 +9,7 @@ class SignInController {
   final Dio _dio = Dio();
   final String _signInRoute = '${PasarAjaConstant.baseUrl}/auth/signin';
 
+  /// login dengan google
   Future<DataState> signInGoogle({
     required String email,
   }) async {
@@ -49,6 +50,7 @@ class SignInController {
     }
   }
 
+  /// login dengan email
   Future<DataState<UserModel>> signInEmail({
     required String email,
     required String password,
@@ -90,6 +92,7 @@ class SignInController {
     }
   }
 
+  /// login dengan nomor hp
   Future<DataState<UserModel>> signInPhone({
     required String phone,
     required String pin,

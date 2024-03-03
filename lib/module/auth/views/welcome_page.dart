@@ -190,6 +190,6 @@ _masukOnPressed(BuildContext context) {
 
 _registerOnPressed(BuildContext context) {
   return () {
-    Navigator.pushNamed(context, RouteName.signupFirst);
+    Navigator.pushNamed(context, RouteName.testpage);
   };
 }

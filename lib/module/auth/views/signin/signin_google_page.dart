@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:pasaraja_mobile/config/themes/Typography.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
-import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/views/verify/verify_otp_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/core/services/google_signin_services.dart';
-import 'package:pasaraja_mobile/module/auth/controllers/signin/signin_google_controller.dart';
 import 'package:provider/provider.dart';
 
 class SignInGooglePage extends StatefulWidget {
@@ -117,18 +115,6 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                 title: 'Masuk',
                 onPressed: () async {
                   setState(() => state = AuthFilledButton.stateLoadingButton);
-                  final response = await SignInGoogleController.loginEmail(
-                    email: emailCont.text,
-                    password: pwCont.text,
-                  );
-
-                  print("dfasfsad -> ${response.message}");
-                  if (response.status == 'success') {
-                    _showSnackbar(context, 'Login berhasil');
-                  } else {
-                    PasarAjaUtils.triggerVibration();
-                    _showSnackbar(context, response.message!);
-                  }
 
                   setState(() => state = AuthFilledButton.stateEnabledButton);
                 },
@@ -167,15 +153,6 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                   await services.googleLogin();
 
                   setState(() => email = services.user.email);
-
-                  final response =
-                      await SignInGoogleController.loginGoogle(email: email);
-
-                  if (response.status == 'success') {
-                    _showSnackbar(context, "Login Berhasil");
-                  } else {
-                    _showSnackbar(context, response.message!);
-                  }
 
                   services.logout();
                 },
