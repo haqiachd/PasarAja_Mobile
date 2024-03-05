@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
-import 'package:pasaraja_mobile/core/data/data_state.dart';
+import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/test_controller.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
