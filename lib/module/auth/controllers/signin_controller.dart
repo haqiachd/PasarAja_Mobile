@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/module/auth/models/user_model.dart';
+import 'package:talker_dio_logger/talker_dio_logger.dart';
 
 class SignInController {
   final Dio _dio = Dio();
@@ -14,6 +15,20 @@ class SignInController {
     required String email,
   }) async {
     try {
+      _dio.interceptors.add(
+        TalkerDioLogger(
+          settings: const TalkerDioLoggerSettings(
+            // All http request & responses enabled for console logging
+            printResponseData: false,
+            printRequestData: false,
+            // Request & Reposnse logs including http - headers
+            printResponseHeaders: false,
+            printRequestHeaders: false,
+            // Request logs with response message
+            printResponseMessage: false,
+          ),
+        ),
+      );
       // send request
       final response = await _dio.post(
         "$_signInRoute/google",
@@ -132,5 +147,19 @@ class SignInController {
     } on DioException catch (ex) {
       return DataFailed(ex);
     }
+  }
+}
+
+void main(List<String> args) async {
+  DataState dataState =
+      await SignInController().signInGoogle(email: 'hakiahmad756@gmail.comsd');
+
+  if (dataState is DataSuccess) {
+    //
+    print('login berhasil');
+  }
+
+  if (dataState is DataFailed) {
+    print(dataState.error!.error);
   }
 }

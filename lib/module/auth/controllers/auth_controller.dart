@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
+import 'package:pasaraja_mobile/core/utils/utils.dart';
 
 class AuthController {
   final Dio _dio = Dio();
@@ -24,11 +25,21 @@ class AuthController {
         ),
       );
 
+      // get response data
+      final Map<String, dynamic> payload = response.data;
+
       // jika response ok maka data exist
       if (response.statusCode == HttpStatus.ok) {
         return const DataSuccess(true);
       } else {
-        return const DataSuccess(false);
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
       }
     } on DioException catch (ex) {
       return DataFailed(ex);
@@ -51,13 +62,24 @@ class AuthController {
         ),
       );
 
+      // get response data
+      final Map<String, dynamic> payload = response.data;
+
       // jika response ok maka data exist
       if (response.statusCode == HttpStatus.ok) {
         return const DataSuccess(true);
       } else {
-        return const DataSuccess(false);
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
       }
     } on DioException catch (ex) {
+      PasarAjaUtils.clearDioException(_dio);
       return DataFailed(ex);
     }
   }

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/routes/routes.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/firebase_options.dart';
+import 'package:pasaraja_mobile/module/auth/providers/signin/signin_phone_provider.dart';
 import 'package:pasaraja_mobile/module/auth/views/welcome_page.dart';
 import 'package:pasaraja_mobile/core/services/google_signin_services.dart';
 import 'package:provider/provider.dart';
@@ -30,8 +31,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => GoogleSignService(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => GoogleSignService()),
+        ChangeNotifierProvider(create: (context) => SignInPhoneProvider()),
+      ],
       child: GetMaterialApp(
         title: 'PasarAja',
         theme: ThemeData(
