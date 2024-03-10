@@ -5,4 +5,5 @@ class PasarAjaConstant {
   static const int initLoading = 3;
   static const String baseUrl = 'http://192.168.1.152:8000/api/m';
   static const String npeString = 'Exception : NPE';
+  static const String unknownError = 'unknown error';
 }

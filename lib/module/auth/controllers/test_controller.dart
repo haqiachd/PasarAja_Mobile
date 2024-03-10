@@ -35,7 +35,7 @@ class TestController {
     } else {
       // jika response failed
       return DataFailed(
-        DioError(
+        DioException(
           requestOptions: RequestOptions(path: ''),
           error: body['message'],
         ),
@@ -70,15 +70,15 @@ class TestController {
       } else {
         // jika gagal maka akan mengembalikan pesan error
         return DataFailed(
-          DioError(
+          DioException(
             requestOptions: response.requestOptions,
             response: response,
-            type: DioErrorType.response,
+            type: DioExceptionType.badResponse,
             error: payload['message'],
           ),
         );
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       return DataFailed(error);
     }
   }

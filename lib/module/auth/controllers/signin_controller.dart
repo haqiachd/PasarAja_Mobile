@@ -37,15 +37,15 @@ class SignInController {
       } else {
         // jika gagal maka akan mengembalikan pesan error
         return DataFailed(
-          DioError(
+          DioException(
             requestOptions: response.requestOptions,
             response: response,
-            type: DioErrorType.response,
+            type: DioExceptionType.badResponse,
             error: payload['message'],
           ),
         );
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       return DataFailed(error);
     }
   }
@@ -79,15 +79,15 @@ class SignInController {
       } else {
         // jika login gagal
         return DataFailed(
-          DioError(
+          DioException(
             requestOptions: response.requestOptions,
             response: response,
-            type: DioErrorType.response,
+            type: DioExceptionType.badResponse,
             error: payload['message'],
           ),
         );
       }
-    } on DioError catch (ex) {
+    } on DioException catch (ex) {
       return DataFailed(ex);
     }
   }
@@ -121,15 +121,15 @@ class SignInController {
       } else {
         // jika login gagal
         return DataFailed(
-          DioError(
+          DioException(
             requestOptions: response.requestOptions,
             response: response,
-            type: DioErrorType.response,
+            type: DioExceptionType.badResponse,
             error: payload['message'],
           ),
         );
       }
-    } on DioError catch (ex) {
+    } on DioException catch (ex) {
       return DataFailed(ex);
     }
   }

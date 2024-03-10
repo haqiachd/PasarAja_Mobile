@@ -83,7 +83,9 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
                               PasarAjaUtils.triggerVibration();
                               errMessage = dataState.error!.message;
                               Fluttertoast.showToast(
-                                  msg: dataState.error!.message);
+                                msg: dataState.error!.message ??
+                                    PasarAjaConstant.unknownError,
+                              );
                             }
                             setState(() {});
                           },

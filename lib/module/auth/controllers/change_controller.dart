@@ -35,17 +35,16 @@ class ChangeController {
       } else {
         // jika pw gagal diubah
         return DataFailed(
-          DioError(
+          DioException(
             requestOptions: response.requestOptions,
             response: response,
-            type: DioErrorType.response,
+            type: DioExceptionType.badResponse,
             error: payload['message'],
           ),
         );
       }
-    } on DioError catch (ex) {
+    } on DioException catch (ex) {
       return DataFailed(ex);
     }
   }
 }
-

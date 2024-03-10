@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
+import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/test_controller.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
@@ -44,7 +45,10 @@ class _MyTestPageState extends State<MyTestPage> {
                 }
 
                 if (response is DataFailed) {
-                  Fluttertoast.showToast(msg: response.error!.message);
+                  Fluttertoast.showToast(
+                    msg: response.error!.message ??
+                        PasarAjaConstant.unknownError,
+                  );
                 }
               },
               title: 'Button',

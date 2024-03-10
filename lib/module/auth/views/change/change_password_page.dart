@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
+import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/change_controller.dart';
@@ -145,7 +146,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   }
 
                   if (dataState is DataFailed) {
-                    Fluttertoast.showToast(msg: dataState.error!.message);
+                    Fluttertoast.showToast(
+                      msg: dataState.error!.message ??
+                          PasarAjaConstant.unknownError,
+                    );
                   }
 
                   setState(() => state = AuthFilledButton.stateEnabledButton);

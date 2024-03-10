@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pasaraja_mobile/config/themes/Typography.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
+import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
@@ -143,7 +144,10 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
 
                   if (dataState is DataFailed) {
                     PasarAjaUtils.triggerVibration();
-                    Fluttertoast.showToast(msg: dataState.error!.message);
+                    Fluttertoast.showToast(
+                      msg: dataState.error!.message ??
+                          PasarAjaConstant.unknownError,
+                    );
                   }
 
                   setState(() => state = AuthFilledButton.stateEnabledButton);
@@ -178,7 +182,10 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                         }
 
                         if (dataState is DataFailed) {
-                          Fluttertoast.showToast(msg: dataState.error!.message);
+                          Fluttertoast.showToast(
+                            msg: dataState.error!.message ??
+                                PasarAjaConstant.unknownError,
+                          );
                         }
                       } else {
                         Fluttertoast.showToast(msg: "Email tidak terdaftar");
@@ -186,7 +193,10 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                     }
 
                     if (dataState is DataFailed) {
-                      Fluttertoast.showToast(msg: dataState.error!.message);
+                      Fluttertoast.showToast(
+                        msg: dataState.error!.message ??
+                            PasarAjaConstant.unknownError,
+                      );
                     }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -223,7 +233,10 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
                   }
 
                   if (dataState is DataFailed) {
-                    Fluttertoast.showToast(msg: dataState.error!.message);
+                    Fluttertoast.showToast(
+                      msg: dataState.error!.message ??
+                          PasarAjaConstant.unknownError,
+                    );
                   }
 
                   gServices.logout();

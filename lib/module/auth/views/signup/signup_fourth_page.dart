@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
+import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
@@ -126,7 +127,10 @@ class _SignUpConfirmPageState extends State<SignUpConfirmPage> {
 
                   if (dataState is DataFailed) {
                     PasarAjaUtils.triggerVibration();
-                    Fluttertoast.showToast(msg: dataState.error!.message);
+                    Fluttertoast.showToast(
+                      msg: dataState.error!.message ??
+                          PasarAjaConstant.unknownError,
+                    );
                   }
                 },
                 state: state,

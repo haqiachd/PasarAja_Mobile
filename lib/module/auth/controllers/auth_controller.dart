@@ -30,7 +30,7 @@ class AuthController {
       } else {
         return const DataSuccess(false);
       }
-    } on DioError catch (ex) {
+    } on DioException catch (ex) {
       return DataFailed(ex);
     }
   }
@@ -57,7 +57,7 @@ class AuthController {
       } else {
         return const DataSuccess(false);
       }
-    } on DioError catch (ex) {
+    } on DioException catch (ex) {
       return DataFailed(ex);
     }
   }
