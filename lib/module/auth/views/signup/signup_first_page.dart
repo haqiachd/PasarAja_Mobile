@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
-import 'package:pasaraja_mobile/core/constants/constants.dart';
-import 'package:pasaraja_mobile/core/sources/data_state.dart';
-import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
-import 'package:pasaraja_mobile/module/auth/controllers/auth_controller.dart';
-import 'package:pasaraja_mobile/module/auth/models/verification_model.dart';
-import 'package:pasaraja_mobile/module/auth/views/verify/verify_otp_page.dart';
+import 'package:pasaraja_mobile/module/auth/providers/signup/signup_first_provider.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 class SignUpPhonePage extends StatefulWidget {
   const SignUpPhonePage({super.key});
@@ -20,12 +14,14 @@ class SignUpPhonePage extends StatefulWidget {
 }
 
 class _SignUpPhonePageState extends State<SignUpPhonePage> {
-  final AuthController _authController = AuthController();
-  //
-  final TextEditingController nohpCont = TextEditingController();
-  ValidationModel vPhone = PasarAjaValidation.phone(null);
-  //
-  int state = AuthFilledButton.stateDisabledButton;
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<SignUpFirstProvider>(context, listen: false).resetData();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,81 +56,17 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
                     Flexible(
                       fit: FlexFit.tight,
                       flex: 5,
-                      child: AuthTextField(
-                        controller: nohpCont,
-                        hintText: '82-xxxx-xxxx',
-                        errorText: vPhone.message,
-                        keyboardType: TextInputType.number,
-                        showHelper: false,
-                        formatters: AuthTextField.numberFormatter(),
-                        onChanged: (value) {
-                          // valdasi data
-                          vPhone = PasarAjaValidation.phone(value);
-                          // enable and disable button
-                          if (vPhone.status == true) {
-                            state = AuthFilledButton.stateEnabledButton;
-                            nohpCont.text = value;
-                          } else {
-                            state = AuthFilledButton.stateDisabledButton;
-                          }
-                          setState(() {});
-                        },
-                        suffixAction: () {
-                          setState(() => nohpCont.text = '');
-                          setState(
-                            () => state = AuthFilledButton.stateDisabledButton,
-                          );
-                        },
-                      ),
+                      child: _buildInputPhone(),
                     ),
                   ],
                 ),
               ),
               Align(
                 alignment: Alignment.centerLeft,
-                child: AuthHelperText(
-                  title: _showHelperText(vPhone.message),
-                ),
+                child: _buildHelperText(),
               ),
               const SizedBox(height: 40),
-              AuthFilledButton(
-                onPressed: () async {
-                  setState(() => state = AuthFilledButton.stateLoadingButton);
-
-                  DataState dataState = await _authController.isExistPhone(
-                    phone: "62${nohpCont.text}",
-                  );
-
-                  if (dataState is DataSuccess) {
-                    if (dataState.data == true) {
-                      PasarAjaUtils.triggerVibration();
-                      Fluttertoast.showToast(msg: "Nomor hp sudah terdaftar");
-                    } else {
-                      Get.to(
-                        VerifyOtpPage(
-                          verificationModel:
-                              const VerificationModel(otp: "1234"),
-                          from: VerifyOtpPage.fromRegister,
-                          recipient: "62${nohpCont.text}",
-                        ),
-                        transition: Transition.leftToRight,
-                        duration: const Duration(milliseconds: 500),
-                      );
-                    }
-                  }
-
-                  if (dataState is DataFailed) {
-                    Fluttertoast.showToast(
-                      msg: dataState.error!.message ??
-                          PasarAjaConstant.unknownError,
-                    );
-                  }
-
-                  setState(() => state = AuthFilledButton.stateEnabledButton);
-                },
-                state: state,
-                title: 'Berikutnya',
-              ),
+              _buildButtonBerikutnya(),
               const SizedBox(height: 100),
             ],
           ),
@@ -142,12 +74,62 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
       ),
     );
   }
-}
 
-String? _showHelperText(String? message) {
-  if (message == null || message != 'Phone null' && message != 'Data valid') {
-    return message;
-  } else {
-    return null;
+  /// Input Nomor HP
+  _buildInputPhone() {
+    return Consumer<SignUpFirstProvider>(
+      builder: (context, provider, child) {
+        // Mendapatkan instance SignUpFirstProvider
+        final phoneCont = provider.phoneCont;
+
+        return AuthTextField(
+          controller: phoneCont,
+          hintText: '82-xxxx-xxxx',
+          errorText: provider.message.toString(),
+          keyboardType: TextInputType.number,
+          showHelper: false,
+          formatters: AuthTextField.numberFormatter(),
+          onChanged: (value) {
+            provider.onValidatePhone(value);
+          },
+          suffixAction: () {
+            phoneCont.text = '';
+            provider.vPhone = PasarAjaValidation.phone('');
+            provider.message = provider.vPhone.message.toString();
+            provider.buttonState = AuthFilledButton.stateDisabledButton;
+          },
+        );
+      },
+    );
+  }
+
+  // Helper Text
+  _buildHelperText() {
+    return Consumer<SignUpFirstProvider>(
+      builder: (context, provider, child) {
+        return AuthHelperText(
+          title: provider.showHelperText(
+            provider.message.toString(),
+          ),
+        );
+      },
+    );
+  }
+
+  // Button Berikutnya
+  _buildButtonBerikutnya() {
+    return Consumer<SignUpFirstProvider>(
+      builder: (context, provider, child) {
+        return AuthFilledButton(
+          onPressed: () async {
+            provider.onPressedButtonBerikutnya(
+              phone: "62${provider.phoneCont.text}",
+            );
+          },
+          state: provider.buttonState,
+          title: 'Berikutnya',
+        );
+      },
+    );
   }
 }

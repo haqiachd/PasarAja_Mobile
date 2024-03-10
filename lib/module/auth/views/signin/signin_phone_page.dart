@@ -82,7 +82,7 @@ Widget _buildHelperMessage(BuildContext context) {
   return Consumer<SignInPhoneProvider>(
     builder: (context, provider, child) {
       return AuthHelperText(
-        title: provider.showHelperText(provider.message),
+        title: provider.showHelperText(provider.message.toString()),
       );
     },
   );
@@ -102,7 +102,7 @@ Widget _buildTextFieldPhone(BuildContext context) {
         hintText: '82-xxxx-xxxx',
         keyboardType: TextInputType.number,
         formatters: AuthTextField.numberFormatter(),
-        errorText: provider.message,
+        errorText: provider.message.toString(),
         showHelper: false,
         onChanged: (value) {
           // update controller
@@ -112,6 +112,7 @@ Widget _buildTextFieldPhone(BuildContext context) {
           // reset text phone menjadi null
           phoneCont.text = '';
           provider.vPhone = PasarAjaValidation.phone('');
+          provider.message = provider.vPhone.message.toString();
           provider.buttonState = AuthFilledButton.stateDisabledButton;
         },
       );

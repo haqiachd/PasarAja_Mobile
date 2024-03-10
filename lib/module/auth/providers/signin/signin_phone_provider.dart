@@ -24,9 +24,9 @@ class SignInPhoneProvider extends ChangeNotifier {
   }
 
   // error message
-  String _message = '';
-  String get message => _message;
-  set message(String m) {
+  Object _message = '';
+  Object get message => _message;
+  set message(Object m) {
     _message = m;
     notifyListeners();
   }
@@ -74,16 +74,17 @@ class SignInPhoneProvider extends ChangeNotifier {
       // jika nomor hp tidak exist
       if (dataState is DataFailed) {
         PasarAjaUtils.triggerVibration();
-        message = dataState.error!.error.toString();
-        Fluttertoast.showToast(msg: message);
+        message = dataState.error!.error ?? PasarAjaConstant.unknownError;
+        Fluttertoast.showToast(msg: message.toString());
       }
 
       // update button state
       buttonState = AuthFilledButton.stateEnabledButton;
       notifyListeners();
     } catch (ex) {
+      buttonState = AuthFilledButton.stateEnabledButton;
       message = ex.toString();
-      Fluttertoast.showToast(msg: message);
+      Fluttertoast.showToast(msg: message.toString());
       notifyListeners();
     }
   }
@@ -102,7 +103,7 @@ class SignInPhoneProvider extends ChangeNotifier {
     phoneCont.text = '';
     buttonState = AuthFilledButton.stateDisabledButton;
     message = '';
-    vPhone = PasarAjaValidation.phone(null);
+    vPhone = PasarAjaValidation.phone('');
     notifyListeners();
   }
 }
