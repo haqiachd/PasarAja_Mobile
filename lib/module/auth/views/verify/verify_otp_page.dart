@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:pasaraja_mobile/config/routes/route_names.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
-import 'package:pasaraja_mobile/core/constants/constants.dart';
-import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/module/auth/models/verification_model.dart';
-import 'package:pasaraja_mobile/module/auth/views/change/change_password_page.dart';
-import 'package:pasaraja_mobile/module/auth/views/signup/signup_second_page.dart';
+import 'package:pasaraja_mobile/module/auth/providers/verify/verify_otp_provider.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 class VerifyOtpPage extends StatefulWidget {
   static const int fromLoginGoogle = 1;
@@ -26,22 +21,17 @@ class VerifyOtpPage extends StatefulWidget {
   });
 
   @override
-  State<VerifyOtpPage> createState() =>
-      _VerifyOtpPageState(verificationModel, from, recipient);
+  State<VerifyOtpPage> createState() => _VerifyOtpPageState();
 }
 
 class _VerifyOtpPageState extends State<VerifyOtpPage> {
-  final VerificationModel verificationModel;
-  final int? from;
-  final String? recipient;
-  _VerifyOtpPageState(
-    this.verificationModel,
-    this.from,
-    this.recipient,
-  );
-  //
-  int state = AuthFilledButton.stateDisabledButton;
-  String? errMessage;
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<VerifyOtpProvider>(context, listen: false).resetData();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,41 +62,7 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: AuthInputPin(
-                        title: 'Masukan OTP',
-                        authPin: AuthPin(
-                          length: 4,
-                          onChanged: (value) {
-                            errMessage = null;
-                            setState(() {});
-                          },
-                          onCompleted: (value) async {
-                            if (value == verificationModel.otp) {
-                              await Future.delayed(const Duration(seconds: 1));
-                              switch (from) {
-                                case VerifyOtpPage.fromLoginGoogle:
-                                  Get.off(
-                                    ChangePasswordPage(email: recipient!),
-                                    transition: Transition.leftToRight,
-                                  );
-                                case VerifyOtpPage.fromRegister:
-                                  Get.off(
-                                    SignUpCreatePage(phone: recipient!),
-                                    transition: Transition.leftToRight,
-                                  );
-                                default:
-                                  {
-                                    Fluttertoast.showToast(
-                                        msg: "default error");
-                                  }
-                              }
-                            } else {
-                              errMessage = 'Kode OTP tidak cocok!';
-                              PasarAjaUtils.triggerVibration();
-                            }
-                          },
-                        ),
-                      ),
+                      child: _buildInputOtp(),
                     )
                   ],
                 ),
@@ -114,32 +70,64 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
               const SizedBox(height: 10),
               Align(
                 alignment: Alignment.centerLeft,
-                child: AuthHelperText(
-                  title: errMessage,
-                ),
+                child: _buildHelperMessage(),
               ),
               const SizedBox(height: 30),
-              AuthFilledButton(
-                onPressed: () async {
-                  setState(
-                    () => state = AuthFilledButton.stateLoadingButton,
-                  );
-                  await Future.delayed(
-                    const Duration(seconds: PasarAjaConstant.initLoading),
-                  );
-                  setState(
-                    () => state = AuthFilledButton.stateEnabledButton,
-                  );
-                  Navigator.pushNamed(context, RouteName.signupSecond);
-                },
-                state: state,
-                title: 'Kirim Ulang (3 menit)',
-              ),
+              _buildButtonKirimUlang(),
               const SizedBox(height: 40),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  // Input OTP
+  _buildInputOtp() {
+    return Consumer<VerifyOtpProvider>(builder: (context, provider, child) {
+      return AuthInputPin(
+        title: 'Masukan OTP',
+        authPin: AuthPin(
+          length: 4,
+          onChanged: (value) {
+            provider.message = '';
+          },
+          onCompleted: (value) async {
+            provider.onCompletePin(
+              from: widget.from!,
+              verify: widget.verificationModel,
+              otp: value,
+              data: widget.recipient,
+            );
+          },
+        ),
+      );
+    });
+  }
+
+  // Helper Message
+  _buildHelperMessage() {
+    return Consumer<VerifyOtpProvider>(
+      builder: (context, provider, child) {
+        return AuthHelperText(
+          title: provider.message.toString(),
+        );
+      },
+    );
+  }
+
+  // Button Kirim Ulang
+  _buildButtonKirimUlang() {
+    return Consumer<VerifyOtpProvider>(
+      builder: (context, provider, child) {
+        return AuthFilledButton(
+          onPressed: () async {
+            //
+          },
+          state: provider.buttonState,
+          title: 'Kirim Ulang (3 menit)',
+        );
+      },
     );
   }
 }
