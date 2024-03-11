@@ -90,13 +90,13 @@ class SignInGoogleProvider extends ChangeNotifier {
   }) async {
     try {
       // call loading
-      buttonState = AuthFilledButton.stateLoadingButton;
+      _buttonState = AuthFilledButton.stateLoadingButton;
       notifyListeners();
 
       await PasarAjaConstant.buttonDelay;
 
       // memanggil api untuk melakukan login dengan email dan password
-      final DataState dataState = await _signInController.signInEmail(
+      final dataState = await _signInController.signInEmail(
         email: email,
         password: password,
       );
@@ -112,7 +112,7 @@ class SignInGoogleProvider extends ChangeNotifier {
         PasarAjaUtils.showWarning(message.toString());
       }
 
-      buttonState = AuthFilledButton.stateEnabledButton;
+      _buttonState = AuthFilledButton.stateEnabledButton;
       notifyListeners();
     } catch (ex) {
       buttonState = AuthFilledButton.stateEnabledButton;

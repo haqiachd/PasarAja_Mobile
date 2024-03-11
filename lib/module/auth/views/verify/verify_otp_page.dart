@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
+import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/module/auth/models/verification_model.dart';
 import 'package:pasaraja_mobile/module/auth/providers/verify/verify_otp_provider.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
@@ -35,47 +37,61 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: PasarAjaColor.white,
-      appBar: authAppbar(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: 19,
-            right: 19,
-            top: 176 - MediaQuery.of(context).padding.top,
-          ),
-          child: Column(
-            children: [
-              const AuthInit(
-                image: PasarAjaImage.ilVerifyOtp,
-                title: 'Verifikasi OTP',
-                description:
-                    'Silakan masukkan kode OTP yang telah kami kirimkan ke nomor HP Anda.',
-              ),
-              const SizedBox(height: 19),
-              Padding(
-                padding: const EdgeInsets.only(left: 5, right: 5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: _buildInputOtp(),
-                    )
-                  ],
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (!didPop) {
+          final metu = await PasarAjaUtils.showConfirmBack(
+            "Apakah Anda yakin ingin keluar dari verifikasi OTP, Kode OTP Anda akan hangus",
+          );
+
+          if (metu) {
+            Get.back();
+          }
+        }
+      },
+      child: Scaffold(
+        backgroundColor: PasarAjaColor.white,
+        appBar: authAppbar(),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 19,
+              right: 19,
+              top: 176 - MediaQuery.of(context).padding.top,
+            ),
+            child: Column(
+              children: [
+                const AuthInit(
+                  image: PasarAjaImage.ilVerifyOtp,
+                  title: 'Verifikasi OTP',
+                  description:
+                      'Silakan masukkan kode OTP yang telah kami kirimkan ke nomor HP Anda.',
                 ),
-              ),
-              const SizedBox(height: 10),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: _buildHelperMessage(),
-              ),
-              const SizedBox(height: 30),
-              _buildButtonKirimUlang(),
-              const SizedBox(height: 40),
-            ],
+                const SizedBox(height: 19),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: _buildInputOtp(),
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: _buildHelperMessage(),
+                ),
+                const SizedBox(height: 30),
+                _buildButtonKirimUlang(),
+                const SizedBox(height: 40),
+              ],
+            ),
           ),
         ),
       ),
