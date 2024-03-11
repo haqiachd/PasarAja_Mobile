@@ -67,7 +67,7 @@ class SignInGoogleProvider extends ChangeNotifier {
     if (vPass.status == true) {
       message = '';
     } else {
-      message = vEmail.message ?? PasarAjaConstant.unknownError;
+      message = vPass.message ?? PasarAjaConstant.unknownError;
     }
     _updateButonState();
   }
@@ -169,7 +169,9 @@ class SignInGoogleProvider extends ChangeNotifier {
         );
       }
     } catch (ex) {
-      //
+      message = ex.toString();
+      Fluttertoast.showToast(msg: message.toString());
+      notifyListeners();
     }
   }
 
