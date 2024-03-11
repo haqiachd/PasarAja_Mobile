@@ -4,9 +4,10 @@ import 'package:get/get.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
+import 'package:pasaraja_mobile/module/auth/models/user_model.dart';
 import 'package:pasaraja_mobile/module/auth/models/verification_model.dart';
 import 'package:pasaraja_mobile/module/auth/views/change/change_password_page.dart';
-import 'package:pasaraja_mobile/module/auth/views/signup/signup_second_page.dart';
+import 'package:pasaraja_mobile/module/auth/views/signup/signup_third_page.dart';
 import 'package:pasaraja_mobile/module/auth/views/verify/verify_otp_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
@@ -68,9 +69,9 @@ class VerifyOtpProvider extends ChangeNotifier {
           // verifikasi register
           case VerifyOtpPage.fromRegister:
             Get.off(
-              SignUpCreatePage(phone: data as String),
-              transition: Transition.leftToRight,
-              duration: PasarAjaConstant.transitionDuration,
+              SingUpCreatePin(
+                user: data as UserModel,
+              ),
             );
           default:
             Fluttertoast.showToast(msg: "default error");

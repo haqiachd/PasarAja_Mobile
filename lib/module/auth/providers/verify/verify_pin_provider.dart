@@ -6,6 +6,7 @@ import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/signin_controller.dart';
+import 'package:pasaraja_mobile/module/auth/views/change/change_pin_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
 class VerifyPinProvider extends ChangeNotifier {
@@ -84,6 +85,29 @@ class VerifyPinProvider extends ChangeNotifier {
       notifyListeners();
     } catch (ex) {
       buttonState = AuthFilledButton.stateEnabledButton;
+      message = ex.toString();
+      Fluttertoast.showToast(msg: message.toString());
+      notifyListeners();
+    }
+  }
+
+  Future<void> onPressedButtonLupaPin({
+    required String phone,
+  }) async {
+    try {
+      PasarAjaUtils.showLoadingDialog();
+
+      await Future.delayed(const Duration(seconds: 3));
+
+      Get.back();
+      Fluttertoast.showToast(msg: phone);
+
+      Get.to(
+        const ChangePinPage(),
+        transition: Transition.leftToRight,
+        duration: PasarAjaConstant.transitionDuration,
+      );
+    } catch (ex) {
       message = ex.toString();
       Fluttertoast.showToast(msg: message.toString());
       notifyListeners();

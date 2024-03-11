@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
+import 'package:pasaraja_mobile/config/themes/typography.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/module/auth/providers/verify/verify_pin_provider.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
@@ -69,7 +70,8 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
               Visibility(
                 visible: false,
                 child: _buildButton(),
-              )
+              ),
+              _buildButtonLupaPin(),
             ],
           ),
         ),
@@ -113,14 +115,37 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
   }
 
   _buildButton() {
-    return Consumer<VerifyPinProvider>(builder: (context, provider, child) {
-      return AuthFilledButton(
-        onPressed: () async {
-          //
-        },
-        state: provider.buttonState,
-        title: 'Masuk',
-      );
-    });
+    return Consumer<VerifyPinProvider>(
+      builder: (context, provider, child) {
+        return AuthFilledButton(
+          onPressed: () async {
+            //
+          },
+          state: provider.buttonState,
+          title: 'Masuk',
+        );
+      },
+    );
+  }
+
+  _buildButtonLupaPin() {
+    return Consumer<VerifyPinProvider>(
+      builder: (context, provider, child) {
+        return TextButton(
+          onPressed: () {
+            provider.onPressedButtonLupaPin(
+              phone: widget.phone,
+            );
+          },
+          child: Text(
+            'Lupa PIN',
+            style: PasarAjaTypography.sfProDisplay.copyWith(
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+            ),
+          ),
+        );
+      },
+    );
   }
 }

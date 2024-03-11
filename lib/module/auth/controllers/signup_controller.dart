@@ -9,6 +9,7 @@ class SignUpController {
   final String _signUpRoute = '${PasarAjaConstant.baseUrl}/auth';
   Future<DataState<bool>> signUp({
     required String phone,
+    required String email,
     required String fullName,
     required String pin,
     required String password,
@@ -19,6 +20,7 @@ class SignUpController {
         "$_signUpRoute/signup/",
         data: {
           "phone_number": phone,
+          "email" : email,
           "full_name": fullName,
           "pin": pin,
           "password": password,

@@ -57,7 +57,7 @@ class SignInPhoneProvider extends ChangeNotifier {
       buttonState = AuthFilledButton.stateLoadingButton;
       notifyListeners();
       // await Future.delayed(const Duration(seconds: 3));
-
+      Fluttertoast.showToast(msg: phone);
       DMethod.log('phone number : $phone');
       // memanggil api untuk mengecek nomor hp exist atau tidak
       DataState dataState = await _authController.isExistPhone(phone: phone);

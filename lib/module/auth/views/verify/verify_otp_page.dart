@@ -15,11 +15,13 @@ class VerifyOtpPage extends StatefulWidget {
   final VerificationModel verificationModel;
   final String? recipient;
   final int? from;
+  final dynamic data;
   const VerifyOtpPage({
     super.key,
     required this.verificationModel,
     required this.from,
     required this.recipient,
+    this.data,
   });
 
   @override
@@ -113,7 +115,7 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
               from: widget.from!,
               verify: widget.verificationModel,
               otp: value,
-              data: widget.recipient,
+              data: widget.data,
             );
           },
         ),
