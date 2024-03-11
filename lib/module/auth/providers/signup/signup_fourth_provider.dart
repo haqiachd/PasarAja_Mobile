@@ -63,6 +63,7 @@ class SignUpFourthProvider extends ChangeNotifier {
       // memanggil api untuk login
       final dataState = await _signUpController.signUp(
         phone: user.phoneNumber!,
+        email: user.email!,
         fullName: user.fullName!,
         pin: createdPin,
         password: user.password!,

@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
+import 'package:pasaraja_mobile/core/sources/data_state.dart';
+import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
+import 'package:pasaraja_mobile/module/auth/controllers/auth_controller.dart';
+import 'package:pasaraja_mobile/module/auth/controllers/verification_controller.dart';
 import 'package:pasaraja_mobile/module/auth/models/user_model.dart';
-import 'package:pasaraja_mobile/module/auth/views/signup/signup_third_page.dart';
+import 'package:pasaraja_mobile/module/auth/models/verification_model.dart';
+import 'package:pasaraja_mobile/module/auth/views/verify/verify_otp_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
 class SignUpSecondProvider extends ChangeNotifier {
   // controller, validator
+  ValidationModel vEmail = PasarAjaValidation.email(null);
   ValidationModel vName = PasarAjaValidation.name(null);
   ValidationModel vPass = PasarAjaValidation.password(null);
   ValidationModel vKonf = PasarAjaValidation.konfirmasiPassword(null, null);
+  final TextEditingController emailCont = TextEditingController();
   final TextEditingController nameCont = TextEditingController();
   final TextEditingController pwCont = TextEditingController();
   final TextEditingController konfCont = TextEditingController();
+  final AuthController _authController = AuthController();
+  final VerificationController _verifyController = VerificationController();
 
   // button state status
   int _buttonState = AuthFilledButton.stateDisabledButton;
@@ -46,6 +56,20 @@ class SignUpSecondProvider extends ChangeNotifier {
   set obscureKonf(bool b) {
     _obscureKonf = b;
     notifyListeners();
+  }
+
+  /// Untuk mengecek apakah email yang diinputkan valid atau tidak
+  ///
+  void onValidateEmail(String email) {
+    vEmail = PasarAjaValidation.email(email);
+
+    // enable and disable button
+    if (vEmail.status == true) {
+      message = '';
+    } else {
+      message = vEmail.message ?? PasarAjaConstant.unknownError;
+    }
+    _updateButonState();
   }
 
   /// Untuk mengecek apakah nama yang diinputkan valid atau tidak
@@ -91,10 +115,14 @@ class SignUpSecondProvider extends ChangeNotifier {
   }
 
   void _updateButonState() {
-    if (vName.status == null || vPass.status == null || vKonf.status == null) {
+    if (vEmail.status == null ||
+        vName.status == null ||
+        vPass.status == null ||
+        vKonf.status == null) {
       buttonState = AuthFilledButton.stateDisabledButton;
     }
-    if (vName.status == false ||
+    if (vEmail.status == false ||
+        vName.status == false ||
         vPass.status == false ||
         vKonf.status == false) {
       buttonState = AuthFilledButton.stateDisabledButton;
@@ -106,19 +134,59 @@ class SignUpSecondProvider extends ChangeNotifier {
 
   Future<void> onPressedButtonBerikutnya({
     required String phone,
+    required String email,
     required String fullName,
     required String password,
   }) async {
     try {
-      Get.to(
-        SingUpCreatePin(
-          user: UserModel(
-            phoneNumber: phone,
-            fullName: fullName,
-            password: password,
-          ),
-        ),
+      _buttonState = AuthFilledButton.stateLoadingButton;
+      notifyListeners();
+
+      await PasarAjaConstant.buttonDelay;
+
+      DataState dataState = await _authController.isExistEmail(
+        email: email,
       );
+
+      if (dataState is DataSuccess) {
+        PasarAjaUtils.showWarning("Email tersebut sudah terdaftar");
+        // reset data email
+        PasarAjaUtils.triggerVibration();
+        emailCont.text = '';
+        onValidateEmail('');
+      }
+
+      if (dataState is DataFailed) {
+        dataState = await _verifyController.requestOtp(email: email);
+
+        // otp berhasil terikirm
+        if (dataState is DataSuccess) {
+          Get.to(
+            VerifyOtpPage(
+              verificationModel: dataState.data as VerificationModel,
+              from: VerifyOtpPage.fromRegister,
+              recipient: email,
+              data: UserModel(
+                phoneNumber: phone,
+                email: email,
+                fullName: fullName,
+                password: password,
+              ),
+            ),
+            transition: Transition.downToUp,
+          );
+        }
+
+        // data otp gagal dikirim
+        if (dataState is DataFailed) {
+          PasarAjaUtils.triggerVibration();
+          _message = dataState.error!.error ?? 'fail send otp';
+          Fluttertoast.showToast(msg: message.toString());
+        }
+      }
+
+      _buttonState = AuthFilledButton.stateEnabledButton;
+      notifyListeners();
     } catch (ex) {
       buttonState = AuthFilledButton.stateEnabledButton;
       message = ex.toString();
@@ -127,8 +195,50 @@ class SignUpSecondProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> onTapButtonLoginGoogle({
+    required GoogleSignInAccount user,
+  }) async {
+    try {
+      // send login request
+      PasarAjaUtils.showLoadingDialog();
+
+      await Future.delayed(const Duration(seconds: 3));
+
+      final dataState = await _authController.isExistEmail(
+        email: user.email,
+      );
+
+      Get.back();
+
+      if (dataState is DataSuccess) {
+        PasarAjaUtils.showWarning("Email tersebut sudah terdaftar");
+        // reset data email dan nama
+        PasarAjaUtils.triggerVibration();
+        emailCont.text = '';
+        nameCont.text = '';
+        onValidateEmail('');
+        onValidateName('');
+      }
+
+      if (dataState is DataFailed) {
+        final email = user.email;
+        final name = user.displayName ?? '';
+        // show data
+        emailCont.text = email;
+        nameCont.text = name;
+        // validasi data
+        onValidateEmail(email);
+        onValidateName(name);
+      }
+    } catch (ex) {
+      message = ex.toString();
+      Fluttertoast.showToast(msg: message.toString());
+    }
+  }
+
   /// reset semua data pada provider
   void resetData() {
+    emailCont.text = '';
     nameCont.text = '';
     pwCont.text = '';
     konfCont.text = '';
@@ -136,6 +246,7 @@ class SignUpSecondProvider extends ChangeNotifier {
     message = '';
     obscurePass = true;
     obscureKonf = true;
+    vEmail = PasarAjaValidation.email(null);
     vName = PasarAjaValidation.name(null);
     vPass = PasarAjaValidation.password(null);
     vKonf = PasarAjaValidation.konfirmasiPassword(null, null);

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
+import 'package:pasaraja_mobile/config/themes/images.dart';
+import 'package:pasaraja_mobile/core/services/google_signin_services.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/providers/signup/signup_second_provider.dart';
@@ -50,7 +52,7 @@ class _SignUpPageState extends State<SignUpCreatePage> {
             padding: EdgeInsets.only(
               left: 19,
               right: 19,
-              top: 94 - MediaQuery.of(context).padding.top,
+              top: 64 - MediaQuery.of(context).padding.top,
             ),
             child: Column(
               children: [
@@ -65,6 +67,8 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                 SingleChildScrollView(
                   child: Column(
                     children: [
+                      _buildInputEmail(),
+                      const SizedBox(height: 12),
                       _buildInputNama(),
                       const SizedBox(height: 12),
                       _buildInputPassword(),
@@ -73,6 +77,7 @@ class _SignUpPageState extends State<SignUpCreatePage> {
                       const SizedBox(height: 40),
                       _buildButtonBerikutnya(),
                       const SizedBox(height: 40),
+                      _buildButtonLoginGoogle(context),
                     ],
                   ),
                 )
@@ -81,6 +86,36 @@ class _SignUpPageState extends State<SignUpCreatePage> {
           ),
         ),
       ),
+    );
+  }
+
+  _buildInputEmail() {
+    return Consumer<SignUpSecondProvider>(
+      builder: (context, provider, child) {
+        //
+        final emailCont = provider.emailCont;
+
+        return AuthInputText(
+          title: 'Masukan Email',
+          textField: AuthTextField(
+            controller: emailCont,
+            hintText: 'Email Anda',
+            fontSize: 20,
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
+            autofillHints: const [AutofillHints.email],
+            errorText: provider.vEmail.message,
+            onChanged: (value) {
+              provider.onValidateEmail(value);
+            },
+            suffixAction: () {
+              emailCont.text = '';
+              provider.vEmail = PasarAjaValidation.email('');
+              provider.buttonState = AuthFilledButton.stateDisabledButton;
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -183,12 +218,39 @@ class _SignUpPageState extends State<SignUpCreatePage> {
           onPressed: () {
             provider.onPressedButtonBerikutnya(
               phone: widget.phone,
+              email: provider.emailCont.text,
               fullName: provider.nameCont.text,
               password: provider.pwCont.text,
             );
           },
           state: provider.buttonState,
           title: 'Berikutnya',
+        );
+      },
+    );
+  }
+
+  _buildButtonLoginGoogle(BuildContext context) {
+    return Consumer<SignUpSecondProvider>(
+      builder: (context, provider, child) {
+        return InkWell(
+          onTap: () async {
+            // show google auth
+            final gServices = Provider.of<GoogleSignService>(
+              context,
+              listen: false,
+            );
+            await gServices.googleLogin();
+
+            provider.onTapButtonLoginGoogle(user: gServices.user);
+
+            gServices.logout();
+          },
+          child: Image.asset(
+            PasarAjaImage.icGoogle,
+            width: 38,
+            height: 38,
+          ),
         );
       },
     );

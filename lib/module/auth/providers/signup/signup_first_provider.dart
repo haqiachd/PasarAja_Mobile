@@ -6,8 +6,7 @@ import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/auth_controller.dart';
-import 'package:pasaraja_mobile/module/auth/models/verification_model.dart';
-import 'package:pasaraja_mobile/module/auth/views/verify/verify_otp_page.dart';
+import 'package:pasaraja_mobile/module/auth/views/signup/signup_second_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/filled_button.dart';
 
 class SignUpFirstProvider extends ChangeNotifier {
@@ -70,16 +69,9 @@ class SignUpFirstProvider extends ChangeNotifier {
       // jika nomor hp tidak exist
       if (dataState is DataFailed) {
         Fluttertoast.showToast(msg: 'Nomor not exist');
-        // KIRIM OTP
-        const otp = VerificationModel(otp: "1234");
-        // open verify otp
         Get.to(
-          VerifyOtpPage(
-            verificationModel: otp,
-            from: VerifyOtpPage.fromRegister,
-            recipient: phone,
-          ),
-          transition: Transition.downToUp,
+          SignUpCreatePage(phone: phone),
+          transition: Transition.rightToLeft,
           duration: PasarAjaConstant.transitionDuration,
         );
       }
@@ -93,6 +85,14 @@ class SignUpFirstProvider extends ChangeNotifier {
       Fluttertoast.showToast(msg: message.toString());
       notifyListeners();
     }
+  }
+
+  void onPressedButtonSkip() {
+    Get.to(
+      const SignUpCreatePage(phone: ''),
+      transition: Transition.rightToLeft,
+      duration: PasarAjaConstant.transitionDuration,
+    );
   }
 
   /// filter untuk menampilkan pesan error

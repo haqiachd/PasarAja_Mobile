@@ -32,7 +32,7 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
           padding: EdgeInsets.only(
               left: 19,
               right: 19,
-              top: 176 - MediaQuery.of(context).padding.top),
+              top: 136 - MediaQuery.of(context).padding.top),
           child: Column(
             children: [
               const AuthInit(
@@ -67,7 +67,9 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
               ),
               const SizedBox(height: 40),
               _buildButtonBerikutnya(),
-              const SizedBox(height: 100),
+              const SizedBox(height: 20),
+              _buildButtonSkip(),
+              const SizedBox(height: 10),
             ],
           ),
         ),
@@ -130,6 +132,19 @@ class _SignUpPhonePageState extends State<SignUpPhonePage> {
           title: 'Berikutnya',
         );
       },
+    );
+  }
+
+  // Button Berikutnya
+  _buildButtonSkip() {
+    return AuthOutlinedButton(
+      onPressed: () async {
+        Provider.of<SignUpFirstProvider>(
+          context,
+          listen: false,
+        ).onPressedButtonSkip();
+      },
+      title: 'Lewati Nomor HP',
     );
   }
 }
