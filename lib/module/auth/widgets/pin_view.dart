@@ -31,6 +31,7 @@ class AuthPin extends StatelessWidget {
       length: length ?? 4,
       showCursor: false,
       autofocus: false,
+      controller: controller,
       obscureText: obscureText ?? false,
       onChanged: onChanged,
       onCompleted: onCompleted,
