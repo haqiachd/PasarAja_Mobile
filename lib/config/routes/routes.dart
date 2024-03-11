@@ -25,7 +25,9 @@ class AppRoutes {
       case RouteName.loginGoogle:
         return _materialRoute(const SignInGooglePage());
       case RouteName.changePin:
-        return _materialRoute(const ChangePinPage());
+        return _materialRoute(const ChangePinPage(
+          phone: 'null',
+        ));
       case RouteName.changePw:
         return _materialRoute(const ChangePasswordPage(
           email: '',

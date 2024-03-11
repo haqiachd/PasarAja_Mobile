@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 class VerifyOtpPage extends StatefulWidget {
   static const int fromLoginGoogle = 1;
   static const int fromRegister = 2;
+  static const int fromForgotPin = 3;
   //
   final VerificationModel verificationModel;
   final String? recipient;

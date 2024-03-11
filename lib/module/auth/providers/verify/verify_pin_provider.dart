@@ -6,13 +6,16 @@ import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/signin_controller.dart';
-import 'package:pasaraja_mobile/module/auth/views/change/change_pin_page.dart';
+import 'package:pasaraja_mobile/module/auth/controllers/verification_controller.dart';
+import 'package:pasaraja_mobile/module/auth/models/verification_model.dart';
+import 'package:pasaraja_mobile/module/auth/views/verify/verify_otp_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
 class VerifyPinProvider extends ChangeNotifier {
   // validator, controller
   ValidationModel vPin = PasarAjaValidation.pin(null);
-  SignInController _signInController = SignInController();
+  final SignInController _signInController = SignInController();
+  final VerificationController _verifyController = VerificationController();
 
   // button state status
   int _buttonState = AuthFilledButton.stateDisabledButton;
@@ -97,16 +100,35 @@ class VerifyPinProvider extends ChangeNotifier {
     try {
       PasarAjaUtils.showLoadingDialog();
 
-      await Future.delayed(const Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 2));
+
+      // mengirim kode otp
+      final dataState = await _verifyController.requestOtpByPhone(
+        phone: phone,
+      );
 
       Get.back();
-      Fluttertoast.showToast(msg: phone);
 
-      Get.to(
-        const ChangePinPage(),
-        transition: Transition.leftToRight,
-        duration: PasarAjaConstant.transitionDuration,
-      );
+      // jika otp berhasil dikirim
+      if (dataState is DataSuccess) {
+        final model = dataState.data as VerificationModel;
+        Get.to(
+          VerifyOtpPage(
+            verificationModel: model,
+            from: VerifyOtpPage.fromForgotPin,
+            recipient: phone,
+            data: phone,
+          ),
+          transition: Transition.leftToRight,
+          duration: PasarAjaConstant.transitionDuration,
+        );
+      }
+
+      // jika gagal
+      if (dataState is DataFailed) {
+        message = dataState.error!.error.toString();
+        Fluttertoast.showToast(msg: message.toString());
+      }
     } catch (ex) {
       message = ex.toString();
       Fluttertoast.showToast(msg: message.toString());

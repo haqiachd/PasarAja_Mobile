@@ -7,6 +7,7 @@ import 'package:pasaraja_mobile/core/sources/data_state.dart';
 class ChangeController {
   final Dio _dio = Dio();
   final String _authRoute = "${PasarAjaConstant.baseUrl}/auth";
+
   Future<DataState<bool>> changePassword({
     required String email,
     required String password,
@@ -18,6 +19,47 @@ class ChangeController {
         data: {
           "email": email,
           "password": password,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok || status == HttpStatus.badRequest;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+
+      if (response.statusCode == HttpStatus.ok) {
+        // jika pw berhasil diubah
+        return const DataSuccess(true);
+      } else {
+        // jika pw gagal diubah
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<bool>> changePin({
+    required String phone,
+    required String pin,
+  }) async {
+    try {
+      // send request
+      final response = await _dio.post(
+        "$_authRoute/updatepin",
+        data: {
+          "phone_number": phone,
+          "pin": pin,
         },
         options: Options(
           validateStatus: (status) {

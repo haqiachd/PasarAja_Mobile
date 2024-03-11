@@ -9,14 +9,52 @@ class VerificationController {
   final Dio _dio = Dio();
   final String _verifyRoute = '${PasarAjaConstant.baseUrl}/messenger';
 
-  Future<DataState<VerificationModel>> requestOtp(
-      {required String email}) async {
+  Future<DataState<VerificationModel>> requestOtp({
+    required String email,
+  }) async {
     try {
       // send request
       final response = await _dio.post(
         "$_verifyRoute/otp",
         data: {
           "email": email,
+          "type": "Forgot",
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok || status == HttpStatus.badRequest;
+          },
+        ),
+      );
+
+      final Map<String, dynamic> payload = response.data;
+
+      if (response.statusCode == HttpStatus.ok) {
+        return DataSuccess(VerificationModel.fromJson(payload['data']));
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<VerificationModel>> requestOtpByPhone({
+    required String phone,
+  }) async {
+    try {
+      // send request
+      final response = await _dio.post(
+        "$_verifyRoute/otphone",
+        data: {
+          "phone": phone,
           "type": "Forgot",
         },
         options: Options(
