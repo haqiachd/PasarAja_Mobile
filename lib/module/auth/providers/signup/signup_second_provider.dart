@@ -64,12 +64,13 @@ class SignUpSecondProvider extends ChangeNotifier {
 
   /// Untuk mengecek apakah password yang diinputkan valid atau tidak
   ///
-  void onValidatePassword(String password) {
+  void onValidatePassword(String password, String konf) {
     vPass = PasarAjaValidation.password(password);
 
     // enable and disable button
     if (vPass.status == true) {
       message = '';
+      onValidateKonf(password, konf);
     } else {
       message = vPass.message ?? PasarAjaConstant.unknownError;
     }
@@ -135,8 +136,9 @@ class SignUpSecondProvider extends ChangeNotifier {
     message = '';
     obscurePass = false;
     obscureKonf = false;
-    vName = PasarAjaValidation.name('');
-    vPass = PasarAjaValidation.password('');
+    vName = PasarAjaValidation.name(null);
+    vPass = PasarAjaValidation.password(null);
+    vKonf = PasarAjaValidation.konfirmasiPassword(null, null);
     notifyListeners();
   }
 }

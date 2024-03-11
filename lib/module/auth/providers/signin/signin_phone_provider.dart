@@ -1,3 +1,4 @@
+import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -57,6 +58,7 @@ class SignInPhoneProvider extends ChangeNotifier {
       notifyListeners();
       // await Future.delayed(const Duration(seconds: 3));
 
+      DMethod.log('phone number : $phone');
       // memanggil api untuk mengecek nomor hp exist atau tidak
       DataState dataState = await _authController.isExistPhone(phone: phone);
 
@@ -103,7 +105,7 @@ class SignInPhoneProvider extends ChangeNotifier {
     phoneCont.text = '';
     buttonState = AuthFilledButton.stateDisabledButton;
     message = '';
-    vPhone = PasarAjaValidation.phone('');
+    vPhone = PasarAjaValidation.phone(null);
     notifyListeners();
   }
 }

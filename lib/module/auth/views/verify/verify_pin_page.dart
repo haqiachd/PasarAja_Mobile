@@ -20,8 +20,8 @@ class VerifyPinPage extends StatefulWidget {
 class _VerifyPinPageState extends State<VerifyPinPage> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPersistentFrameCallback((timeStamp) {
-      Provider.of<VerifyPinProvider>(context).resetData();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<VerifyPinProvider>(context, listen: false).resetData();
     });
     super.initState();
   }

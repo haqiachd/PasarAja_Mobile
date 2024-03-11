@@ -202,8 +202,8 @@ class SignInGoogleProvider extends ChangeNotifier {
     buttonState = AuthFilledButton.stateDisabledButton;
     message = '';
     obscure = false;
-    vEmail = PasarAjaValidation.email('');
-    vPass = PasarAjaValidation.password('');
+    vEmail = PasarAjaValidation.email(null);
+    vPass = PasarAjaValidation.password(null);
     notifyListeners();
   }
 }

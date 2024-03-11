@@ -20,7 +20,7 @@ class _SignUpPageState extends State<SignUpCreatePage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<SignUpSecondProvider>(context).resetData();
+      Provider.of<SignUpSecondProvider>(context, listen: false).resetData();
     });
     super.initState();
   }
@@ -116,8 +116,10 @@ class _SignUpPageState extends State<SignUpCreatePage> {
             errorText: provider.vPass.message,
             suffixIcon: AuthTextField.hiddenPassword(provider.obscurePass),
             onChanged: (value) {
-              provider.onValidatePassword(value);
-              provider.onValidateKonf(value, provider.konfCont.text);
+              provider.onValidatePassword(
+                value,
+                provider.konfCont.text,
+              );
             },
             suffixAction: () {
               provider.obscurePass = !provider.obscurePass;

@@ -19,7 +19,7 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<SignInGoogleProvider>(context).resetData();
+      Provider.of<SignInGoogleProvider>(context, listen: false).resetData();
     });
     super.initState();
   }

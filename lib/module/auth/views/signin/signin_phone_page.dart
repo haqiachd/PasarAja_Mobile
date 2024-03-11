@@ -131,6 +131,7 @@ Widget _buildButtonBerikutnya(BuildContext context) {
           provider.onPressedButtonBerikutnya(
             phone: "62${provider.phoneCont.text}",
           );
+          DMethod.log('phone num : 62${provider.phoneCont.text}');
         },
         state: provider.buttonState, // update state
         title: 'Berikutnya',
