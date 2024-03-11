@@ -1,12 +1,11 @@
+import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
-import 'package:pasaraja_mobile/core/constants/constants.dart';
-import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/models/user_model.dart';
-import 'package:pasaraja_mobile/module/auth/views/signup/signup_fourth_page.dart';
+import 'package:pasaraja_mobile/module/auth/providers/signup/signup_third_provider.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 class SingUpCreatePin extends StatefulWidget {
   final UserModel user;
@@ -16,18 +15,17 @@ class SingUpCreatePin extends StatefulWidget {
   });
 
   @override
-  State<SingUpCreatePin> createState() => _SingUpCreatePinState(user);
+  State<SingUpCreatePin> createState() => _SingUpCreatePinState();
 }
 
 class _SingUpCreatePinState extends State<SingUpCreatePin> {
-  final TextEditingController pinCont = TextEditingController();
-  ValidationModel vPin = PasarAjaValidation.pin(null);
-  //
-  final UserModel user;
-  int state = AuthFilledButton.stateDisabledButton;
-  String? errMessage;
-  //
-  _SingUpCreatePinState(this.user);
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<SignUpThirdProvider>(context, listen: false).resetData();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,44 +51,11 @@ class _SingUpCreatePinState extends State<SingUpCreatePin> {
               ),
               Column(
                 children: [
-                  AuthInputPin(
-                    title: 'Masukan PIN',
-                    authPin: AuthPin(
-                      controller: pinCont,
-                      length: 6,
-                      onChanged: (value) {
-                        vPin = PasarAjaValidation.pin(value);
-                        state = _buttonState(vPin.status);
-                        pinCont.text = value;
-                        print(pinCont.text);
-                        setState(() {});
-                      },
-                    ),
-                  ),
+                  _buildInputPin(),
                 ],
               ),
               const SizedBox(height: 40),
-              AuthFilledButton(
-                onPressed: () async {
-                  setState(
-                    () => state = AuthFilledButton.stateLoadingButton,
-                  );
-                  await Future.delayed(
-                    const Duration(seconds: PasarAjaConstant.initLoading),
-                  );
-                  setState(
-                    () => state = AuthFilledButton.stateEnabledButton,
-                  );
-                  Get.to(
-                    SignUpConfirmPage(user: user, createdPin: pinCont.text),
-                    transition: Transition.downToUp,
-                  );
-                  // Navigator.pushNamed(context, RouteName.signupFourth);
-                  // Navigator.pop(context);
-                },
-                state: state,
-                title: 'Berikutnya',
-              ),
+              _buildButtonBerikutnya(),
               const SizedBox(height: 20),
             ],
           ),
@@ -98,14 +63,45 @@ class _SingUpCreatePinState extends State<SingUpCreatePin> {
       ),
     );
   }
-}
 
-int _buttonState(bool? v1) {
-  if (v1 == null) {
-    return AuthFilledButton.stateDisabledButton;
+  _buildInputPin() {
+    return Consumer<SignUpThirdProvider>(
+      builder: (context, provider, child) {
+        //
+        final pinCont = provider.pinCont;
+
+        return AuthInputPin(
+          title: 'Masukan PIN',
+          authPin: AuthPin(
+            controller: pinCont,
+            length: 6,
+            onChanged: (value) {
+              provider.onValidatePin(value);
+              DMethod.log("PIIIN : ${pinCont.text}");
+            },
+          ),
+        );
+      },
+    );
   }
 
-  return v1
-      ? AuthFilledButton.stateEnabledButton
-      : AuthFilledButton.stateDisabledButton;
+  _buildButtonBerikutnya() {
+    return Consumer<SignUpThirdProvider>(
+      builder: (context, provider, child) {
+        return AuthFilledButton(
+          onPressed: () {
+            // aksi saat button di klik
+            DMethod.log('Password From Third  Page: ${provider.pinCont.text}');
+
+            provider.onPressedButtonBerikutnya(
+              user: widget.user,
+              createdPin: provider.pinCont.text,
+            );
+          },
+          state: provider.buttonState,
+          title: 'Berikutnya',
+        );
+      },
+    );
+  }
 }
