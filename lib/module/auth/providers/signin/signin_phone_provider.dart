@@ -55,7 +55,7 @@ class SignInPhoneProvider extends ChangeNotifier {
       // call loading
       buttonState = AuthFilledButton.stateLoadingButton;
       notifyListeners();
-      await Future.delayed(const Duration(seconds: 3));
+      // await Future.delayed(const Duration(seconds: 3));
 
       // memanggil api untuk mengecek nomor hp exist atau tidak
       DataState dataState = await _authController.isExistPhone(phone: phone);
