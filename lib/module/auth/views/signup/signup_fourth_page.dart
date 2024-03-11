@@ -1,16 +1,11 @@
+import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
-import 'package:pasaraja_mobile/core/constants/constants.dart';
-import 'package:pasaraja_mobile/core/sources/data_state.dart';
-import 'package:pasaraja_mobile/core/utils/utils.dart';
-import 'package:pasaraja_mobile/core/utils/validations.dart';
-import 'package:pasaraja_mobile/module/auth/controllers/signup_controller.dart';
 import 'package:pasaraja_mobile/module/auth/models/user_model.dart';
-import 'package:pasaraja_mobile/module/auth/views/welcome_page.dart';
+import 'package:pasaraja_mobile/module/auth/providers/signup/signup_fourth_provider.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 class SignUpConfirmPage extends StatefulWidget {
   final UserModel user;
@@ -22,22 +17,18 @@ class SignUpConfirmPage extends StatefulWidget {
   });
 
   @override
-  State<SignUpConfirmPage> createState() =>
-      _SignUpConfirmPageState(user, createdPin);
+  State<SignUpConfirmPage> createState() => _SignUpConfirmPageState();
 }
 
 class _SignUpConfirmPageState extends State<SignUpConfirmPage> {
-  //
-  final SignUpController _signUpController = SignUpController();
-  ValidationModel vPin = PasarAjaValidation.pin(null);
-  //
-  bool isMatch = false;
-  String? errMessage;
-  int state = AuthFilledButton.stateDisabledButton;
-  final UserModel user;
-  final String createdPin;
-  //
-  _SignUpConfirmPageState(this.user, this.createdPin);
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<SignUpFourthProvider>(context, listen: false).resetData();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,81 +52,16 @@ class _SignUpConfirmPageState extends State<SignUpConfirmPage> {
               Padding(
                 padding: const EdgeInsets.only(left: 5, right: 5),
                 child: Column(
-                  children: [
-                    AuthInputPin(
-                      title: 'Masukan PIN',
-                      authPin: AuthPin(
-                        length: 6,
-                        onChanged: (value) {
-                          vPin = PasarAjaValidation.pin(value);
-                          state = _buttonState(vPin.status, false);
-                          errMessage = null;
-                          setState(() {});
-                        },
-                        onCompleted: (value) {
-                          vPin = PasarAjaValidation.pin(value);
-                          state = _buttonState(vPin.status, isMatch);
-                          if (createdPin == value) {
-                            isMatch = true;
-                          } else {
-                            isMatch = false;
-                            errMessage = 'PIN tidak cocok';
-                          }
-                          state = _buttonState(vPin.status, isMatch);
-                          setState(() {});
-                        },
-                      ),
-                    )
-                  ],
+                  children: [_buildInputPin()],
                 ),
               ),
               const SizedBox(height: 10),
               Align(
                 alignment: Alignment.centerLeft,
-                child: AuthHelperText(
-                  title: errMessage,
-                ),
+                child: _buildHelperText(),
               ),
               const SizedBox(height: 30),
-              AuthFilledButton(
-                onPressed: () async {
-                  // Fluttertoast.showToast(
-                  //   msg:
-                  //       "phone : ${user.phoneNumber} | name : ${user.fullName} | password ${user.password} | pin $createdPin",
-                  // );
-
-                  DataState dataState = await _signUpController.signUp(
-                    phone: user.phoneNumber!,
-                    fullName: user.fullName!,
-                    pin: createdPin,
-                    password: user.password!,
-                  );
-
-                  if (dataState is DataSuccess) {
-                    Fluttertoast.showToast(
-                      msg:
-                          "Register berhasil, Silahkan login dengan akun yang baru",
-                    );
-
-                    await Future.delayed(const Duration(seconds: 2));
-
-                    Get.off(
-                      const WelcomePage(),
-                      transition: Transition.leftToRight,
-                    );
-                  }
-
-                  if (dataState is DataFailed) {
-                    PasarAjaUtils.triggerVibration();
-                    Fluttertoast.showToast(
-                      msg: dataState.error!.message ??
-                          PasarAjaConstant.unknownError,
-                    );
-                  }
-                },
-                state: state,
-                title: 'Buat Akun',
-              ),
+              _buildButtonBuatAkun(),
               const SizedBox(height: 40),
             ],
           ),
@@ -143,16 +69,57 @@ class _SignUpConfirmPageState extends State<SignUpConfirmPage> {
       ),
     );
   }
-}
 
-int _buttonState(bool? v1, bool? v2) {
-  if (v1 == null || v2 == null) {
-    return AuthFilledButton.stateDisabledButton;
+  _buildInputPin() {
+    return Consumer<SignUpFourthProvider>(
+      builder: (context, provider, child) {
+        return AuthInputPin(
+          title: 'Masukan PIN',
+          authPin: AuthPin(
+            length: 6,
+            onChanged: (value) {
+              provider.onValidatePin('', '23');
+              provider.message = '';
+            },
+            onCompleted: (value) {
+              provider.onValidatePin(widget.createdPin, value);
+              DMethod.log('Password Page : ${widget.createdPin}');
+              DMethod.log('Konfirmasi Page : $value');
+            },
+          ),
+        );
+      },
+    );
   }
 
-  if (v1 == true && v2 == true) {
-    return AuthFilledButton.stateEnabledButton;
-  } else {
-    return AuthFilledButton.stateDisabledButton;
+  _buildHelperText() {
+    return Consumer<SignUpFourthProvider>(
+      builder: (context, provider, child) {
+        return AuthHelperText(
+          title: provider.message.toString(),
+        );
+      },
+    );
+  }
+
+  _buildButtonBuatAkun() {
+    return Consumer<SignUpFourthProvider>(
+      builder: (context, provider, child) {
+        return AuthFilledButton(
+          onPressed: () {
+            provider.onPressedButtonBuatAkun(
+              user: widget.user,
+              createdPin: widget.createdPin,
+            );
+            DMethod.log('user : ${widget.user.fullName}');
+            DMethod.log('phone : ${widget.user.phoneNumber}');
+            DMethod.log('password : ${widget.user.password}');
+            DMethod.log('pin : ${widget.createdPin}');
+          },
+          state: provider.buttonState,
+          title: 'Buat Akun',
+        );
+      },
+    );
   }
 }
