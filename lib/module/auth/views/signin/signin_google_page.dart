@@ -1,3 +1,4 @@
+import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
 import 'package:pasaraja_mobile/config/themes/Typography.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
@@ -72,6 +73,7 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
   _buildInputEmail() {
     return Consumer<SignInGoogleProvider>(
       builder: (context, provider, child) {
+        // DMethod.log('build input email');
         // get email controller
         final emailCont = provider.emailCont;
 
@@ -105,6 +107,7 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
       builder: (context, provider, child) {
         // get password controller
         final pwCont = provider.passCont;
+        // DMethod.log('build input password');
 
         return AuthInputText(
           title: 'Masukan Password',
@@ -114,16 +117,12 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
             errorText: provider.vPass.message,
             obscureText: provider.obscure,
             keyboardType: TextInputType.visiblePassword,
+            autofillHints: const [
+              AutofillHints.password,
+              AutofillHints.newPassword,
+            ],
             fontSize: 18,
-            suffixIcon: provider.obscure
-                ? const Icon(
-                    Icons.visibility_off,
-                    color: Colors.black,
-                  )
-                : const Icon(
-                    Icons.visibility,
-                    color: Colors.black,
-                  ),
+            suffixIcon: AuthTextField.hiddenPassword(provider.obscure),
             onChanged: (value) {
               provider.onValidatePassword(value);
             },
@@ -143,6 +142,7 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
           state: provider.buttonState,
           title: 'Masuk',
           onPressed: () {
+            DMethod.log('button masuk onpressed');
             provider.onPressedButtonMasuk(
               email: provider.emailCont.text,
               password: provider.passCont.text,

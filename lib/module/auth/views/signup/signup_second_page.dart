@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
+import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/providers/signup/signup_second_provider.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
@@ -27,41 +29,55 @@ class _SignUpPageState extends State<SignUpCreatePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: PasarAjaColor.white,
-      appBar: authAppbar(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: 19,
-            right: 19,
-            top: 94 - MediaQuery.of(context).padding.top,
-          ),
-          child: Column(
-            children: [
-              const AuthInit(
-                image: '',
-                title: 'Daftar Akun',
-                description:
-                    'Silakan masukkan nama dan kata sandi untuk mendaftarkan akun.',
-                haveImage: false,
-              ),
-              const SizedBox(height: 19),
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    _buildInputNama(),
-                    const SizedBox(height: 12),
-                    _buildInputPassword(),
-                    const SizedBox(height: 12),
-                    _buildInputKonfirmasi(),
-                    const SizedBox(height: 40),
-                    _buildButtonBerikutnya(),
-                    const SizedBox(height: 40),
-                  ],
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (!didPop) {
+          final result = await PasarAjaUtils.showConfirmBack(
+            "Apakah Anda yakin ingin keluar?",
+          );
+
+          if (result) {
+            Get.back();
+          }
+        }
+      },
+      child: Scaffold(
+        backgroundColor: PasarAjaColor.white,
+        appBar: authAppbar(),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 19,
+              right: 19,
+              top: 94 - MediaQuery.of(context).padding.top,
+            ),
+            child: Column(
+              children: [
+                const AuthInit(
+                  image: '',
+                  title: 'Daftar Akun',
+                  description:
+                      'Silakan masukkan nama dan kata sandi untuk mendaftarkan akun.',
+                  haveImage: false,
                 ),
-              )
-            ],
+                const SizedBox(height: 19),
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _buildInputNama(),
+                      const SizedBox(height: 12),
+                      _buildInputPassword(),
+                      const SizedBox(height: 12),
+                      _buildInputKonfirmasi(),
+                      const SizedBox(height: 40),
+                      _buildButtonBerikutnya(),
+                      const SizedBox(height: 40),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

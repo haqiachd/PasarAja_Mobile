@@ -134,8 +134,8 @@ class SignUpSecondProvider extends ChangeNotifier {
     konfCont.text = '';
     buttonState = AuthFilledButton.stateDisabledButton;
     message = '';
-    obscurePass = false;
-    obscureKonf = false;
+    obscurePass = true;
+    obscureKonf = true;
     vName = PasarAjaValidation.name(null);
     vPass = PasarAjaValidation.password(null);
     vKonf = PasarAjaValidation.konfirmasiPassword(null, null);

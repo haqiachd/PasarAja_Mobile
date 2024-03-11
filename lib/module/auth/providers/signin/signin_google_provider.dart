@@ -39,7 +39,7 @@ class SignInGoogleProvider extends ChangeNotifier {
   }
 
   // obscure password
-  bool _obscure = false;
+  bool _obscure = true;
   bool get obscure => _obscure;
   set obscure(bool b) {
     _obscure = b;
@@ -93,6 +93,8 @@ class SignInGoogleProvider extends ChangeNotifier {
       buttonState = AuthFilledButton.stateLoadingButton;
       notifyListeners();
 
+      await PasarAjaConstant.buttonDelay;
+
       // memanggil api untuk melakukan login dengan email dan password
       final DataState dataState = await _signInController.signInEmail(
         email: email,
@@ -106,7 +108,8 @@ class SignInGoogleProvider extends ChangeNotifier {
       if (dataState is DataFailed) {
         PasarAjaUtils.triggerVibration();
         message = dataState.error!.error ?? PasarAjaConstant.unknownError;
-        Fluttertoast.showToast(msg: message.toString());
+        // Fluttertoast.showToast(msg: message.toString());
+        PasarAjaUtils.showWarning(message.toString());
       }
 
       buttonState = AuthFilledButton.stateEnabledButton;
@@ -127,12 +130,19 @@ class SignInGoogleProvider extends ChangeNotifier {
           email: email,
         );
 
+        // send login request
+        PasarAjaUtils.showLoadingDialog();
+
+        await PasarAjaConstant.buttonDelay;
+
         // jika email exist
         if (dataState is DataSuccess) {
           // mengirim kode otp ke email
           dataState = await _verifyController.requestOtp(
             email: emailCont.text,
           );
+
+          Get.back();
 
           // jika otp berhasil dikirim
           if (dataState is DataSuccess) {
@@ -179,9 +189,15 @@ class SignInGoogleProvider extends ChangeNotifier {
     required String email,
   }) async {
     // send login request
+    PasarAjaUtils.showLoadingDialog();
+
+    await Future.delayed(const Duration(seconds: 3));
+
     DataState dataState = await _signInController.signInGoogle(
       email: email,
     );
+
+    Get.back();
 
     if (dataState is DataSuccess) {
       Fluttertoast.showToast(msg: "Login Berhasil");
@@ -190,9 +206,10 @@ class SignInGoogleProvider extends ChangeNotifier {
     if (dataState is DataFailed) {
       PasarAjaUtils.triggerVibration();
       message = dataState.error!.error ?? PasarAjaConstant.unknownError;
-      Fluttertoast.showToast(msg: message.toString());
-      notifyListeners();
+      // Fluttertoast.showToast(msg: message.toString());
+      PasarAjaUtils.showWarning(message.toString());
     }
+    notifyListeners();
   }
 
   /// reset semua data pada provider
@@ -201,7 +218,7 @@ class SignInGoogleProvider extends ChangeNotifier {
     passCont.text = '';
     buttonState = AuthFilledButton.stateDisabledButton;
     message = '';
-    obscure = false;
+    obscure = true;
     vEmail = PasarAjaValidation.email(null);
     vPass = PasarAjaValidation.password(null);
     notifyListeners();

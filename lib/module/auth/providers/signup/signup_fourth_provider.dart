@@ -75,7 +75,7 @@ class SignUpFourthProvider extends ChangeNotifier {
 
         await Future.delayed(const Duration(seconds: 2));
 
-        Get.off(
+        Get.offAll(
           const WelcomePage(),
           transition: Transition.leftToRight,
         );
