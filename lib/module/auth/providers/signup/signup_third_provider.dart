@@ -62,7 +62,7 @@ class SignUpThirdProvider extends ChangeNotifier {
   }) {
     DMethod.log('Password From Third Provider: $createdPin');
     Get.to(
-      SignUpConfirmPage(
+      SignUpFourthPage(
         user: user,
         createdPin: createdPin,
       ),

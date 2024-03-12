@@ -6,14 +6,14 @@ import 'package:pasaraja_mobile/module/auth/providers/signup/signup_first_provid
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
-class SignUpPhonePage extends StatefulWidget {
-  const SignUpPhonePage({super.key});
+class SignUpFirstPage extends StatefulWidget {
+  const SignUpFirstPage({super.key});
 
   @override
-  State<SignUpPhonePage> createState() => _SignUpPhonePageState();
+  State<SignUpFirstPage> createState() => _SignUpFirstPageState();
 }
 
-class _SignUpPhonePageState extends State<SignUpPhonePage> {
+class _SignUpFirstPageState extends State<SignUpFirstPage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {

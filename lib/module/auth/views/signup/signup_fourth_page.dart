@@ -7,20 +7,20 @@ import 'package:pasaraja_mobile/module/auth/providers/signup/signup_fourth_provi
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
-class SignUpConfirmPage extends StatefulWidget {
+class SignUpFourthPage extends StatefulWidget {
   final UserModel user;
   final String createdPin;
-  const SignUpConfirmPage({
+  const SignUpFourthPage({
     super.key,
     required this.user,
     required this.createdPin,
   });
 
   @override
-  State<SignUpConfirmPage> createState() => _SignUpConfirmPageState();
+  State<SignUpFourthPage> createState() => _SignUpFourthPageState();
 }
 
-class _SignUpConfirmPageState extends State<SignUpConfirmPage> {
+class _SignUpFourthPageState extends State<SignUpFourthPage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {

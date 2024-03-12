@@ -70,7 +70,7 @@ class SignUpFirstProvider extends ChangeNotifier {
       if (dataState is DataFailed) {
         Fluttertoast.showToast(msg: 'Nomor not exist');
         Get.to(
-          SignUpCreatePage(phone: phone),
+          SignUpSecondPage(phone: phone),
           transition: Transition.rightToLeft,
           duration: PasarAjaConstant.transitionDuration,
         );
@@ -89,7 +89,7 @@ class SignUpFirstProvider extends ChangeNotifier {
 
   void onPressedButtonSkip() {
     Get.to(
-      const SignUpCreatePage(phone: ''),
+      const SignUpSecondPage(phone: ''),
       transition: Transition.rightToLeft,
       duration: PasarAjaConstant.transitionDuration,
     );

@@ -7,18 +7,18 @@ import 'package:pasaraja_mobile/module/auth/providers/signup/signup_third_provid
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
-class SingUpCreatePin extends StatefulWidget {
+class SignUpThirdPage extends StatefulWidget {
   final UserModel user;
-  const SingUpCreatePin({
+  const SignUpThirdPage({
     super.key,
     required this.user,
   });
 
   @override
-  State<SingUpCreatePin> createState() => _SingUpCreatePinState();
+  State<SignUpThirdPage> createState() => _SignUpThirdPageState();
 }
 
-class _SingUpCreatePinState extends State<SingUpCreatePin> {
+class _SignUpThirdPageState extends State<SignUpThirdPage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {

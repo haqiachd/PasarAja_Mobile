@@ -209,7 +209,7 @@ _masukOnPressed(BuildContext context) {
 _registerOnPressed(BuildContext context) {
   return () {
     Get.to(
-      const SignUpPhonePage(),
+      const SignUpFirstPage(),
       transition: Transition.downToUp,
       duration: const Duration(milliseconds: 500),
     );

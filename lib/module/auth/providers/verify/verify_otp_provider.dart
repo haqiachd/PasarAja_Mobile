@@ -70,7 +70,7 @@ class VerifyOtpProvider extends ChangeNotifier {
           // verifikasi register
           case VerifyOtpPage.fromRegister:
             Get.off(
-              SingUpCreatePin(user: data as UserModel),
+              SignUpThirdPage(user: data as UserModel),
               transition: Transition.leftToRight,
               duration: PasarAjaConstant.transitionDuration,
             );

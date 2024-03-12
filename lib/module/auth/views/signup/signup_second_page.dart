@@ -9,18 +9,18 @@ import 'package:pasaraja_mobile/module/auth/providers/signup/signup_second_provi
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
-class SignUpCreatePage extends StatefulWidget {
+class SignUpSecondPage extends StatefulWidget {
   final String phone;
-  const SignUpCreatePage({
+  const SignUpSecondPage({
     super.key,
     required this.phone,
   });
 
   @override
-  State<SignUpCreatePage> createState() => _SignUpPageState();
+  State<SignUpSecondPage> createState() => _SignUpPageState();
 }
 
-class _SignUpPageState extends State<SignUpCreatePage> {
+class _SignUpPageState extends State<SignUpSecondPage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {

@@ -43,17 +43,17 @@ class AppRoutes {
           recipient: settings.arguments as String,
         ));
       case RouteName.signupFirst:
-        return _materialRoute(const SignUpPhonePage());
+        return _materialRoute(const SignUpFirstPage());
       case RouteName.signupSecond:
-        return _materialRoute(SignUpCreatePage(
+        return _materialRoute(SignUpSecondPage(
           phone: settings.arguments as String,
         ));
       case RouteName.signupThird:
-        return _materialRoute(const SingUpCreatePin(
+        return _materialRoute(const SignUpThirdPage(
           user: UserModel(),
         ));
       case RouteName.signupFourth:
-        return _materialRoute(const SignUpConfirmPage(
+        return _materialRoute(const SignUpFourthPage(
           user: UserModel(),
           createdPin: '',
         ));
