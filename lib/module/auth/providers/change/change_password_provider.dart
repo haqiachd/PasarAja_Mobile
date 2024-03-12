@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:pasaraja_mobile/config/widgets/confirm_dialog.dart';
+import 'package:pasaraja_mobile/config/widgets/information_dialog.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
@@ -106,11 +106,23 @@ class ChangePasswordProvider extends ChangeNotifier {
       );
 
       if (dataState is DataSuccess) {
+        buttonState = AuthFilledButton.stateEnabledButton;
+
         final result = await Get.dialog<bool>(
-          const ConfirmDialog(
-            title: 'Konfirmasi',
-            message: 'Apakah Anda yakin ingin melanjutkan?',
+          PopScope(
+            canPop: false,
+            onPopInvoked: (didPop) {
+              if (!didPop) {
+                Get.back(result: true);
+              }
+            },
+            child: const InformationDialog(
+              title: 'Konfirmasi',
+              message:
+                  'Password berhasil diubah, Silahkan login lagi dengan password yang baru?',
+            ),
           ),
+          barrierDismissible: false,
         );
 
         if (result != null && result) {

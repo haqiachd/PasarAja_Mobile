@@ -199,6 +199,9 @@ class SignUpSecondProvider extends ChangeNotifier {
     required GoogleSignInAccount user,
   }) async {
     try {
+      if (user.email.isEmpty) {
+        return;
+      }
       // send login request
       PasarAjaUtils.showLoadingDialog();
 

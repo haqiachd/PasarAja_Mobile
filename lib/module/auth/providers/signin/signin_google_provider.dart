@@ -150,7 +150,8 @@ class SignInGoogleProvider extends ChangeNotifier {
               VerifyOtpPage(
                 verificationModel: dataState.data as VerificationModel,
                 from: VerifyOtpPage.fromLoginGoogle,
-                recipient: emailCont.text,
+                recipient: email,
+                data: email,
               ),
               transition: Transition.downToUp,
             );
