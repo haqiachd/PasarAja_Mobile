@@ -8,7 +8,7 @@ class GoogleSignService extends ChangeNotifier {
 
   GoogleSignInAccount? _user;
 
-   GoogleSignInAccount get user => _user!;
+  GoogleSignInAccount get user => _user!;
 
   /// sign in as anonymous
   Future<void> signInAsAnonymous() async {
@@ -21,9 +21,12 @@ class GoogleSignService extends ChangeNotifier {
     }
   }
 
-
   Future googleLogin() async {
     try {
+      // reset akun
+      _user = null;
+      notifyListeners();
+
       final googleUser = await googleSignIn.signIn();
       if (googleUser == null) return;
       _user = googleUser;
@@ -45,6 +48,8 @@ class GoogleSignService extends ChangeNotifier {
 
   Future logout() async {
     await googleSignIn.disconnect();
-    FirebaseAuth.instance.signOut();
+    await googleSignIn.signOut();
+    await FirebaseAuth.instance.signOut();
+    notifyListeners();
   }
 }
