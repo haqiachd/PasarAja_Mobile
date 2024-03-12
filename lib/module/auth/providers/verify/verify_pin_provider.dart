@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/signin_controller.dart';
@@ -98,36 +99,43 @@ class VerifyPinProvider extends ChangeNotifier {
     required String phone,
   }) async {
     try {
-      PasarAjaUtils.showLoadingDialog();
-
-      await Future.delayed(const Duration(seconds: 2));
-
-      // mengirim kode otp
-      final dataState = await _verifyController.requestOtpByPhone(
-        phone: phone,
+      final confirm = await PasarAjaMessage.showConfirmation(
+        "Kami akan mengirimkan kode OTP ke alamat email Anda.",
       );
 
-      Get.back();
+      if (confirm) {
+        // memanggil loading dialog
+        PasarAjaUtils.showLoadingDialog();
+        await PasarAjaConstant.buttonDelay;
 
-      // jika otp berhasil dikirim
-      if (dataState is DataSuccess) {
-        final model = dataState.data as VerificationModel;
-        Get.to(
-          VerifyOtpPage(
-            verificationModel: model,
-            from: VerifyOtpPage.fromForgotPin,
-            recipient: phone,
-            data: phone,
-          ),
-          transition: Transition.leftToRight,
-          duration: PasarAjaConstant.transitionDuration,
+        // mengirim kode otp
+        final dataState = await _verifyController.requestOtpByPhone(
+          phone: phone,
         );
-      }
 
-      // jika gagal
-      if (dataState is DataFailed) {
-        message = dataState.error!.error.toString();
-        Fluttertoast.showToast(msg: message.toString());
+        // menutup loading dialog
+        Get.back();
+
+        // jika otp berhasil dikirim
+        if (dataState is DataSuccess) {
+          final model = dataState.data as VerificationModel;
+          Get.to(
+            VerifyOtpPage(
+              verificationModel: model,
+              from: VerifyOtpPage.fromForgotPin,
+              recipient: phone,
+              data: phone,
+            ),
+            transition: Transition.leftToRight,
+            duration: PasarAjaConstant.transitionDuration,
+          );
+        }
+
+        // jika gagal
+        if (dataState is DataFailed) {
+          message = dataState.error!.error.toString();
+          Fluttertoast.showToast(msg: message.toString());
+        }
       }
     } catch (ex) {
       message = ex.toString();

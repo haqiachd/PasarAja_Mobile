@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
-import 'package:pasaraja_mobile/config/widgets/confirm_dialog.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/module/auth/providers/verify/verify_pin_provider.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
@@ -135,18 +133,9 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
       builder: (context, provider, child) {
         return TextButton(
           onPressed: () async {
-            final result = await Get.dialog<bool>(
-              const ConfirmDialog(
-                title: 'Konfirmasi',
-                message: 'Kami akan mengirimkan kode OTP ke Email Anda.',
-              ),
+            provider.onPressedButtonLupaPin(
+              phone: widget.phone,
             );
-
-            if (result != null && result) {
-              provider.onPressedButtonLupaPin(
-                phone: widget.phone,
-              );
-            }
           },
           child: Text(
             'Lupa PIN',

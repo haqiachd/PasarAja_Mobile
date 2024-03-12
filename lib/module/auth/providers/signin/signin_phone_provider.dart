@@ -54,17 +54,17 @@ class SignInPhoneProvider extends ChangeNotifier {
   }) async {
     try {
       // call loading
-      buttonState = AuthFilledButton.stateLoadingButton;
+      _buttonState = AuthFilledButton.stateLoadingButton;
       notifyListeners();
-      // await Future.delayed(const Duration(seconds: 3));
-      Fluttertoast.showToast(msg: phone);
+
+      await PasarAjaConstant.buttonDelay;
+
       DMethod.log('phone number : $phone');
       // memanggil api untuk mengecek nomor hp exist atau tidak
-      DataState dataState = await _authController.isExistPhone(phone: phone);
+      final dataState = await _authController.isExistPhone(phone: phone);
 
       // jika nomor hp exist
       if (dataState is DataSuccess) {
-        Fluttertoast.showToast(msg: 'Nomor hp exist');
         // membuka halaman verifikasi pin
         Get.to(
           VerifyPinPage(phone: phone),

@@ -7,5 +7,5 @@ class PasarAjaConstant {
   static const String npeString = 'Exception : NPE';
   static const String unknownError = 'unknown error';
   static const Duration transitionDuration = Duration(milliseconds: 800);
-  static Future buttonDelay = Future.delayed(const Duration(seconds: 1));
+  static Future buttonDelay = Future.delayed(const Duration(seconds: 2));
 }

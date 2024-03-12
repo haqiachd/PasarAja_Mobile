@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/auth_controller.dart';
@@ -124,44 +125,54 @@ class SignInGoogleProvider extends ChangeNotifier {
 
   Future<void> onTapButtonLupaSandi({required String email}) async {
     try {
+      // cek apakah email valid atau tidak
       if (PasarAjaValidation.email(email).status == true) {
         // mengecek apakah email yang dibuat lupa sandi exist atau tidak
         DataState dataState = await _authController.isExistEmail(
           email: email,
         );
 
-        // send login request
-        PasarAjaUtils.showLoadingDialog();
-
         await PasarAjaConstant.buttonDelay;
 
         // jika email exist
         if (dataState is DataSuccess) {
-          // mengirim kode otp ke email
-          dataState = await _verifyController.requestOtp(
-            email: emailCont.text,
+          // show konfirmasi dialog
+          final confirm = await PasarAjaMessage.showConfirmation(
+            "Kami akan mengirimkan kode OTP ke alamat email Anda.",
           );
 
-          Get.back();
+          // jika user menekan tombol yes
+          if (confirm) {
+            // memanggil dialog loading
+            PasarAjaUtils.showLoadingDialog();
 
-          // jika otp berhasil dikirim
-          if (dataState is DataSuccess) {
-            Get.to(
-              VerifyOtpPage(
-                verificationModel: dataState.data as VerificationModel,
-                from: VerifyOtpPage.fromLoginGoogle,
-                recipient: email,
-                data: email,
-              ),
-              transition: Transition.downToUp,
+            // mengirim kode otp ke email
+            dataState = await _verifyController.requestOtp(
+              email: emailCont.text,
             );
-          }
 
-          // jika otp gagal dikirim
-          if (dataState is DataFailed) {
-            PasarAjaUtils.triggerVibration();
-            message = dataState.error!.error ?? PasarAjaConstant.unknownError;
-            Fluttertoast.showToast(msg: message.toString());
+            // menutup dialog loading
+            Get.back();
+
+            // jika otp berhasil dikirim
+            if (dataState is DataSuccess) {
+              Get.to(
+                VerifyOtpPage(
+                  verificationModel: dataState.data as VerificationModel,
+                  from: VerifyOtpPage.fromLoginGoogle,
+                  recipient: email,
+                  data: email,
+                ),
+                transition: Transition.downToUp,
+              );
+            }
+
+            // jika otp gagal dikirim
+            if (dataState is DataFailed) {
+              PasarAjaUtils.triggerVibration();
+              message = dataState.error!.error ?? PasarAjaConstant.unknownError;
+              Fluttertoast.showToast(msg: message.toString());
+            }
           }
         }
 
@@ -172,6 +183,9 @@ class SignInGoogleProvider extends ChangeNotifier {
           Fluttertoast.showToast(msg: message.toString());
         }
       } else {
+        // jika email tidak valid
+        _buttonState = AuthFilledButton.stateEnabledButton;
+        notifyListeners();
         Get.snackbar(
           'Info',
           'Email tidak valid',

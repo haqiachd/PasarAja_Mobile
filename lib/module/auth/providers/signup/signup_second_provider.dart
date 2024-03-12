@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/auth_controller.dart';
@@ -154,39 +155,61 @@ class SignUpSecondProvider extends ChangeNotifier {
         PasarAjaUtils.triggerVibration();
         emailCont.text = '';
         onValidateEmail('');
+        // close loading button
+        _buttonState = AuthFilledButton.stateEnabledButton;
+        notifyListeners();
       }
 
+      // jika email belum terdaftar
       if (dataState is DataFailed) {
-        dataState = await _verifyController.requestOtp(email: email);
+        // close loading button
+        _buttonState = AuthFilledButton.stateEnabledButton;
+        notifyListeners();
 
-        // otp berhasil terikirm
-        if (dataState is DataSuccess) {
-          Get.to(
-            VerifyOtpPage(
-              verificationModel: dataState.data as VerificationModel,
-              from: VerifyOtpPage.fromRegister,
-              recipient: email,
-              data: UserModel(
-                phoneNumber: phone,
-                email: email,
-                fullName: fullName,
-                password: password,
+        // menampilkan konfirmasi dialog kirim otp
+        final bool confirm = await PasarAjaMessage.showConfirmation(
+          "Kami akan mengirimkan kode OTP ke email Anda",
+        );
+
+        // jika user menekan tombol yes
+        if (confirm) {
+          // menampilkan dialog loading
+          PasarAjaUtils.showLoadingDialog();
+
+          // memanggil controller untuk mengirimkan otp
+          dataState = await _verifyController.requestOtp(email: email);
+
+          // close dialog
+          Get.back();
+
+          // otp berhasil terikirm
+          if (dataState is DataSuccess) {
+            Get.to(
+              VerifyOtpPage(
+                verificationModel: dataState.data as VerificationModel,
+                from: VerifyOtpPage.fromRegister,
+                recipient: email,
+                data: UserModel(
+                  phoneNumber: phone,
+                  email: email,
+                  fullName: fullName,
+                  password: password,
+                ),
               ),
-            ),
-            transition: Transition.downToUp,
-          );
-        }
+              transition: Transition.downToUp,
+            );
+          }
 
-        // data otp gagal dikirim
-        if (dataState is DataFailed) {
-          PasarAjaUtils.triggerVibration();
-          _message = dataState.error!.error ?? 'fail send otp';
-          Fluttertoast.showToast(msg: message.toString());
+          // data otp gagal dikirim
+          if (dataState is DataFailed) {
+            PasarAjaUtils.triggerVibration();
+            _message = dataState.error!.error ?? 'fail send otp';
+            Fluttertoast.showToast(msg: message.toString());
+            _buttonState = AuthFilledButton.stateEnabledButton;
+            notifyListeners();
+          }
         }
       }
-
-      _buttonState = AuthFilledButton.stateEnabledButton;
-      notifyListeners();
     } catch (ex) {
       buttonState = AuthFilledButton.stateEnabledButton;
       message = ex.toString();

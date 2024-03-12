@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/change_controller.dart';
@@ -105,6 +106,10 @@ class ChangePinProvider extends ChangeNotifier {
       );
 
       if (dataState is DataSuccess) {
+        await PasarAjaMessage.showInformation(
+          "PIN berhasil diubah, Silahkan Login lagi dengan PIN yang baru.",
+        );
+
         Fluttertoast.showToast(msg: "PIN berhasil diubah, Silahkan Login Lagi");
         Get.offAll(
           const WelcomePage(),

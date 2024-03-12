@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/signup_controller.dart';
@@ -60,6 +61,8 @@ class SignUpFourthProvider extends ChangeNotifier {
       buttonState = AuthFilledButton.stateLoadingButton;
       notifyListeners();
 
+      await PasarAjaConstant.buttonDelay;
+
       // memanggil api untuk login
       final dataState = await _signUpController.signUp(
         phone: user.phoneNumber!,
@@ -70,12 +73,16 @@ class SignUpFourthProvider extends ChangeNotifier {
       );
 
       if (dataState is DataSuccess) {
-        Fluttertoast.showToast(
-          msg: "Register berhasil, Silahkan login dengan akun yang baru",
+        // update button state
+        _buttonState = AuthFilledButton.stateEnabledButton;
+        notifyListeners();
+
+        // menapilkan dialog informasi register berhasil
+        await PasarAjaMessage.showInformation(
+          'Register berhasil, Silahkan login dengan akun yang baru',
         );
 
-        await Future.delayed(const Duration(seconds: 2));
-
+        // ke halaman welcome
         Get.offAll(
           const WelcomePage(),
           transition: Transition.leftToRight,
@@ -84,13 +91,12 @@ class SignUpFourthProvider extends ChangeNotifier {
 
       if (dataState is DataFailed) {
         PasarAjaUtils.triggerVibration();
-        message = dataState.error!.error ?? PasarAjaConstant.unknownError;
+        _message = dataState.error!.error ?? PasarAjaConstant.unknownError;
         Fluttertoast.showToast(msg: message.toString());
+        // update button state
+        _buttonState = AuthFilledButton.stateEnabledButton;
+        notifyListeners();
       }
-
-      // update button state
-      buttonState = AuthFilledButton.stateEnabledButton;
-      notifyListeners();
     } catch (ex) {
       buttonState = AuthFilledButton.stateEnabledButton;
       message = ex.toString();
