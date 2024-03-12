@@ -5,7 +5,11 @@ class ConfirmDialog extends StatelessWidget {
   final String title;
   final String message;
 
-  const ConfirmDialog({Key? key, required this.title, required this.message}) : super(key: key);
+  const ConfirmDialog({
+    Key? key,
+    required this.title,
+    required this.message,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +21,13 @@ class ConfirmDialog extends StatelessWidget {
           onPressed: () {
             Get.back(result: false);
           },
-          child: Text('Tidak'),
+          child: const Text('Tidak'),
         ),
         TextButton(
           onPressed: () {
             Get.back(result: true);
           },
-          child: Text('Ya'),
+          child: const Text('Ya'),
         ),
       ],
     );

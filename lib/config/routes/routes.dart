@@ -41,6 +41,7 @@ class AppRoutes {
           verificationModel: const VerificationModel(),
           from: settings.arguments as int,
           recipient: settings.arguments as String,
+          data: '',
         ));
       case RouteName.signupFirst:
         return _materialRoute(const SignUpFirstPage());
