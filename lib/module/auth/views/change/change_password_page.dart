@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
+import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/module/auth/providers/change/change_password_provider.dart';
+import 'package:pasaraja_mobile/module/auth/views/welcome_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +43,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           );
 
           if (metu) {
-            Get.back();
+            Get.offAll(
+              const WelcomePage(),
+              transition: Transition.rightToLeft,
+              duration: PasarAjaConstant.transitionDuration,
+            );
           }
         }
       },

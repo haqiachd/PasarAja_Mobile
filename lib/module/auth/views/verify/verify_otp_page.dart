@@ -1,10 +1,13 @@
+import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
+import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/module/auth/models/verification_model.dart';
 import 'package:pasaraja_mobile/module/auth/providers/verify/verify_otp_provider.dart';
+import 'package:pasaraja_mobile/module/auth/views/welcome_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +25,7 @@ class VerifyOtpPage extends StatefulWidget {
     required this.verificationModel,
     required this.from,
     required this.recipient,
-    this.data,
+    required this.data,
   });
 
   @override
@@ -34,6 +37,8 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<VerifyOtpProvider>(context, listen: false).resetData();
+      Provider.of<VerifyOtpProvider>(context, listen: false).playTimer();
+      DMethod.log('TIMER STARTED');
     });
     super.initState();
   }
@@ -49,7 +54,13 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
           );
 
           if (metu) {
-            Get.back();
+            // ignore: use_build_context_synchronously
+            Provider.of<VerifyOtpProvider>(context, listen: false).onDispose();
+            Get.offAll(
+              const WelcomePage(),
+              transition: Transition.rightToLeft,
+              duration: PasarAjaConstant.transitionDuration,
+            );
           }
         }
       },
@@ -139,12 +150,17 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
   _buildButtonKirimUlang() {
     return Consumer<VerifyOtpProvider>(
       builder: (context, provider, child) {
+        DMethod.log('rebuild button filled');
         return AuthFilledButton(
           onPressed: () async {
-            //
+            provider.onPressedButtonKirimUlang(
+              email: widget.recipient!,
+              from: widget.from!,
+              data: widget.data,
+            );
           },
           state: provider.buttonState,
-          title: 'Kirim Ulang (3 menit)',
+          title: provider.timeStatus.toString(),
         );
       },
     );

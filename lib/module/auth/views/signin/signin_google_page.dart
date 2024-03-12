@@ -174,20 +174,19 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
   }
 
   _buildButtonLoginGoogle(BuildContext context) {
-    return Consumer<SignInGoogleProvider>(
-      builder: (context, provider, child) {
+    return Consumer2<SignInGoogleProvider, GoogleSignService>(
+      builder: (context, signInProvider, googleProvider, child) {
         return InkWell(
           onTap: () async {
             // show google auth
-            final gServices = Provider.of<GoogleSignService>(
-              context,
-              listen: false,
+            await googleProvider.googleLogin();
+
+            // login dengan google
+            signInProvider.onTapButtonLoginGoogle(
+              email: googleProvider.user.email,
             );
-            await gServices.googleLogin();
 
-            provider.onTapButtonLoginGoogle(email: gServices.user.email);
-
-            gServices.logout();
+            googleProvider.logout();
           },
           child: Image.asset(
             PasarAjaImage.icGoogle,

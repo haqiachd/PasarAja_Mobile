@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
+import 'package:pasaraja_mobile/core/constants/constants.dart';
+import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/module/auth/providers/change/change_pin_provider.dart';
+import 'package:pasaraja_mobile/module/auth/views/welcome_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -30,39 +34,56 @@ class _ChangePinPageState extends State<ChangePinPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: PasarAjaColor.white,
-      appBar: authAppbar(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: 19,
-            right: 19,
-            top: 94 - MediaQuery.of(context).padding.top,
-          ),
-          child: Column(
-            children: [
-              const AuthInit(
-                image: PasarAjaImage.ilCreate,
-                title: 'Ganti PIN',
-                description:
-                    'Buatlah PIN yang kuat dan jangan bagikan PIN Anda kepada orang lain.',
-              ),
-              const SizedBox(height: 19),
-              Padding(
-                padding: const EdgeInsets.only(left: 5, right: 140),
-                child: Column(
-                  children: [
-                    _buildInputPin(),
-                    const SizedBox(height: 12),
-                    _buildInputKonfirmasi()
-                  ],
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (!didPop) {
+          final metu = await PasarAjaUtils.showConfirmBack(
+              "Apakah Anda yakin ingin keluar");
+
+          if (metu) {
+            Get.offAll(
+              const WelcomePage(),
+              transition: Transition.rightToLeft,
+              duration: PasarAjaConstant.transitionDuration,
+            );
+          }
+        }
+      },
+      child: Scaffold(
+        backgroundColor: PasarAjaColor.white,
+        appBar: authAppbar(),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 19,
+              right: 19,
+              top: 94 - MediaQuery.of(context).padding.top,
+            ),
+            child: Column(
+              children: [
+                const AuthInit(
+                  image: PasarAjaImage.ilCreate,
+                  title: 'Ganti PIN',
+                  description:
+                      'Buatlah PIN yang kuat dan jangan bagikan PIN Anda kepada orang lain.',
                 ),
-              ),
-              const SizedBox(height: 40),
-              _buildButtonGantiPin(context),
-              const SizedBox(height: 40),
-            ],
+                const SizedBox(height: 19),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5, right: 140),
+                  child: Column(
+                    children: [
+                      _buildInputPin(),
+                      const SizedBox(height: 12),
+                      _buildInputKonfirmasi()
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 40),
+                _buildButtonGantiPin(context),
+                const SizedBox(height: 40),
+              ],
+            ),
           ),
         ),
       ),

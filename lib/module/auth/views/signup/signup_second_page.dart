@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
+import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/services/google_signin_services.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/providers/signup/signup_second_provider.dart';
+import 'package:pasaraja_mobile/module/auth/views/welcome_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -40,7 +42,11 @@ class _SignUpPageState extends State<SignUpSecondPage> {
           );
 
           if (result) {
-            Get.back();
+            Get.offAll(
+              const WelcomePage(),
+              transition: Transition.rightToLeft,
+              duration: PasarAjaConstant.transitionDuration,
+            );
           }
         }
       },
@@ -231,20 +237,19 @@ class _SignUpPageState extends State<SignUpSecondPage> {
   }
 
   _buildButtonLoginGoogle(BuildContext context) {
-    return Consumer<SignUpSecondProvider>(
-      builder: (context, provider, child) {
+    return Consumer2<SignUpSecondProvider, GoogleSignService>(
+      builder: (context, signUpProvider, googleProvider, child) {
         return InkWell(
           onTap: () async {
             // show google auth
-            final gServices = Provider.of<GoogleSignService>(
-              context,
-              listen: false,
+            await googleProvider.googleLogin();
+
+            // get user data
+            signUpProvider.onTapButtonLoginGoogle(
+              user: googleProvider.user,
             );
-            await gServices.googleLogin();
 
-            provider.onTapButtonLoginGoogle(user: gServices.user);
-
-            gServices.logout();
+            googleProvider.logout();
           },
           child: Image.asset(
             PasarAjaImage.icGoogle,
