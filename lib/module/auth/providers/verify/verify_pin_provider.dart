@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
+import 'package:pasaraja_mobile/core/services/user_services.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
+import 'package:pasaraja_mobile/main_page.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/signin_controller.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/verification_controller.dart';
+import 'package:pasaraja_mobile/module/auth/models/user_model.dart';
 import 'package:pasaraja_mobile/module/auth/models/verification_model.dart';
 import 'package:pasaraja_mobile/module/auth/views/verify/verify_otp_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
@@ -68,12 +71,11 @@ class VerifyPinProvider extends ChangeNotifier {
 
       // jika login berhasil
       if (dataState is DataSuccess) {
-        Get.showSnackbar(
-          GetSnackBar(
-            title: 'Informasi',
-            message: 'Login Berhasil',
-            duration: PasarAjaConstant.transitionDuration * 2,
-          ),
+        // menyimpan session login
+        await PasarAjaUserService.login(dataState.data as UserModel);
+        Fluttertoast.showToast(msg: "Login Berhasil");
+        Get.to(
+          const MainPages(),
         );
       }
 
