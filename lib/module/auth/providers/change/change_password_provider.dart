@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:pasaraja_mobile/config/widgets/information_dialog.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/change_controller.dart';
 import 'package:pasaraja_mobile/module/auth/views/welcome_page.dart';
@@ -52,104 +52,102 @@ class ChangePasswordProvider extends ChangeNotifier {
   /// Untuk mengecek apakah password yang diinputkan valid atau tidak
   ///
   void onValidatePassword(String password, String konf) {
+    // mengecek apakah password valid atau tidak
     vPass = PasarAjaValidation.password(password);
 
-    // enable and disable button
+    // jika password valid
     if (vPass.status == true) {
-      message = '';
+      _message = '';
       onValidateKonf(password, konf);
     } else {
-      message = vPass.message ?? PasarAjaConstant.unknownError;
+      _message = vPass.message ?? PasarAjaConstant.unknownError;
     }
+
+    // update status button
     _updateButonState();
   }
 
   /// Untuk mengecek apakah konfirmasi password cocok atau tidak
   ///
   void onValidateKonf(String password, String konf) {
+    // mengecek apakah konfirmasi password valid atau tidak
     vKonf = PasarAjaValidation.konfirmasiPassword(password, konf);
 
+    // jika konfirmasi password cocok
     if (vKonf.status == true) {
-      message = '';
+      _message = '';
     } else {
-      message = vKonf.message ?? PasarAjaConstant.unknownError;
+      _message = vKonf.message ?? PasarAjaConstant.unknownError;
     }
+
+    // update status button
     _updateButonState();
   }
 
+  /// Enable & disable button, sesuai dengan valid atau tidaknya data
+  ///
   void _updateButonState() {
     if (vPass.status == null || vKonf.status == null) {
-      buttonState = AuthFilledButton.stateDisabledButton;
+      _buttonState = AuthFilledButton.stateDisabledButton;
     }
     if (vPass.status == false || vKonf.status == false) {
-      buttonState = AuthFilledButton.stateDisabledButton;
+      _buttonState = AuthFilledButton.stateDisabledButton;
     } else {
-      buttonState = AuthFilledButton.stateEnabledButton;
+      _buttonState = AuthFilledButton.stateEnabledButton;
     }
     notifyListeners();
   }
 
+  /// Aksi saat button 'Ganti Password' ditekan
+  ///
   Future<void> onPressedGantiPassword({
     required String email,
     required String password,
   }) async {
     try {
-      _buttonState = AuthFilledButton.stateLoadingButton;
-      notifyListeners();
+      // show loading button
+      buttonState = AuthFilledButton.stateLoadingButton;
 
       await PasarAjaConstant.buttonDelay;
 
-      // call api ganti sandi
+      // memanggil controller untuk mengganti password dari user
       final dataState = await _changeController.changePassword(
         email: email,
         password: password,
       );
 
+      // jika password berhasil diubah
       if (dataState is DataSuccess) {
+        // close loading button
         buttonState = AuthFilledButton.stateEnabledButton;
 
-        final result = await Get.dialog<bool>(
-          PopScope(
-            canPop: false,
-            onPopInvoked: (didPop) {
-              if (!didPop) {
-                Get.back(result: true);
-              }
-            },
-            child: const InformationDialog(
-              title: 'Konfirmasi',
-              message:
-                  'Password berhasil diubah, Silahkan login lagi dengan password yang baru?',
-            ),
-          ),
-          barrierDismissible: false,
+        // menampilkan dialog informasi, bahwa password berhasil diubah
+        await PasarAjaMessage.showInformation(
+          'Password berhasil diubah, Silahkan login lagi dengan password yang baru?',
         );
 
-        if (result != null && result) {
-          Get.offAll(
-            const WelcomePage(),
-            transition: Transition.downToUp,
-            duration: const Duration(milliseconds: 500),
-          );
-          Fluttertoast.showToast(msg: "Password berhasil Diubah");
-        } else {
-          print('Anda memilih Tidak atau dialog ditutup');
-        }
+        // kembali ke halaman welcome
+        Get.offAll(
+          const WelcomePage(),
+          transition: Transition.downToUp,
+          duration: const Duration(milliseconds: 500),
+        );
       }
 
+      // jika password gagal diubah
       if (dataState is DataFailed) {
         Fluttertoast.showToast(
           msg: dataState.error!.message ?? PasarAjaConstant.unknownError,
         );
       }
 
-      _buttonState = AuthFilledButton.stateEnabledButton;
-      notifyListeners();
+      // close loading button
+      buttonState = AuthFilledButton.stateEnabledButton;
     } catch (ex) {
       _buttonState = AuthFilledButton.stateEnabledButton;
-      message = ex.toString();
-      Fluttertoast.showToast(msg: message.toString());
+      _message = ex.toString();
       notifyListeners();
+      Fluttertoast.showToast(msg: message.toString());
     }
   }
 
@@ -157,12 +155,12 @@ class ChangePasswordProvider extends ChangeNotifier {
   void resetData() {
     pwCont.text = '';
     konfCont.text = '';
-    buttonState = AuthFilledButton.stateDisabledButton;
-    message = '';
+    _buttonState = AuthFilledButton.stateDisabledButton;
+    _message = '';
     vPass = PasarAjaValidation.password(null);
     vKonf = PasarAjaValidation.konfirmasiPassword(null, null);
-    obscurePass = true;
-    obscureKonf = true;
+    _obscurePass = true;
+    _obscureKonf = true;
     notifyListeners();
   }
 }

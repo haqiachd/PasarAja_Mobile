@@ -17,7 +17,7 @@ import 'package:pasaraja_mobile/module/auth/views/verify/verify_otp_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 
 class SignInGoogleProvider extends ChangeNotifier {
-  // controller, validator, services
+  // controller, validator
   ValidationModel vEmail = PasarAjaValidation.email(null);
   ValidationModel vPass = PasarAjaValidation.password(null);
   final TextEditingController emailCont = TextEditingController();
@@ -50,70 +50,87 @@ class SignInGoogleProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Untuk mengecek apakah nomor hp yang diinputkan valid atau tidak
+  /// Untuk mengecek apakah email yang diinputkan valid atau tidak
   ///
   void onValidateEmail(String email) {
+    // mengecek apakah email valid atau tidak
     vEmail = PasarAjaValidation.email(email);
 
-    // enable and disable button
+    // jika email valid
     if (vEmail.status == true) {
-      message = '';
+      _message = '';
     } else {
-      message = vEmail.message ?? PasarAjaConstant.unknownError;
+      _message = vEmail.message ?? PasarAjaConstant.unknownError;
     }
+
+    // update status button
     _updateButonState();
   }
 
+  /// Untuk mengecek apakah password yang diinputkan valid atau tidak
+  ///
   void onValidatePassword(String password) {
+    // mengecek apakah password valid atau tidak
     vPass = PasarAjaValidation.password(password);
 
-    // enable and disable button
+    // jika password valid
     if (vPass.status == true) {
-      message = '';
+      _message = '';
     } else {
-      message = vPass.message ?? PasarAjaConstant.unknownError;
+      _message = vPass.message ?? PasarAjaConstant.unknownError;
     }
+
+    // update status button
     _updateButonState();
   }
 
+  /// Enable & disable button, sesuai dengan valid atau tidaknya data
+  ///
   void _updateButonState() {
     if (vEmail.status == null || vPass.status == null) {
-      buttonState = AuthFilledButton.stateDisabledButton;
+      _buttonState = AuthFilledButton.stateDisabledButton;
     }
     if (vEmail.status == false || vPass.status == false) {
-      buttonState = AuthFilledButton.stateDisabledButton;
+      _buttonState = AuthFilledButton.stateDisabledButton;
     } else {
-      buttonState = AuthFilledButton.stateEnabledButton;
+      _buttonState = AuthFilledButton.stateEnabledButton;
     }
     notifyListeners();
   }
 
+  /// Aksi saat button 'Masuk' ditekan
+  ///
   Future<void> onPressedButtonMasuk({
     required String email,
     required String password,
   }) async {
     try {
-      // call loading
-      _buttonState = AuthFilledButton.stateLoadingButton;
-      notifyListeners();
+      // show loading button
+      buttonState = AuthFilledButton.stateLoadingButton;
 
       await PasarAjaConstant.buttonDelay;
 
-      // memanggil api untuk melakukan login dengan email dan password
+      // memanggil controller untuk melakukan login dengan email dan password
       final dataState = await _signInController.signInEmail(
         email: email,
         password: password,
       );
 
+      // jika login berhasil
       if (dataState is DataSuccess) {
+        // close loading button
+        buttonState = AuthFilledButton.stateEnabledButton;
+
         // menyimpan session login
         await PasarAjaUserService.login(dataState.data as UserModel);
-        Fluttertoast.showToast(msg: "Login Berhasil");
+
+        // membuka beranda
         Get.to(
           const MainPages(),
         );
       }
 
+      // jika login gagal
       if (dataState is DataFailed) {
         PasarAjaUtils.triggerVibration();
         message = dataState.error!.error ?? PasarAjaConstant.unknownError;
@@ -121,52 +138,61 @@ class SignInGoogleProvider extends ChangeNotifier {
         PasarAjaUtils.showWarning(message.toString());
       }
 
-      _buttonState = AuthFilledButton.stateEnabledButton;
-      notifyListeners();
-    } catch (ex) {
+      // close loading button
       buttonState = AuthFilledButton.stateEnabledButton;
-      message = ex.toString();
+    } catch (ex) {
+      _buttonState = AuthFilledButton.stateEnabledButton;
+      _message = ex.toString();
       Fluttertoast.showToast(msg: message.toString());
       notifyListeners();
     }
   }
 
+  /// Aksi saat button 'Lupa Sandi' ditekan
   Future<void> onTapButtonLupaSandi({required String email}) async {
     try {
       // cek apakah email valid atau tidak
       if (PasarAjaValidation.email(email).status == true) {
-        // mengecek apakah email yang dibuat lupa sandi exist atau tidak
+        // show loading ui
+        PasarAjaUtils.showLoadingDialog();
+
+        await PasarAjaConstant.buttonDelay;
+
+        // mengecek apakah email yang diinputkan exist atau tidak
         DataState dataState = await _authController.isExistEmail(
           email: email,
         );
 
-        await PasarAjaConstant.buttonDelay;
+        // close loading ui
+        Get.back();
 
         // jika email exist
         if (dataState is DataSuccess) {
-          // show konfirmasi dialog
+          // menampilkan dialog konfirmasi pengiriman otp
           final confirm = await PasarAjaMessage.showConfirmation(
             "Kami akan mengirimkan kode OTP ke alamat email Anda.",
           );
 
           // jika user menekan tombol yes
           if (confirm) {
-            // memanggil dialog loading
+            // menampilkan loding ui
             PasarAjaUtils.showLoadingDialog();
 
-            // mengirim kode otp ke email
+            // memanggil controller untuk mengirimkan kode otp ke email user
             dataState = await _verifyController.requestOtp(
               email: emailCont.text,
             );
 
-            // menutup dialog loading
+            // menutup loading ui
             Get.back();
 
             // jika otp berhasil dikirim
             if (dataState is DataSuccess) {
+              // membuka halaman verifikasi otp dengan data otp dari controller
               Get.to(
                 VerifyOtpPage(
-                  verificationModel: dataState.data as VerificationModel,
+                  verificationModel:
+                      dataState.data as VerificationModel, // data otp
                   from: VerifyOtpPage.fromLoginGoogle,
                   recipient: email,
                   data: email,
@@ -192,8 +218,6 @@ class SignInGoogleProvider extends ChangeNotifier {
         }
       } else {
         // jika email tidak valid
-        _buttonState = AuthFilledButton.stateEnabledButton;
-        notifyListeners();
         Get.snackbar(
           'Info',
           'Email tidak valid',
@@ -204,33 +228,39 @@ class SignInGoogleProvider extends ChangeNotifier {
     } catch (ex) {
       message = ex.toString();
       Fluttertoast.showToast(msg: message.toString());
-      notifyListeners();
     }
   }
 
+  /// Aksi saat button 'Login Google' ditekan
   Future<void> onTapButtonLoginGoogle({
     required String email,
   }) async {
-    // send login request
+    // menampilkan loading ui
     PasarAjaUtils.showLoadingDialog();
 
     await Future.delayed(const Duration(seconds: 3));
 
+    // memanggil controller untuk melakukan login google dengan email yang diinputkan
     DataState dataState = await _signInController.signInGoogle(
       email: email,
     );
 
+    // menutup loading ui
     Get.back();
 
+    // jika login berhasil
     if (dataState is DataSuccess) {
       // menyimpan session login
       await PasarAjaUserService.login(dataState.data as UserModel);
       Fluttertoast.showToast(msg: "Login Berhasil");
+
+      // membuka halaman utama
       Get.to(
         const MainPages(),
       );
     }
 
+    // jika login gagal
     if (dataState is DataFailed) {
       PasarAjaUtils.triggerVibration();
       message = dataState.error!.error ?? PasarAjaConstant.unknownError;
@@ -244,9 +274,9 @@ class SignInGoogleProvider extends ChangeNotifier {
   void resetData() {
     emailCont.text = '';
     passCont.text = '';
-    buttonState = AuthFilledButton.stateDisabledButton;
-    message = '';
-    obscure = true;
+    _buttonState = AuthFilledButton.stateDisabledButton;
+    _message = '';
+    _obscure = true;
     vEmail = PasarAjaValidation.email(null);
     vPass = PasarAjaValidation.password(null);
     notifyListeners();

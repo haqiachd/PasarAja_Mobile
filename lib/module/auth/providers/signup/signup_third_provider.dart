@@ -31,36 +31,41 @@ class SignUpThirdProvider extends ChangeNotifier {
   /// Untuk mengecek apakah pin yang diinputkan valid atau tidak
   ///
   void onValidatePin(String pin) {
+    // mengecek pin valid atau tidak
     vPin = PasarAjaValidation.pin(pin);
-    // enable and disable button
+    // jika pin valid
     if (vPin.status == true) {
-      message = '';
+      _message = '';
     } else {
-      message = vPin.message ?? PasarAjaConstant.unknownError;
+      _message = vPin.message ?? PasarAjaConstant.unknownError;
     }
 
+    // update button status
     _updateButonState();
   }
 
+  /// Enable & disable button, sesuai dengan valid atau tidaknya data
+  ///
   void _updateButonState() {
     if (vPin.status == null) {
-      buttonState = AuthFilledButton.stateDisabledButton;
+      _buttonState = AuthFilledButton.stateDisabledButton;
     }
     if (vPin.status == false) {
-      buttonState = AuthFilledButton.stateDisabledButton;
+      _buttonState = AuthFilledButton.stateDisabledButton;
     } else {
-      buttonState = AuthFilledButton.stateEnabledButton;
+      _buttonState = AuthFilledButton.stateEnabledButton;
     }
     notifyListeners();
   }
 
-  /// Aksi saat button buat pin di tekan
-  /// 
+  /// Aksi saat button 'Berikutnya' ditekan
+  ///
   void onPressedButtonBerikutnya({
     required UserModel user,
     required String createdPin,
   }) {
     DMethod.log('Password From Third Provider: $createdPin');
+    // membuka halaman singup fourth
     Get.to(
       SignUpFourthPage(
         user: user,
@@ -70,11 +75,11 @@ class SignUpThirdProvider extends ChangeNotifier {
     );
   }
 
-    /// reset semua data pada provider
+  /// reset semua data pada provider
   void resetData() {
     pinCont.text = '';
-    buttonState = AuthFilledButton.stateDisabledButton;
-    message = '';
+    _buttonState = AuthFilledButton.stateDisabledButton;
+    _message = '';
     vPin = PasarAjaValidation.phone(null);
     notifyListeners();
   }

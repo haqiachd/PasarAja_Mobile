@@ -6,8 +6,8 @@ import 'package:pasaraja_mobile/config/routes/routes.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/firebase_options.dart';
 import 'package:pasaraja_mobile/module/auth/providers/providers.dart';
-import 'package:pasaraja_mobile/module/auth/views/welcome_page.dart';
 import 'package:pasaraja_mobile/core/services/google_signin_services.dart';
+import 'package:pasaraja_mobile/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         onGenerateRoute: AppRoutes.onGenerateRoute,
-        home: const WelcomePage(),
+        home: const SplashScreen(),
       ),
     );
   }

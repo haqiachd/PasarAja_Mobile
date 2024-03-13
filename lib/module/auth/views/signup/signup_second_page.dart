@@ -224,7 +224,7 @@ class _SignUpPageState extends State<SignUpSecondPage> {
             await googleProvider.googleLogin();
 
             // get user data
-            signUpProvider.onTapButtonLoginGoogle(
+            signUpProvider.onTapButtonGoogle(
               user: googleProvider.user,
             );
 

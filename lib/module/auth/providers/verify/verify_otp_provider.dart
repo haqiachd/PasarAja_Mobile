@@ -36,6 +36,7 @@ class VerifyOtpProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // second and resend for otp
   int _second = 5;
   int _resent = 1;
 
@@ -44,21 +45,6 @@ class VerifyOtpProvider extends ChangeNotifier {
   Object get timeStatus => _timeStatus;
   set timeStatus(Object m) {
     _timeStatus = m;
-    notifyListeners();
-  }
-
-  /// Untuk mengecek apakah pin yang diinputkan valid atau tidak
-  ///
-  void onValidatePhone(String pin) {
-    vPin = PasarAjaValidation.pin(pin);
-    // enable and disable button
-    if (vPin.status == true) {
-      buttonState = AuthFilledButton.stateEnabledButton;
-      message = '';
-    } else {
-      buttonState = AuthFilledButton.stateDisabledButton;
-      message = vPin.message ?? PasarAjaConstant.unknownError;
-    }
     notifyListeners();
   }
 
@@ -77,24 +63,28 @@ class VerifyOtpProvider extends ChangeNotifier {
       DMethod.log('data -> $data');
       // cek apakah kode otp valid atau tidak
       if (otp == verify.otp) {
+        // stop timer yang sedang berjalan
         _second = -1;
 
         await Future.delayed(const Duration(seconds: 1));
+
+        // action type saat otp valid
         switch (from) {
-          // verifikasi lupa password
+          // jika verifikasi dari lupa password
           case VerifyOtpPage.fromLoginGoogle:
             Get.off(
               ChangePasswordPage(email: data as String),
               transition: Transition.leftToRight,
               duration: PasarAjaConstant.transitionDuration,
             );
-          // verifikasi register
+          // jika verifikasi dari register
           case VerifyOtpPage.fromRegister:
             Get.off(
               SignUpThirdPage(user: data as UserModel),
               transition: Transition.leftToRight,
               duration: PasarAjaConstant.transitionDuration,
             );
+          // jika verifikasi dari lupa pin
           case VerifyOtpPage.fromForgotPin:
             Get.off(
               ChangePinPage(phone: data as String),
@@ -105,7 +95,8 @@ class VerifyOtpProvider extends ChangeNotifier {
             Fluttertoast.showToast(msg: "default error");
         }
       } else {
-        message = 'Kode OTP tidak cocok!';
+        // jika kode otp tidak cocook
+        _message = 'Kode OTP tidak cocok!';
         PasarAjaUtils.triggerVibration();
       }
 
@@ -115,31 +106,34 @@ class VerifyOtpProvider extends ChangeNotifier {
       ex.printInfo();
       message = ex.toString();
       Fluttertoast.showToast(msg: message.toString());
-      notifyListeners();
     }
   }
 
+  /// Aksi saat button 'Kirim Ulang' ditekan
   Future<void> onPressedButtonKirimUlang({
     required String email,
     required int from,
     required dynamic data,
   }) async {
-    _buttonState = AuthFilledButton.stateLoadingButton;
-    notifyListeners();
+    // show button loading
+    buttonState = AuthFilledButton.stateLoadingButton;
 
     await Future.delayed(const Duration(seconds: 3));
 
     // mengirim kode otp ke email
     final dataState = from != VerifyOtpPage.fromForgotPin
         ? await _verifyController.requestOtp(
+            // jika user dari register atau lupa password
             email: email,
           )
         : await _verifyController.requestOtpByPhone(
+            // jika user dari lupa pin
             phone: data,
           );
+
     // jika otp berhasil dikirim
     if (dataState is DataSuccess) {
-      // update button state
+      // close button loading
       _buttonState = AuthFilledButton.stateDisabledButton;
 
       // reset menit
@@ -150,6 +144,8 @@ class VerifyOtpProvider extends ChangeNotifier {
       _calculateResendTime();
 
       _buildTimeStatus();
+
+      notifyListeners();
 
       // membuka ulang halaman otp
       Get.offAll(
@@ -165,13 +161,16 @@ class VerifyOtpProvider extends ChangeNotifier {
 
     // jika otp gagal dikirim
     if (dataState is DataFailed) {
-      _buttonState = AuthFilledButton.stateEnabledButton;
       PasarAjaUtils.triggerVibration();
-      message = dataState.error!.error ?? PasarAjaConstant.unknownError;
+      _buttonState = AuthFilledButton.stateEnabledButton;
+      _message = dataState.error!.error ?? PasarAjaConstant.unknownError;
+      notifyListeners();
       Fluttertoast.showToast(msg: message.toString());
     }
   }
 
+  /// Timer kode otp
+  ///
   Future<void> playTimer() async {
     DMethod.log('calling playtimer');
     while (_second >= 0) {
@@ -189,6 +188,8 @@ class VerifyOtpProvider extends ChangeNotifier {
     }
   }
 
+  /// Untuk menghitung limit waktu untuk mengirimkan ulang otp
+  ///
   void _calculateResendTime() {
     switch (_resent) {
       case 1:
@@ -204,6 +205,8 @@ class VerifyOtpProvider extends ChangeNotifier {
     }
   }
 
+  /// untuk mengenerate text sesuai dengan banyaknya waktu
+  ///
   void _buildTimeStatus() {
     if (_second <= 59) {
       _timeStatus = 'Kirim Ulang OTP ($_second Detik)';
@@ -221,12 +224,13 @@ class VerifyOtpProvider extends ChangeNotifier {
   /// reset semua data pada provider
   void resetData() {
     _calculateResendTime();
-    buttonState = AuthFilledButton.stateDisabledButton;
-    message = '';
+    _buttonState = AuthFilledButton.stateDisabledButton;
+    _message = '';
     vPin = PasarAjaValidation.pin('');
     notifyListeners();
   }
 
+  /// reset data otp saat keluar dari page
   void onDispose() {
     DMethod.log("ON DISPOSE");
     _second = -1;

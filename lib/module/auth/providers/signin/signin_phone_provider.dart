@@ -35,15 +35,19 @@ class SignInPhoneProvider extends ChangeNotifier {
   /// Untuk mengecek apakah nomor hp yang diinputkan valid atau tidak
   ///
   void onValidatePhone(String phone) {
+    // mengecek apakah nomor hp valid atau tidak
     vPhone = PasarAjaValidation.phone(phone);
-    // enable and disable button
+
+    // jika nomor hp valid
     if (vPhone.status == true) {
-      buttonState = AuthFilledButton.stateEnabledButton;
-      message = '';
+      _buttonState = AuthFilledButton.stateEnabledButton;
+      _message = '';
     } else {
-      buttonState = AuthFilledButton.stateDisabledButton;
-      message = vPhone.message ?? PasarAjaConstant.unknownError;
+      _buttonState = AuthFilledButton.stateDisabledButton;
+      _message = vPhone.message ?? PasarAjaConstant.unknownError;
     }
+
+    // update status button
     notifyListeners();
   }
 
@@ -53,14 +57,13 @@ class SignInPhoneProvider extends ChangeNotifier {
     required String phone,
   }) async {
     try {
-      // call loading
-      _buttonState = AuthFilledButton.stateLoadingButton;
-      notifyListeners();
+      // show loading button
+      buttonState = AuthFilledButton.stateLoadingButton;
 
       await PasarAjaConstant.buttonDelay;
 
       DMethod.log('phone number : $phone');
-      // memanggil api untuk mengecek nomor hp exist atau tidak
+      // memanggil controller untuk mengecek nomor hp exist atau tidak
       final dataState = await _authController.isExistPhone(phone: phone);
 
       // jika nomor hp exist
@@ -82,12 +85,11 @@ class SignInPhoneProvider extends ChangeNotifier {
 
       // update button state
       buttonState = AuthFilledButton.stateEnabledButton;
-      notifyListeners();
     } catch (ex) {
-      buttonState = AuthFilledButton.stateEnabledButton;
-      message = ex.toString();
-      Fluttertoast.showToast(msg: message.toString());
+      _buttonState = AuthFilledButton.stateEnabledButton;
+      _message = ex.toString();
       notifyListeners();
+      Fluttertoast.showToast(msg: message.toString());
     }
   }
 
@@ -103,8 +105,8 @@ class SignInPhoneProvider extends ChangeNotifier {
   /// reset semua data pada provider
   void resetData() {
     phoneCont.text = '';
-    buttonState = AuthFilledButton.stateDisabledButton;
-    message = '';
+    _buttonState = AuthFilledButton.stateDisabledButton;
+    _message = '';
     vPhone = PasarAjaValidation.phone(null);
     notifyListeners();
   }

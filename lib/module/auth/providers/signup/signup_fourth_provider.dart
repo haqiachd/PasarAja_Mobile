@@ -39,12 +39,14 @@ class SignUpFourthProvider extends ChangeNotifier {
   void onValidatePin(String createdPin, String konfPin) {
     DMethod.log('Password Prov: $createdPin');
     DMethod.log('Konfirmasi Prov : $konfPin');
+
+    // jika pin dan konfirmasi pin cocok
     if (createdPin == konfPin) {
       _message = '';
-      buttonState = AuthFilledButton.stateEnabledButton;
+      _buttonState = AuthFilledButton.stateEnabledButton;
     } else {
       message = 'PIN tidak cocok';
-      buttonState = AuthFilledButton.stateDisabledButton;
+      _buttonState = AuthFilledButton.stateDisabledButton;
     }
 
     notifyListeners();
@@ -57,13 +59,12 @@ class SignUpFourthProvider extends ChangeNotifier {
     required String createdPin,
   }) async {
     try {
-      // call loading
+      // show button loading
       buttonState = AuthFilledButton.stateLoadingButton;
-      notifyListeners();
 
       await PasarAjaConstant.buttonDelay;
 
-      // memanggil api untuk login
+      // memanggil api untuk melakukan registrasi
       final dataState = await _signUpController.signUp(
         phone: user.phoneNumber!,
         email: user.email!,
@@ -72,10 +73,10 @@ class SignUpFourthProvider extends ChangeNotifier {
         password: user.password!,
       );
 
+      // jika register berhasil
       if (dataState is DataSuccess) {
-        // update button state
-        _buttonState = AuthFilledButton.stateEnabledButton;
-        notifyListeners();
+        // close button loading
+        buttonState = AuthFilledButton.stateEnabledButton;
 
         // menapilkan dialog informasi register berhasil
         await PasarAjaMessage.showInformation(
@@ -89,17 +90,17 @@ class SignUpFourthProvider extends ChangeNotifier {
         );
       }
 
+      // jika reister gagal
       if (dataState is DataFailed) {
         PasarAjaUtils.triggerVibration();
         _message = dataState.error!.error ?? PasarAjaConstant.unknownError;
-        Fluttertoast.showToast(msg: message.toString());
-        // update button state
         _buttonState = AuthFilledButton.stateEnabledButton;
         notifyListeners();
+        Fluttertoast.showToast(msg: message.toString());
       }
     } catch (ex) {
-      buttonState = AuthFilledButton.stateEnabledButton;
-      message = ex.toString();
+      _buttonState = AuthFilledButton.stateEnabledButton;
+      _message = ex.toString();
       Fluttertoast.showToast(msg: message.toString());
       notifyListeners();
     }
@@ -108,8 +109,8 @@ class SignUpFourthProvider extends ChangeNotifier {
   /// reset semua data pada provider
   void resetData() {
     pinCont.text = '';
-    buttonState = AuthFilledButton.stateDisabledButton;
-    message = '';
+    _buttonState = AuthFilledButton.stateDisabledButton;
+    _message = '';
     vPin = PasarAjaValidation.phone(null);
     notifyListeners();
   }

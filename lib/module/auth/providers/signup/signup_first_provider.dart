@@ -34,41 +34,46 @@ class SignUpFirstProvider extends ChangeNotifier {
   /// Untuk mengecek apakah nomor hp yang diinputkan valid atau tidak
   ///
   void onValidatePhone(String phone) {
+    // mengecek apakah nomor valid atau tidak
     vPhone = PasarAjaValidation.phone(phone);
-    // enable and disable button
+
+    // jika nomor hp valid
     if (vPhone.status == true) {
-      buttonState = AuthFilledButton.stateEnabledButton;
-      message = '';
+      _buttonState = AuthFilledButton.stateEnabledButton;
+      _message = '';
     } else {
-      buttonState = AuthFilledButton.stateDisabledButton;
-      message = vPhone.message ?? PasarAjaConstant.unknownError;
+      _buttonState = AuthFilledButton.stateDisabledButton;
+      _message = vPhone.message ?? PasarAjaConstant.unknownError;
     }
+
+    // update button status
     notifyListeners();
   }
 
-  /// Aksi saat button 'Berikutnya' ditekan,
+  /// Aksi saat button 'Berikutnya' ditekan
   ///
   Future<void> onPressedButtonBerikutnya({
     required String phone,
   }) async {
     try {
-      // call loading
+      // show loading button
       buttonState = AuthFilledButton.stateLoadingButton;
-      notifyListeners();
+
       await Future.delayed(const Duration(seconds: 3));
 
-      // memanggil api untuk mengecek nomor hp exist atau tidak
+      // memanggil controller untuk mengecek nomor hp exist atau tidak
       DataState dataState = await _authController.isExistPhone(phone: phone);
 
-      // jika nomor hp exist
+      // jika nomor hp exist (sudah terdaftar)
       if (dataState is DataSuccess) {
         PasarAjaUtils.triggerVibration();
         message = 'Nomor HP sudah terpakai';
+        Fluttertoast.showToast(msg: message.toString());
       }
 
-      // jika nomor hp tidak exist
+      // jika nomor hp tidak exist (belum terdaftar)
       if (dataState is DataFailed) {
-        Fluttertoast.showToast(msg: 'Nomor not exist');
+        // membuka halaman singup second
         Get.to(
           SignUpSecondPage(phone: phone),
           transition: Transition.rightToLeft,
@@ -78,16 +83,17 @@ class SignUpFirstProvider extends ChangeNotifier {
 
       // update button state
       buttonState = AuthFilledButton.stateEnabledButton;
-      notifyListeners();
     } catch (ex) {
-      buttonState = AuthFilledButton.stateEnabledButton;
-      message = ex.toString();
-      Fluttertoast.showToast(msg: message.toString());
+      _buttonState = AuthFilledButton.stateEnabledButton;
+      _message = ex.toString();
       notifyListeners();
+      Fluttertoast.showToast(msg: message.toString());
     }
   }
 
+  /// Aksi saat button 'Skip Nomor HP' ditekan
   void onPressedButtonSkip() {
+    // membuka halaman signup second
     Get.to(
       const SignUpSecondPage(phone: ''),
       transition: Transition.rightToLeft,
@@ -107,8 +113,8 @@ class SignUpFirstProvider extends ChangeNotifier {
   /// reset semua data pada provider
   void resetData() {
     phoneCont.text = '';
-    buttonState = AuthFilledButton.stateDisabledButton;
-    message = '';
+    _buttonState = AuthFilledButton.stateDisabledButton;
+    _message = '';
     vPhone = PasarAjaValidation.phone('');
     notifyListeners();
   }

@@ -37,18 +37,21 @@ class VerifyPinProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Untuk mengecek apakah pin yang diinputkan valid atau tidak
+  /// Untuk mengecek apakah nomor hp yang diinputkan valid atau tidak
   ///
   void onValidatePhone(String pin) {
+    // mengecek nomor hp valid atau tidak
     vPin = PasarAjaValidation.pin(pin);
     // enable and disable button
     if (vPin.status == true) {
-      buttonState = AuthFilledButton.stateEnabledButton;
-      message = '';
+      _buttonState = AuthFilledButton.stateEnabledButton;
+      _message = '';
     } else {
-      buttonState = AuthFilledButton.stateDisabledButton;
-      message = vPin.message ?? PasarAjaConstant.unknownError;
+      _buttonState = AuthFilledButton.stateDisabledButton;
+      _message = vPin.message ?? PasarAjaConstant.unknownError;
     }
+
+    // update button status
     notifyListeners();
   }
 
@@ -59,11 +62,10 @@ class VerifyPinProvider extends ChangeNotifier {
     required String pin,
   }) async {
     try {
-      // call loading
+      // show loading button
       buttonState = AuthFilledButton.stateLoadingButton;
-      notifyListeners();
 
-      // request api untuk login
+      // memanggil controller untuk melakukan login dengan nomor hp
       final dataState = await _signInController.signInPhone(
         phone: phone,
         pin: pin,
@@ -74,6 +76,8 @@ class VerifyPinProvider extends ChangeNotifier {
         // menyimpan session login
         await PasarAjaUserService.login(dataState.data as UserModel);
         Fluttertoast.showToast(msg: "Login Berhasil");
+
+        // membuka halaman utama
         Get.to(
           const MainPages(),
         );
@@ -88,39 +92,44 @@ class VerifyPinProvider extends ChangeNotifier {
 
       // update button state
       buttonState = AuthFilledButton.stateEnabledButton;
-      notifyListeners();
     } catch (ex) {
-      buttonState = AuthFilledButton.stateEnabledButton;
-      message = ex.toString();
+      _buttonState = AuthFilledButton.stateEnabledButton;
+      _message = ex.toString();
       Fluttertoast.showToast(msg: message.toString());
       notifyListeners();
     }
   }
 
+  /// Aksi saat button 'Lupa Pin' ditekan
+  ///
   Future<void> onPressedButtonLupaPin({
     required String phone,
   }) async {
     try {
+      // menampilkan dialog konfirmasi untuk mengirimkan kode otp
       final confirm = await PasarAjaMessage.showConfirmation(
         "Kami akan mengirimkan kode OTP ke alamat email Anda.",
       );
 
+      // jika user menekan tombol yes
       if (confirm) {
-        // memanggil loading dialog
+        // memanggil loading ui
         PasarAjaUtils.showLoadingDialog();
+
         await PasarAjaConstant.buttonDelay;
 
-        // mengirim kode otp
+        // memanggil controller untuk mengirimkan kode otp
         final dataState = await _verifyController.requestOtpByPhone(
           phone: phone,
         );
 
-        // menutup loading dialog
+        // menutup loading ui
         Get.back();
 
         // jika otp berhasil dikirim
         if (dataState is DataSuccess) {
-          final model = dataState.data as VerificationModel;
+          // membuka halaman verifikasi otp dengan data otp dari controller
+          final model = dataState.data as VerificationModel; // data otp
           Get.to(
             VerifyOtpPage(
               verificationModel: model,
@@ -142,14 +151,13 @@ class VerifyPinProvider extends ChangeNotifier {
     } catch (ex) {
       message = ex.toString();
       Fluttertoast.showToast(msg: message.toString());
-      notifyListeners();
     }
   }
 
   /// reset semua data pada provider
   void resetData() {
-    buttonState = AuthFilledButton.stateDisabledButton;
-    message = '';
+    _buttonState = AuthFilledButton.stateDisabledButton;
+    _message = '';
     vPin = PasarAjaValidation.pin('');
     notifyListeners();
   }
