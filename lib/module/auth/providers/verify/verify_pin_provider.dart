@@ -7,13 +7,14 @@ import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
-import 'package:pasaraja_mobile/main_page.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/signin_controller.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/verification_controller.dart';
 import 'package:pasaraja_mobile/module/auth/models/user_model.dart';
 import 'package:pasaraja_mobile/module/auth/models/verification_model.dart';
 import 'package:pasaraja_mobile/module/auth/views/verify/verify_otp_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
+import 'package:pasaraja_mobile/module/customer/views/customer_main_page.dart';
+import 'package:pasaraja_mobile/module/merchant/views/merchant_main_page.dart';
 
 class VerifyPinProvider extends ChangeNotifier {
   // validator, controller
@@ -73,14 +74,34 @@ class VerifyPinProvider extends ChangeNotifier {
 
       // jika login berhasil
       if (dataState is DataSuccess) {
-        // menyimpan session login
-        await PasarAjaUserService.login(dataState.data as UserModel);
+        // close loading button
+        buttonState = AuthFilledButton.stateEnabledButton;
         Fluttertoast.showToast(msg: "Login Berhasil");
 
-        // membuka halaman utama
-        Get.to(
-          const MainPages(),
-        );
+        // mendapatkan data user
+        UserModel userData = dataState.data as UserModel;
+        // menyimpan session login
+        await PasarAjaUserService.login(userData);
+
+        // get user level
+        String level = userData.level!.toLowerCase();
+
+        // jika user login sebagai penjual
+        if (level == UserLevel.penjual.name) {
+          // membuka halaman utama
+          Get.to(
+            const MerchantMainPage(),
+          );
+        }
+        // jika user login sebagai pembeli
+        else if (level == UserLevel.pembeli.name) {
+          // membuka halaman utama
+          Get.to(
+            const CustomerMainPage(),
+          );
+        } else {
+          Get.snackbar("ERROR", "Your account level is unknown");
+        }
       }
 
       // jika login gagal

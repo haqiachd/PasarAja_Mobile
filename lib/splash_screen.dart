@@ -3,8 +3,9 @@ import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/core/services/user_services.dart';
-import 'package:pasaraja_mobile/main_page.dart';
 import 'package:pasaraja_mobile/module/auth/views/welcome_page.dart';
+import 'package:pasaraja_mobile/module/customer/views/customer_main_page.dart';
+import 'package:pasaraja_mobile/module/merchant/views/merchant_main_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -40,13 +41,33 @@ class _SplashScreenState extends State<SplashScreen> {
 
       // Navigasi ke layar berdasarkan status login
       if (isLoggedIn) {
-        DMethod.log("SUDAH LOGIN");
-        Get.to(
-          const MainPages(),
+        // get user level
+        String level = await PasarAjaUserService.getUserData(
+          PasarAjaUserService.level,
         );
+        level = level.toLowerCase();
+
+        DMethod.log("user level : $level");
+
+        // jika user login sebagai penjual
+        if (level == UserLevel.penjual.name) {
+          // membuka halaman utama
+          Get.to(
+            const MerchantMainPage(),
+          );
+        }
+        // jika user login sebagai pembeli
+        else if (level == UserLevel.pembeli.name) {
+          // membuka halaman utama
+          Get.offAll(
+            const CustomerMainPage(),
+          );
+        } else {
+          Get.snackbar("ERROR", "Your account level is unknown");
+        }
       } else {
         DMethod.log("BELUM LOGIN");
-        Get.to(
+        Get.offAll(
           const WelcomePage(),
         );
       }
