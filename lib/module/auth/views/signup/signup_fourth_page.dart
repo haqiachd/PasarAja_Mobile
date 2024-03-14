@@ -70,6 +70,7 @@ class _SignUpFourthPageState extends State<SignUpFourthPage> {
     );
   }
 
+  /// Input Pin
   _buildInputPin() {
     return Consumer<SignUpFourthProvider>(
       builder: (context, provider, child) {
@@ -102,6 +103,8 @@ class _SignUpFourthPageState extends State<SignUpFourthPage> {
     );
   }
 
+
+  /// Button Buat Akun
   _buildButtonBuatAkun() {
     return Consumer<SignUpFourthProvider>(
       builder: (context, provider, child) {

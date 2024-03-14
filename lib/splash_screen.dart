@@ -33,15 +33,14 @@ class _SplashScreenState extends State<SplashScreen> {
   // Memeriksa status login pengguna
   void _checkLoginStatus() async {
     try {
-      // Menunggu 2 detik sebagai efek splash screen
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 6));
 
-      //
+      // mendapatkan data login
       bool isLoggedIn = await PasarAjaUserService.isLoggedIn();
 
-      // Navigasi ke layar berdasarkan status login
+      // jika user sudah login
       if (isLoggedIn) {
-        // get user level
+        // mendapatkan user level
         String level = await PasarAjaUserService.getUserData(
           PasarAjaUserService.level,
         );

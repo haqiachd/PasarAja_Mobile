@@ -112,7 +112,7 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
     );
   }
 
-  // Input OTP
+  /// Input OTP
   _buildInputOtp() {
     return Consumer<VerifyOtpProvider>(builder: (context, provider, child) {
       return AuthInputPin(
@@ -146,7 +146,7 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
     );
   }
 
-  // Button Kirim Ulang
+  /// Button Kirim Ulang
   _buildButtonKirimUlang() {
     return Consumer<VerifyOtpProvider>(
       builder: (context, provider, child) {

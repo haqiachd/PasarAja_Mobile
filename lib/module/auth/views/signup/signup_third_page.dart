@@ -86,6 +86,7 @@ class _SignUpThirdPageState extends State<SignUpThirdPage> {
     );
   }
 
+  /// Input Pin
   _buildInputPin() {
     return Consumer<SignUpThirdProvider>(
       builder: (context, provider, child) {
@@ -107,14 +108,15 @@ class _SignUpThirdPageState extends State<SignUpThirdPage> {
     );
   }
 
+  /// Button Berikutnya
   _buildButtonBerikutnya() {
     return Consumer<SignUpThirdProvider>(
       builder: (context, provider, child) {
         return AuthFilledButton(
           onPressed: () {
-            // aksi saat button di klik
             DMethod.log('Password From Third  Page: ${provider.pinCont.text}');
 
+            // aksi saat button di klik
             provider.onPressedButtonBerikutnya(
               user: widget.user,
               createdPin: provider.pinCont.text,

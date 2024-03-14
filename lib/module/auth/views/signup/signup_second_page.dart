@@ -74,6 +74,7 @@ class _SignUpPageState extends State<SignUpSecondPage> {
     );
   }
 
+  /// Input Email
   _buildInputEmail() {
     return Consumer<SignUpSecondProvider>(
       builder: (context, provider, child) {
@@ -104,6 +105,7 @@ class _SignUpPageState extends State<SignUpSecondPage> {
     );
   }
 
+  /// Input Nama
   _buildInputNama() {
     return Consumer<SignUpSecondProvider>(
       builder: (context, provider, child) {
@@ -134,6 +136,7 @@ class _SignUpPageState extends State<SignUpSecondPage> {
     );
   }
 
+  /// Input Password
   _buildInputPassword() {
     return Consumer<SignUpSecondProvider>(
       builder: (context, provider, child) {
@@ -166,6 +169,7 @@ class _SignUpPageState extends State<SignUpSecondPage> {
     );
   }
 
+  /// Input Konfirmasi Password
   _buildInputKonfirmasi() {
     return Consumer<SignUpSecondProvider>(
       builder: (context, provider, child) {
@@ -196,6 +200,7 @@ class _SignUpPageState extends State<SignUpSecondPage> {
     );
   }
 
+  /// Button Berikutnya
   _buildButtonBerikutnya() {
     return Consumer<SignUpSecondProvider>(
       builder: (context, provider, child) {
@@ -215,6 +220,8 @@ class _SignUpPageState extends State<SignUpSecondPage> {
     );
   }
 
+
+  /// Button Login
   _buildButtonLoginGoogle(BuildContext context) {
     return Consumer2<SignUpSecondProvider, GoogleSignService>(
       builder: (context, signUpProvider, googleProvider, child) {

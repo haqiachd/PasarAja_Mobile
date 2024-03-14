@@ -118,7 +118,7 @@ class _SignUpFirstPageState extends State<SignUpFirstPage> {
     );
   }
 
-  // Button Berikutnya
+  /// Button Berikutnya
   _buildButtonBerikutnya() {
     return Consumer<SignUpFirstProvider>(
       builder: (context, provider, child) {
@@ -135,7 +135,7 @@ class _SignUpFirstPageState extends State<SignUpFirstPage> {
     );
   }
 
-  // Button Berikutnya
+  /// Button Berikutnya
   _buildButtonSkip() {
     return AuthOutlinedButton(
       onPressed: () async {

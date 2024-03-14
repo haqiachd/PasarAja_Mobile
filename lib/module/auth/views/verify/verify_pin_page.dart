@@ -90,7 +90,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
     );
   }
 
-  // Input PIN
+  /// Input PIN
   _buildInputPin() {
     return Consumer<VerifyPinProvider>(
       builder: (context, provider, child) {
@@ -128,6 +128,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
     );
   }
 
+  /// Button Lupa Pin
   _buildButtonLupaPin() {
     return Consumer<VerifyPinProvider>(
       builder: (context, provider, child) {
