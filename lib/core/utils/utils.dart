@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -46,7 +49,7 @@ class PasarAjaUtils {
   }
 
   static clearDioException(Dio dio) {
-    // dio.interceptors.clear();
+    dio.interceptors.clear();
   }
 
   static showMessage(
@@ -144,5 +147,24 @@ class PasarAjaUtils {
 
   static String addZero(int number) {
     return number.toString().padLeft(2, '0');
+  }
+
+  static Future<String> getDeviceModel() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      return "${androidInfo.brand} ${androidInfo.model}";
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      return iosInfo.model;
+    } else if (Platform.isWindows) {
+      WindowsDeviceInfo windowsInfo = await deviceInfo.windowsInfo;
+      return windowsInfo.productName;
+    } else if (Platform.isMacOS) {
+      MacOsDeviceInfo macInfo = await deviceInfo.macOsInfo;
+      return macInfo.model;
+    } else {
+      return 'Unknown';
+    }
   }
 }

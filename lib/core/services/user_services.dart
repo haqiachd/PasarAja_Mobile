@@ -1,3 +1,4 @@
+import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,28 +13,41 @@ class PasarAjaUserService {
   static const fullName = 'fullname';
   static const level = 'level';
   static const photo = 'photo';
+  static const deviceToken = 'device_token';
 
   /// cek apakah user sudah login atau belum
   static Future<bool> isLoggedIn() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // get email
     String userEmail = prefs.getString(email).toString();
-    return userEmail.isNotEmpty && userEmail.trim().isNotEmpty;
+    // validasi email
+    ValidationModel validate = PasarAjaValidation.email(userEmail);
+    return validate.status == true;
   }
 
   // get user data
   static Future<String> getUserData(String data) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(data) ?? '';
+    if (prefs.containsKey(data)) {
+      return prefs.getString(data) ?? '';
+    } else {
+      return '';
+    }
+  }
+
+  // set user data
+  static Future<void> setUserData(String data, String? value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(data, value ?? '');
   }
 
   /// login
   static Future<void> login(UserModel user) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(phone, user.phoneNumber ?? '');
-    await prefs.setString(email, user.email ?? '');
-    await prefs.setString(fullName, user.fullName ?? '');
-    await prefs.setString(level, user.level ?? '');
-    await prefs.setString(phone, user.photo ?? '');
+    await setUserData(phone, user.phoneNumber);
+    await setUserData(email, user.email);
+    await setUserData(fullName, user.fullName);
+    await setUserData(level, user.level);
+    await setUserData(photo, user.photo);
   }
 
   /// logout
@@ -42,5 +56,8 @@ class PasarAjaUserService {
     await prefs.remove(phone);
     await prefs.remove(email);
     await prefs.remove(fullName);
+    await prefs.remove(photo);
+    await prefs.remove(level);
+    await prefs.remove(deviceToken);
   }
 }

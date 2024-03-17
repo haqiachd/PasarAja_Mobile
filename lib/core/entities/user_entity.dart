@@ -8,7 +8,7 @@ class UserEntity extends Equatable {
   final String? password;
   final String? pin;
   final String? level;
-  final bool? isVerified;
+  final int? isVerified;
   final String? photo;
   final String? createdAt;
   final String? updatedAt;
