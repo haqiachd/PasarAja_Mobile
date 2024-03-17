@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:d_method/d_method.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/core/services/user_services.dart';
@@ -33,10 +34,13 @@ class _SplashScreenState extends State<SplashScreen> {
   // Memeriksa status login pengguna
   void _checkLoginStatus() async {
     try {
-      await Future.delayed(const Duration(seconds: 6));
-
+      await Future.delayed(const Duration(seconds: 3));
       // mendapatkan data login
       bool isLoggedIn = await PasarAjaUserService.isLoggedIn();
+
+      // get device token
+      String? deviceToken = await FirebaseMessaging.instance.getToken();
+      DMethod.log('DEVICE TOKEN $deviceToken');
 
       // jika user sudah login
       if (isLoggedIn) {

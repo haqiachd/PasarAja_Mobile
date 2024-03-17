@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -66,10 +67,22 @@ class VerifyPinProvider extends ChangeNotifier {
       // show loading button
       buttonState = AuthFilledButton.stateLoadingButton;
 
+      // get device info
+      String? deviceToken = await FirebaseMessaging.instance.getToken();
+      String deviceName = await PasarAjaUtils.getDeviceModel();
+
+      // save device token
+      PasarAjaUserService.setUserData(
+        PasarAjaUserService.deviceToken,
+        deviceToken,
+      );
+
       // memanggil controller untuk melakukan login dengan nomor hp
       final dataState = await _signInController.signInPhone(
         phone: phone,
         pin: pin,
+        deviceName: deviceName,
+        deviceToken: deviceToken ?? '',
       );
 
       // jika login berhasil
@@ -142,6 +155,7 @@ class VerifyPinProvider extends ChangeNotifier {
         // memanggil controller untuk mengirimkan kode otp
         final dataState = await _verifyController.requestOtpByPhone(
           phone: phone,
+          type: VerificationController.forgotVerify,
         );
 
         // menutup loading ui

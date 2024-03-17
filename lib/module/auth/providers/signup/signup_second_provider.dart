@@ -195,6 +195,7 @@ class SignUpSecondProvider extends ChangeNotifier {
           // memanggil controller untuk mengirimkan otp ke alamat email user
           dataState = await _verifyController.requestOtp(
             email: email,
+            type: VerificationController.registerVerify,
           );
 
           // close loading ui

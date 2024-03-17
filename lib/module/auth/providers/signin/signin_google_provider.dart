@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -111,10 +112,22 @@ class SignInGoogleProvider extends ChangeNotifier {
 
       await PasarAjaConstant.buttonDelay;
 
+      // get device info
+      String? deviceToken = await FirebaseMessaging.instance.getToken();
+      String deviceName = await PasarAjaUtils.getDeviceModel();
+
+      // save device token
+      PasarAjaUserService.setUserData(
+        PasarAjaUserService.deviceToken,
+        deviceToken,
+      );
+
       // memanggil controller untuk melakukan login dengan email dan password
       final dataState = await _signInController.signInEmail(
         email: email,
         password: password,
+        deviceName: deviceName,
+        deviceToken: deviceToken ?? '',
       );
 
       // jika login berhasil
@@ -200,6 +213,7 @@ class SignInGoogleProvider extends ChangeNotifier {
             // memanggil controller untuk mengirimkan kode otp ke email user
             dataState = await _verifyController.requestOtp(
               email: emailCont.text,
+              type: VerificationController.forgotVerify,
             );
 
             // menutup loading ui
@@ -234,6 +248,7 @@ class SignInGoogleProvider extends ChangeNotifier {
           PasarAjaUtils.triggerVibration();
           message = dataState.error!.error ?? PasarAjaConstant.unknownError;
           Fluttertoast.showToast(msg: message.toString());
+          Get.back();
         }
       } else {
         // jika email tidak valid
@@ -259,9 +274,21 @@ class SignInGoogleProvider extends ChangeNotifier {
 
     await Future.delayed(const Duration(seconds: 3));
 
+    // get device info
+    String? deviceToken = await FirebaseMessaging.instance.getToken();
+    String deviceName = await PasarAjaUtils.getDeviceModel();
+
+    // save device token
+    PasarAjaUserService.setUserData(
+      PasarAjaUserService.deviceToken,
+      deviceToken,
+    );
+
     // memanggil controller untuk melakukan login google dengan email yang diinputkan
     DataState dataState = await _signInController.signInGoogle(
       email: email,
+      deviceName: deviceName,
+      deviceToken: deviceToken ?? '',
     );
 
     // menutup loading ui

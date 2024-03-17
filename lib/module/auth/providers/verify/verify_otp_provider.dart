@@ -1,4 +1,5 @@
 import 'package:d_method/d_method.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -63,36 +64,43 @@ class VerifyOtpProvider extends ChangeNotifier {
       DMethod.log('data -> $data');
       // cek apakah kode otp valid atau tidak
       if (otp == verify.otp) {
-        // stop timer yang sedang berjalan
-        _second = -1;
+        // cek apakah otp masih berlaku atau tidak
+        if (verify.expirationTime! >= DateTime.now().millisecondsSinceEpoch) {
+          // stop timer yang sedang berjalan
+          _second = -1;
 
-        await Future.delayed(const Duration(seconds: 1));
+          await Future.delayed(const Duration(seconds: 1));
 
-        // action type saat otp valid
-        switch (from) {
-          // jika verifikasi dari lupa password
-          case VerifyOtpPage.fromLoginGoogle:
-            Get.off(
-              ChangePasswordPage(email: data as String),
-              transition: Transition.leftToRight,
-              duration: PasarAjaConstant.transitionDuration,
-            );
-          // jika verifikasi dari register
-          case VerifyOtpPage.fromRegister:
-            Get.off(
-              SignUpThirdPage(user: data as UserModel),
-              transition: Transition.leftToRight,
-              duration: PasarAjaConstant.transitionDuration,
-            );
-          // jika verifikasi dari lupa pin
-          case VerifyOtpPage.fromForgotPin:
-            Get.off(
-              ChangePinPage(phone: data as String),
-              transition: Transition.leftToRight,
-              duration: PasarAjaConstant.transitionDuration,
-            );
-          default:
-            Fluttertoast.showToast(msg: "default error");
+          // action type saat otp valid
+          switch (from) {
+            // jika verifikasi dari lupa password
+            case VerifyOtpPage.fromLoginGoogle:
+              Get.off(
+                ChangePasswordPage(email: data as String),
+                transition: Transition.leftToRight,
+                duration: PasarAjaConstant.transitionDuration,
+              );
+            // jika verifikasi dari register
+            case VerifyOtpPage.fromRegister:
+              Get.off(
+                SignUpThirdPage(user: data as UserModel),
+                transition: Transition.leftToRight,
+                duration: PasarAjaConstant.transitionDuration,
+              );
+            // jika verifikasi dari lupa pin
+            case VerifyOtpPage.fromForgotPin:
+              Get.off(
+                ChangePinPage(phone: data as String),
+                transition: Transition.leftToRight,
+                duration: PasarAjaConstant.transitionDuration,
+              );
+            default:
+              Fluttertoast.showToast(msg: "default error");
+          }
+        } else {
+          _message = 'Kode OTP telah Kadaluarsa';
+          Fluttertoast.showToast(msg: _message.toString());
+          PasarAjaUtils.triggerVibration();
         }
       } else {
         // jika kode otp tidak cocook
@@ -120,16 +128,28 @@ class VerifyOtpProvider extends ChangeNotifier {
 
     await Future.delayed(const Duration(seconds: 3));
 
+    DataState? dataState;
+
     // mengirim kode otp ke email
-    final dataState = from != VerifyOtpPage.fromForgotPin
-        ? await _verifyController.requestOtp(
-            // jika user dari register atau lupa password
-            email: email,
-          )
-        : await _verifyController.requestOtpByPhone(
-            // jika user dari lupa pin
-            phone: data,
-          );
+    switch (from) {
+      case VerifyOtpPage.fromRegister:
+        dataState = await _verifyController.requestOtp(
+          email: email,
+          type: VerificationController.registerVerify,
+        );
+      case VerifyOtpPage.fromLoginGoogle:
+        dataState = await _verifyController.requestOtp(
+          email: email,
+          type: VerificationController.forgotVerify,
+        );
+      case VerifyOtpPage.fromForgotPin:
+        dataState = await _verifyController.requestOtpByPhone(
+          phone: data,
+          type: VerificationController.forgotVerify,
+        );
+      default:
+        Fluttertoast.showToast(msg: "default error");
+    }
 
     // jika otp berhasil dikirim
     if (dataState is DataSuccess) {
