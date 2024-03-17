@@ -7,10 +7,14 @@ import 'package:pasaraja_mobile/module/auth/models/verification_model.dart';
 
 class VerificationController {
   final Dio _dio = Dio();
-  final String _verifyRoute = '${PasarAjaConstant.baseUrl}/messenger';
+  final String _verifyRoute = '${PasarAjaConstant.baseUrl}/verify';
+  // type
+  static const registerVerify = 'Register';
+  static const forgotVerify = 'Forgot';
 
   Future<DataState<VerificationModel>> requestOtp({
     required String email,
+    required String type,
   }) async {
     try {
       // send request
@@ -18,7 +22,7 @@ class VerificationController {
         "$_verifyRoute/otp",
         data: {
           "email": email,
-          "type": "Forgot",
+          "type": type,
         },
         options: Options(
           validateStatus: (status) {
@@ -48,14 +52,15 @@ class VerificationController {
 
   Future<DataState<VerificationModel>> requestOtpByPhone({
     required String phone,
+    required String type,
   }) async {
     try {
       // send request
       final response = await _dio.post(
-        "$_verifyRoute/otphone",
+        "$_verifyRoute/otpbyphone",
         data: {
-          "phone": phone,
-          "type": "Forgot",
+          "phone_number": phone,
+          "type": type,
         },
         options: Options(
           validateStatus: (status) {
@@ -79,6 +84,7 @@ class VerificationController {
         );
       }
     } on DioException catch (ex) {
+      print('exception $ex');
       return DataFailed(ex);
     }
   }
@@ -86,8 +92,10 @@ class VerificationController {
 
 void main(List<String> args) async {
   VerificationController verificationController = VerificationController();
-  DataState dataState = await verificationController.requestOtp(
-    email: "arenafinder.app@gmail.com",
+  DataState dataState = await verificationController.requestOtpByPhone(
+    // email: "arenafinder.app@gmail.com",
+    phone: '6285655864624',
+    type: VerificationController.forgotVerify,
   );
 
   if (dataState is DataSuccess) {
@@ -96,6 +104,6 @@ void main(List<String> args) async {
   }
 
   if (dataState is DataFailed) {
-    print(dataState.error!.message);
+    print(dataState.error!.error);
   }
 }
