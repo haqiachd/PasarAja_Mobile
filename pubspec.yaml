@@ -28,6 +28,7 @@ dependencies:
   firebase_messaging: ^14.7.17
   http: ^1.1.2
   dio: ^5.4.1
+  jwt_decoder: ^2.0.1
   flutter_native_splash: ^2.2.4
   logger: ^2.0.2+1
   image_picker: ^1.0.7
@@ -36,6 +37,7 @@ dependencies:
   d_input: ^0.1.2
   d_method: ^0.2.4
   talker_dio_logger: ^4.0.3
+  device_info_plus: ^9.1.2
 
 dev_dependencies:
   flutter_test:
