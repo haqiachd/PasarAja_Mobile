@@ -52,6 +52,7 @@ class PasarAjaUtils {
     dio.interceptors.clear();
   }
 
+  @deprecated
   static showMessage(
     String title,
     String message, {
@@ -80,6 +81,7 @@ class PasarAjaUtils {
     );
   }
 
+  @deprecated
   static showWarning(String message) {
     showMessage(
       "Peringatan",
@@ -89,6 +91,7 @@ class PasarAjaUtils {
     );
   }
 
+  @deprecated
   static showLoadingDialog() {
     Get.dialog(
       const Center(
@@ -100,6 +103,7 @@ class PasarAjaUtils {
     );
   }
 
+  @deprecated
   static dynamic showConfirmBack(String message) {
     return Get.bottomSheet(
       Container(
