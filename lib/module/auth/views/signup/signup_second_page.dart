@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/services/google_signin_services.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/providers/signup/signup_second_provider.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
@@ -29,45 +31,61 @@ class _SignUpPageState extends State<SignUpSecondPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: PasarAjaColor.white,
-      appBar: authAppbar(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: 19,
-            right: 19,
-            top: 64 - MediaQuery.of(context).padding.top,
-          ),
-          child: Column(
-            children: [
-              const AuthInit(
-                image: '',
-                title: 'Daftar Akun',
-                description:
-                    'Silakan masukkan nama dan kata sandi untuk mendaftarkan akun.',
-                haveImage: false,
-              ),
-              const SizedBox(height: 19),
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    _buildInputEmail(),
-                    const SizedBox(height: 12),
-                    _buildInputNama(),
-                    const SizedBox(height: 12),
-                    _buildInputPassword(),
-                    const SizedBox(height: 12),
-                    _buildInputKonfirmasi(),
-                    const SizedBox(height: 40),
-                    _buildButtonBerikutnya(),
-                    const SizedBox(height: 40),
-                    _buildButtonLoginGoogle(context),
-                    const SizedBox(height: 20),
-                  ],
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (!didPop) {
+          final metu = await PasarAjaMessage.showConfirmBack(
+            'Apakah Anda yakin ingin keluar dari halaman Daftar Akun.\n\nData akun Anda tidak akan tersimpan!',
+          );
+
+          if (metu) {
+            Get.back();
+            // ignore: use_build_context_synchronously
+            Provider.of<SignUpSecondProvider>(context).isLoginGoogle = false;
+          }
+        }
+      },
+      child: Scaffold(
+        backgroundColor: PasarAjaColor.white,
+        appBar: authAppbar(),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 19,
+              right: 19,
+              top: 64 - MediaQuery.of(context).padding.top,
+            ),
+            child: Column(
+              children: [
+                const AuthInit(
+                  image: '',
+                  title: 'Daftar Akun',
+                  description:
+                      'Silakan masukkan nama dan kata sandi untuk mendaftarkan akun.',
+                  haveImage: false,
                 ),
-              )
-            ],
+                const SizedBox(height: 19),
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _buildInputEmail(),
+                      const SizedBox(height: 12),
+                      _buildInputNama(),
+                      const SizedBox(height: 12),
+                      _buildInputPassword(),
+                      const SizedBox(height: 12),
+                      _buildInputKonfirmasi(),
+                      const SizedBox(height: 40),
+                      _buildButtonBerikutnya(),
+                      const SizedBox(height: 40),
+                      _buildButtonLoginGoogle(context),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -81,24 +99,28 @@ class _SignUpPageState extends State<SignUpSecondPage> {
         //
         final emailCont = provider.emailCont;
 
-        return AuthInputText(
-          title: 'Masukan Email',
-          textField: AuthTextField(
-            controller: emailCont,
-            hintText: 'Email Anda',
-            fontSize: 20,
-            keyboardType: TextInputType.emailAddress,
-            textInputAction: TextInputAction.next,
-            autofillHints: const [AutofillHints.email],
-            errorText: provider.vEmail.message,
-            onChanged: (value) {
-              provider.onValidateEmail(value);
-            },
-            suffixAction: () {
-              emailCont.text = '';
-              provider.vEmail = PasarAjaValidation.email('');
-              provider.buttonState = AuthFilledButton.stateDisabledButton;
-            },
+        return Visibility(
+          visible: !provider.isLoginGoogle,
+          child: AuthInputText(
+            title: 'Masukan Email',
+            textField: AuthTextField(
+              controller: emailCont,
+              hintText: 'Email Anda',
+              readOnly: provider.isLoginGoogle,
+              fontSize: 20,
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              autofillHints: const [AutofillHints.email],
+              errorText: provider.vEmail.message,
+              onChanged: (value) {
+                provider.onValidateEmail(value);
+              },
+              suffixAction: () {
+                emailCont.text = '';
+                provider.vEmail = PasarAjaValidation.email('');
+                provider.buttonState = AuthFilledButton.stateDisabledButton;
+              },
+            ),
           ),
         );
       },
@@ -220,27 +242,29 @@ class _SignUpPageState extends State<SignUpSecondPage> {
     );
   }
 
-
   /// Button Login
   _buildButtonLoginGoogle(BuildContext context) {
     return Consumer2<SignUpSecondProvider, GoogleSignService>(
       builder: (context, signUpProvider, googleProvider, child) {
-        return InkWell(
-          onTap: () async {
-            // show google auth
-            await googleProvider.googleLogin();
+        return Visibility(
+          visible: !signUpProvider.isLoginGoogle,
+          child: InkWell(
+            onTap: () async {
+              // show google auth
+              await googleProvider.googleLogin();
 
-            // get user data
-            signUpProvider.onTapButtonGoogle(
-              user: googleProvider.user,
-            );
+              // get user data
+              signUpProvider.onTapButtonGoogle(
+                user: googleProvider.user,
+              );
 
-            googleProvider.logout();
-          },
-          child: Image.asset(
-            PasarAjaImage.icGoogle,
-            width: 38,
-            height: 38,
+              googleProvider.logout();
+            },
+            child: Image.asset(
+              PasarAjaImage.icGoogle,
+              width: 38,
+              height: 38,
+            ),
           ),
         );
       },

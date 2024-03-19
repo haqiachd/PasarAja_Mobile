@@ -46,7 +46,7 @@ class AuthTextField extends StatelessWidget {
       controller: controller,
       onChanged: onChanged,
       maxLines: 1,
-      readOnly: readOnly ?? true,
+      readOnly: readOnly ?? false,
       style: PasarAjaTypography.sfpdBoldAuthInput.copyWith(
         color: PasarAjaColor.black,
         fontSize: fontSize,

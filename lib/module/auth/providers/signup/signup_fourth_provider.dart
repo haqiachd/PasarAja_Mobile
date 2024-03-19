@@ -80,7 +80,7 @@ class SignUpFourthProvider extends ChangeNotifier {
 
         // menapilkan dialog informasi register berhasil
         await PasarAjaMessage.showInformation(
-          'Register berhasil, Silahkan login dengan akun yang baru',
+          'Register berhasil, Silahkan login dengan akun yang baru!',
           actionYes: 'Login',
         );
 
