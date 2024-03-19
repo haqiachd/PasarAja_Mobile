@@ -1,33 +1,53 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:pasaraja_mobile/config/themes/typography.dart';
+import 'package:pasaraja_mobile/config/widgets/dialog_button.dart';
 
 class ConfirmDialog extends StatelessWidget {
   final String title;
   final String message;
+  final String? actionYes;
+  final String? actionCancel;
 
   const ConfirmDialog({
     Key? key,
     required this.title,
     required this.message,
+    this.actionYes,
+    this.actionCancel,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(title),
-      content: Text(message),
-      actions: <Widget>[
-        TextButton(
+    return CupertinoAlertDialog(
+      title: Text(
+        title,
+        style: PasarAjaTypography.sfpdSemibold.copyWith(
+          fontSize: 20,
+        ),
+      ),
+      content: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: Text(
+          message,
+          style: PasarAjaTypography.sfpdRegular.copyWith(
+            fontSize: 16,
+          ),
+        ),
+      ),
+      actions: [
+        DialogButton(
           onPressed: () {
             Get.back(result: false);
           },
-          child: const Text('Tidak'),
+          actionName: actionCancel ?? 'Tidak',
+          isDestructiveAction: true,
         ),
-        TextButton(
+        DialogButton(
           onPressed: () {
             Get.back(result: true);
           },
-          child: const Text('Ya'),
+          actionName: actionYes ?? 'Iya',
         ),
       ],
     );
