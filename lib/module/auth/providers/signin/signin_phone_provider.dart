@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/auth_controller.dart';
@@ -80,7 +81,7 @@ class SignInPhoneProvider extends ChangeNotifier {
       if (dataState is DataFailed) {
         PasarAjaUtils.triggerVibration();
         message = dataState.error!.error ?? PasarAjaConstant.unknownError;
-        Fluttertoast.showToast(msg: message.toString());
+        PasarAjaMessage.showSnackbarWarning(message.toString());
       }
 
       // update button state

@@ -168,7 +168,7 @@ class SignUpSecondProvider extends ChangeNotifier {
 
       // jika email sudah terdaftar
       if (dataState is DataSuccess) {
-        PasarAjaUtils.showWarning("Email tersebut sudah terdaftar");
+        PasarAjaMessage.showSnackbarWarning("Email tersebut sudah terdaftar");
         // reset data email
         PasarAjaUtils.triggerVibration();
         emailCont.text = '';
@@ -185,12 +185,14 @@ class SignUpSecondProvider extends ChangeNotifier {
         // menampilkan konfirmasi dialog untuk mengirimkan kode otp
         final bool confirm = await PasarAjaMessage.showConfirmation(
           "Kami akan mengirimkan kode OTP ke email Anda",
+          actionYes: 'Kirim',
+          actionCancel: 'Batal',
         );
 
         // jika user menekan tombol yes
         if (confirm) {
           // menampilkan loading ui
-          PasarAjaUtils.showLoadingDialog();
+          PasarAjaMessage.showLoading();
 
           // memanggil controller untuk mengirimkan otp ke alamat email user
           dataState = await _verifyController.requestOtp(
@@ -251,7 +253,7 @@ class SignUpSecondProvider extends ChangeNotifier {
       }
 
       // show loading ui
-      PasarAjaUtils.showLoadingDialog();
+      PasarAjaMessage.showLoading();
 
       await Future.delayed(const Duration(seconds: 3));
 
@@ -265,7 +267,7 @@ class SignUpSecondProvider extends ChangeNotifier {
 
       // jika email sudah terdaftar
       if (dataState is DataSuccess) {
-        PasarAjaUtils.showWarning("Email tersebut sudah terdaftar");
+        PasarAjaMessage.showSnackbarWarning("Email tersebut sudah terdaftar");
         // reset data email dan nama
         PasarAjaUtils.triggerVibration();
         emailCont.text = '';

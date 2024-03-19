@@ -81,12 +81,14 @@ class SignUpFourthProvider extends ChangeNotifier {
         // menapilkan dialog informasi register berhasil
         await PasarAjaMessage.showInformation(
           'Register berhasil, Silahkan login dengan akun yang baru',
+          actionYes: 'Login',
         );
 
         // ke halaman welcome
         Get.offAll(
           const WelcomePage(),
-          transition: Transition.leftToRight,
+          transition: Transition.circularReveal,
+          duration: PasarAjaConstant.transitionDuration,
         );
       }
 

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
-import 'package:pasaraja_mobile/core/utils/utils.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/module/auth/models/verification_model.dart';
 import 'package:pasaraja_mobile/module/auth/providers/verify/verify_otp_provider.dart';
 import 'package:pasaraja_mobile/module/auth/views/welcome_page.dart';
@@ -49,8 +49,8 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
       canPop: false,
       onPopInvoked: (didPop) async {
         if (!didPop) {
-          final metu = await PasarAjaUtils.showConfirmBack(
-            "Apakah Anda yakin ingin keluar dari verifikasi OTP, Kode OTP Anda akan hangus",
+          final metu = await PasarAjaMessage.showConfirmBack(
+            "Apakah Anda yakin ingin keluar dari verifikasi OTP. \nKode OTP Anda akan hangus",
           );
 
           if (metu) {

@@ -139,7 +139,7 @@ class ChangePinProvider extends ChangeNotifier {
         PasarAjaUtils.triggerVibration();
         _message = dataState.error!.error.toString();
         notifyListeners();
-        PasarAjaUtils.showWarning(message.toString());
+        PasarAjaMessage.showSnackbarWarning(message.toString());
       }
 
       // close loading button

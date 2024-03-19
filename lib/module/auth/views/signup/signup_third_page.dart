@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
-import 'package:pasaraja_mobile/core/utils/utils.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/module/auth/models/user_model.dart';
 import 'package:pasaraja_mobile/module/auth/providers/signup/signup_third_provider.dart';
 import 'package:pasaraja_mobile/module/auth/views/welcome_page.dart';
@@ -37,7 +37,7 @@ class _SignUpThirdPageState extends State<SignUpThirdPage> {
       canPop: false,
       onPopInvoked: (didPop) async {
         if (!didPop) {
-          final metu = await PasarAjaUtils.showConfirmBack(
+          final metu = await PasarAjaMessage.showConfirmBack(
             'Apakah Anda yakin ingin kembali, Jika Anda kembali maka pembuatan akun akan dibatalkan',
           );
 

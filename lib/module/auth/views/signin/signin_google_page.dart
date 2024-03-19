@@ -63,6 +63,7 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
               _buildButtonLupaSandi(context),
               const SizedBox(height: 20),
               _buildButtonLoginGoogle(context),
+              const SizedBox(height: 10),
             ],
           ),
         ),
@@ -157,7 +158,8 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
     return Consumer<SignInGoogleProvider>(
       builder: (context, provider, child) {
         return GestureDetector(
-          onTap: () async {
+          onTap: () {
+            provider.onValidateEmail(provider.emailCont.text);
             provider.onTapButtonLupaSandi(
               email: provider.emailCont.text,
             );

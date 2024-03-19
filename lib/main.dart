@@ -54,6 +54,11 @@ class MyApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(
             surfaceTintColor: Colors.white,
           ),
+          dialogBackgroundColor: Colors.white,
+          dialogTheme: const DialogTheme(
+            backgroundColor: Colors.white,
+            surfaceTintColor: Colors.white,
+          ),
         ),
         debugShowCheckedModeBanner: false,
         home: const SplashScreen(),

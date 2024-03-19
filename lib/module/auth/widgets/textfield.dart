@@ -14,6 +14,7 @@ class AuthTextField extends StatelessWidget {
   final Iterable<String>? autofillHints;
   final bool? obscureText;
   final bool? showHelper;
+  final bool? readOnly;
   final int? maxLength;
   final double? fontSize;
   final String? hintText;
@@ -30,6 +31,7 @@ class AuthTextField extends StatelessWidget {
     this.formatters,
     this.obscureText,
     this.showHelper,
+    this.readOnly,
     this.maxLength,
     this.fontSize,
     this.hintText,
@@ -44,6 +46,7 @@ class AuthTextField extends StatelessWidget {
       controller: controller,
       onChanged: onChanged,
       maxLines: 1,
+      readOnly: readOnly ?? true,
       style: PasarAjaTypography.sfpdBoldAuthInput.copyWith(
         color: PasarAjaColor.black,
         fontSize: fontSize,

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
-import 'package:pasaraja_mobile/core/utils/utils.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/module/auth/providers/change/change_password_provider.dart';
 import 'package:pasaraja_mobile/module/auth/views/welcome_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
@@ -38,7 +38,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       canPop: false,
       onPopInvoked: (didPop) async {
         if (!didPop) {
-          final metu = await PasarAjaUtils.showConfirmBack(
+          final metu = await PasarAjaMessage.showConfirmBack(
             "Apakah Anda yakin ingin keluar, Jika ya maka password tidak akan diubah",
           );
 
@@ -65,7 +65,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               children: [
                 const AuthInit(
                   image: PasarAjaImage.ilCreate,
-                  title: 'Ganti Kata Sandi',
+                  title: 'Buat Kata Sandi <register>',
                   description:
                       'Buatlah sebuah kata sandi yang rumit dan sulit ditebak oleh orang lain.',
                 ),

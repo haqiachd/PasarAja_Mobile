@@ -167,7 +167,7 @@ class SignInGoogleProvider extends ChangeNotifier {
         PasarAjaUtils.triggerVibration();
         message = dataState.error!.error ?? PasarAjaConstant.unknownError;
         // Fluttertoast.showToast(msg: message.toString());
-        PasarAjaUtils.showWarning(message.toString());
+        PasarAjaMessage.showSnackbarWarning(message.toString());
       }
 
       // close loading button
@@ -186,7 +186,7 @@ class SignInGoogleProvider extends ChangeNotifier {
       // cek apakah email valid atau tidak
       if (PasarAjaValidation.email(email).status == true) {
         // show loading ui
-        PasarAjaUtils.showLoadingDialog();
+        PasarAjaMessage.showLoading();
 
         await PasarAjaConstant.buttonDelay;
 
@@ -203,12 +203,14 @@ class SignInGoogleProvider extends ChangeNotifier {
           // menampilkan dialog konfirmasi pengiriman otp
           final confirm = await PasarAjaMessage.showConfirmation(
             "Kami akan mengirimkan kode OTP ke alamat email Anda.",
+            actionYes: 'Kirim',
+            actionCancel: 'Batal',
           );
 
           // jika user menekan tombol yes
           if (confirm) {
             // menampilkan loding ui
-            PasarAjaUtils.showLoadingDialog();
+            PasarAjaMessage.showLoading();
 
             // memanggil controller untuk mengirimkan kode otp ke email user
             dataState = await _verifyController.requestOtp(
@@ -248,16 +250,10 @@ class SignInGoogleProvider extends ChangeNotifier {
           PasarAjaUtils.triggerVibration();
           message = dataState.error!.error ?? PasarAjaConstant.unknownError;
           Fluttertoast.showToast(msg: message.toString());
-          Get.back();
         }
       } else {
         // jika email tidak valid
-        Get.snackbar(
-          'Info',
-          'Email tidak valid',
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 3),
-        );
+        Fluttertoast.showToast(msg: vEmail.message ?? 'Email tidak valid');
       }
     } catch (ex) {
       message = ex.toString();
@@ -270,7 +266,7 @@ class SignInGoogleProvider extends ChangeNotifier {
     required String email,
   }) async {
     // menampilkan loading ui
-    PasarAjaUtils.showLoadingDialog();
+    PasarAjaMessage.showLoading();
 
     await Future.delayed(const Duration(seconds: 3));
 
@@ -329,7 +325,7 @@ class SignInGoogleProvider extends ChangeNotifier {
       PasarAjaUtils.triggerVibration();
       message = dataState.error!.error ?? PasarAjaConstant.unknownError;
       // Fluttertoast.showToast(msg: message.toString());
-      PasarAjaUtils.showWarning(message.toString());
+      PasarAjaMessage.showSnackbarWarning(message.toString());
     }
     notifyListeners();
   }

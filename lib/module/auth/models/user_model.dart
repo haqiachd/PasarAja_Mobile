@@ -8,7 +8,7 @@ class UserModel extends UserEntity {
     final String? fullName,
     final String? password,
     final String? level,
-    final bool? isVerified,
+    final int? isVerified,
     final String? photo,
   }) : super(
           idUser: idUser,
@@ -23,7 +23,7 @@ class UserModel extends UserEntity {
 
   factory UserModel.fromJson(Map<String, dynamic> map) {
     return UserModel(
-      idUser: map['id'] ?? 0,
+      idUser: map['id_user'] ?? 0,
       phoneNumber: map['phone_number'] ?? '',
       email: map['email'] ?? '',
       fullName: map['full_name'] ?? '',

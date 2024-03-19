@@ -111,6 +111,8 @@ class VerifyPinProvider extends ChangeNotifier {
           // membuka halaman utama
           Get.to(
             const CustomerMainPage(),
+            transition: Transition.circularReveal,
+            duration: PasarAjaConstant.transitionDuration,
           );
         } else {
           Get.snackbar("ERROR", "Your account level is unknown");
@@ -143,12 +145,14 @@ class VerifyPinProvider extends ChangeNotifier {
       // menampilkan dialog konfirmasi untuk mengirimkan kode otp
       final confirm = await PasarAjaMessage.showConfirmation(
         "Kami akan mengirimkan kode OTP ke alamat email Anda.",
+        actionYes: 'Kirim',
+        actionCancel: 'Batal',
       );
 
       // jika user menekan tombol yes
       if (confirm) {
         // memanggil loading ui
-        PasarAjaUtils.showLoadingDialog();
+        PasarAjaMessage.showLoading();
 
         await PasarAjaConstant.buttonDelay;
 

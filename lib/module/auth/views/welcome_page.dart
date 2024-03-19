@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -5,7 +7,7 @@ import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/icons.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
 import 'package:pasaraja_mobile/core/constants/local_data.dart';
-import 'package:pasaraja_mobile/core/utils/utils.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/module/auth/views/signin/signin_google_page.dart';
 import 'package:pasaraja_mobile/module/auth/views/signup/signup_first_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
@@ -26,12 +28,12 @@ class _WelcomePageState extends State<WelcomePage> {
       canPop: false,
       onPopInvoked: (didPop) async {
         if (!didPop) {
-          final metu = await PasarAjaUtils.showConfirmBack(
+          final metu = await PasarAjaMessage.showConfirmBack(
             "Apakah Anda yakin ingin keluar dari Aplikasi",
           );
 
           if (metu) {
-            Get.back();
+            exit(0);
           }
         }
       },
@@ -131,13 +133,14 @@ _masukOnPressed(BuildContext context) {
       builder: ((context) {
         return Container(
           width: double.infinity,
-          height: 230,
+          height: 240,
           decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25),
-                topRight: Radius.circular(25),
-              )),
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
+            ),
+          ),
           child: Column(
             children: [
               const SizedBox(height: 20),
@@ -153,7 +156,7 @@ _masukOnPressed(BuildContext context) {
                         'Pilih Tipe Masuk',
                         textAlign: TextAlign.left,
                         style: PasarAjaTypography.sfpdBold.copyWith(
-                          fontSize: 16,
+                          fontSize: 18,
                         ),
                       ),
                     ),
@@ -163,7 +166,7 @@ _masukOnPressed(BuildContext context) {
                         'Anda ingin masuk lewat apa?',
                         textAlign: TextAlign.left,
                         style: PasarAjaTypography.sfpdRegular.copyWith(
-                          fontSize: 12,
+                          fontSize: 14,
                         ),
                       ),
                     ),

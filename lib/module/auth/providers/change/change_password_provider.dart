@@ -124,6 +124,7 @@ class ChangePasswordProvider extends ChangeNotifier {
         // menampilkan dialog informasi, bahwa password berhasil diubah
         await PasarAjaMessage.showInformation(
           'Password berhasil diubah, Silahkan login lagi dengan password yang baru?',
+          actionYes: 'Login',
         );
 
         // kembali ke halaman welcome

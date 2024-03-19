@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
-import 'package:pasaraja_mobile/core/utils/utils.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/module/auth/providers/change/change_pin_provider.dart';
 import 'package:pasaraja_mobile/module/auth/views/welcome_page.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
@@ -38,8 +38,9 @@ class _ChangePinPageState extends State<ChangePinPage> {
       canPop: false,
       onPopInvoked: (didPop) async {
         if (!didPop) {
-          final metu = await PasarAjaUtils.showConfirmBack(
-              "Apakah Anda yakin ingin keluar");
+          final metu = await PasarAjaMessage.showConfirmBack(
+            "Apakah Anda yakin ingin keluar",
+          );
 
           if (metu) {
             Get.offAll(
