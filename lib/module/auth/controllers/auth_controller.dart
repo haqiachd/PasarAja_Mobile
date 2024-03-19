@@ -83,4 +83,42 @@ class AuthController {
       return DataFailed(ex);
     }
   }
+
+  /// Logout akun
+  Future<DataState<bool>> logout({required String email}) async {
+    try {
+      // send request
+      final response = await _dio.delete(
+        '$_authUrl/logout',
+        data: {
+          "email": email,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok || status == HttpStatus.badRequest;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+
+      // jika response ok maka logout berhasil
+      if (response.statusCode == HttpStatus.ok) {
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
 }
