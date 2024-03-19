@@ -87,11 +87,14 @@ class PasarAjaMessage {
   }
 
   ///
-  static showLoading() {
+  static showLoading({bool canPop = false}) {
     Get.dialog(
-      const Center(
-        child: CircularProgressIndicator(
-          color: PasarAjaColor.green2,
+      PopScope(
+        canPop: canPop,
+        child: const Center(
+          child: CircularProgressIndicator(
+            color: PasarAjaColor.green2,
+          ),
         ),
       ),
       barrierDismissible: false,
