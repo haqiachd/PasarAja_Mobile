@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
             seedColor: PasarAjaColor.green2,
+            background: Colors.white,
           ),
           appBarTheme: const AppBarTheme(
             surfaceTintColor: Colors.white,
