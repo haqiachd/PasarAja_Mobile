@@ -38,6 +38,7 @@ dependencies:
   d_method: ^0.2.4
   talker_dio_logger: ^4.0.3
   device_info_plus: ^9.1.2
+  persistent_bottom_nav_bar: any
 
 dev_dependencies:
   flutter_test:
