@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:pasaraja_mobile/core/entities/product_promo_entity.dart';
 import 'package:pasaraja_mobile/core/entities/product_settings_entity.dart';
 
 class ProductEntity extends Equatable {
@@ -13,7 +12,6 @@ class ProductEntity extends Equatable {
   final String? unit;
   final int? sellingUnit;
   final int? price;
-  final ProductPromoEntity? promos;
   final String? photo;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -29,7 +27,6 @@ class ProductEntity extends Equatable {
     this.unit,
     this.sellingUnit,
     this.price,
-    this.promos,
     this.photo,
     this.createdAt,
     this.updatedAt,
@@ -48,7 +45,6 @@ class ProductEntity extends Equatable {
       unit,
       sellingUnit,
       price,
-      promos,
       photo,
       createdAt,
       updatedAt,
