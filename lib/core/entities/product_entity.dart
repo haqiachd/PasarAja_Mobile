@@ -4,7 +4,7 @@ import 'package:pasaraja_mobile/core/entities/product_settings_entity.dart';
 class ProductEntity extends Equatable {
   final int? id;
   final int? idShop;
-  final int? idCpShop;
+  final int? idCpProd;
   final String? productName;
   final String? description;
   final int? totalSold;
@@ -19,7 +19,7 @@ class ProductEntity extends Equatable {
   const ProductEntity({
     this.id,
     this.idShop,
-    this.idCpShop,
+    this.idCpProd,
     this.productName,
     this.description,
     this.totalSold,
@@ -37,7 +37,7 @@ class ProductEntity extends Equatable {
     return [
       id,
       idShop,
-      idCpShop,
+      idCpProd,
       productName,
       description,
       totalSold,
