@@ -9,6 +9,10 @@ class ReviewEntity extends Equatable {
   final String? comment;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final String? productName;
+  final String? fullName;
+  final String? email;
+  final String? photo;
 
   const ReviewEntity({
     this.idReview,
@@ -19,6 +23,10 @@ class ReviewEntity extends Equatable {
     this.comment,
     this.createdAt,
     this.updatedAt,
+    this.productName,
+    this.fullName,
+    this.email,
+    this.photo,
   });
 
   @override
@@ -32,6 +40,10 @@ class ReviewEntity extends Equatable {
       comment,
       createdAt,
       updatedAt,
+      productName,
+      fullName,
+      email,
+      photo,
     ];
   }
 }

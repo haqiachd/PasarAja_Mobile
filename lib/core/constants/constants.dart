@@ -8,4 +8,7 @@ class PasarAjaConstant {
   static const String unknownError = 'unknown error';
   static const Duration transitionDuration = Duration(milliseconds: 800);
   static Future buttonDelay = Future.delayed(const Duration(seconds: 2));
+  static Future onRefreshDelay = Future.delayed(
+    const Duration(milliseconds: 2500),
+  );
 }
