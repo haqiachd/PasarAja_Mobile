@@ -3,14 +3,20 @@ import 'package:d_method/d_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
+import 'package:pasaraja_mobile/config/themes/typography.dart';
 import 'package:pasaraja_mobile/config/widgets/app_bar.dart';
-import 'package:pasaraja_mobile/core/sources/provider_state.dart';
-import 'package:pasaraja_mobile/module/merchant/models/product/product_page_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product_category_model.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/product_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/widgets/category_item.dart';
+import 'package:pasaraja_mobile/module/merchant/views/product/best_selling_page.dart';
+import 'package:pasaraja_mobile/module/merchant/views/product/complain_page.dart';
+import 'package:pasaraja_mobile/module/merchant/views/product/hidden_page.dart';
+import 'package:pasaraja_mobile/module/merchant/views/product/recommended_page.dart';
+import 'package:pasaraja_mobile/module/merchant/views/product/review_page.dart';
+import 'package:pasaraja_mobile/module/merchant/views/product/unavailable_page.dart';
+import 'package:pasaraja_mobile/module/merchant/widgets/feature_button.dart';
 import 'package:provider/provider.dart';
 
 class ProductPage extends StatefulWidget {
@@ -64,67 +70,140 @@ class _ProductPageState extends State<ProductPage> {
               onRefresh: _fetchData,
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                child: Consumer<ProductProvider>(
-                  builder: (context, value, child) {
-                    // show loading
-                    if (value.state is OnLoadingState) {
-                      return const Center(
-                        child: CupertinoActivityIndicator(),
-                      );
-                    }
-
-                    // jika data berhasil didapakan
-// Jika data berhasil didapatkan
-                    if (value.state is OnSuccessState) {
-                      List<ProductCategoryModel> categories = value.categories;
-
-                      return SizedBox(
-                        height: 300,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: categories.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: Column(
-                                children: [
-                                  CircleAvatar(
-                                    child: CachedNetworkImage(
-                                      imageUrl: categories[index].photo ?? '',
-                                      placeholder: (context, url) {
-                                        return Image.asset(
-                                            PasarAjaImage.icGoogle);
-                                      },
-                                      errorWidget: (context, url, error) {
-                                        return Text('error');
-                                      },
-                                    ),
-                                  ),
-                                  Text(categories[index].categoryName ?? 'nul'),
-                                ],
-                              ),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        ProdcutFeatureButton(
+                          title: 'Terlaris',
+                          onPressed: () {
+                            Get.to(
+                              const BestSellingPage(),
+                              transition: Transition.cupertino,
                             );
                           },
                         ),
-                      );
-                    }
-
-                    // jika data gagal didapatkan
-                    if (value.state is OnFailureState) {
-                      return const Center(
-                        child: Text('Failure'),
-                      );
-                    }
-
-                    return const Center(
-                      child: Text('Sometimes Wrong'),
-                    );
-                  },
+                        ProdcutFeatureButton(
+                          title: 'Ulasan',
+                          onPressed: () {
+                            Get.to(
+                              const ReviewPage(),
+                              transition: Transition.cupertino,
+                            );
+                          },
+                        ),
+                        ProdcutFeatureButton(
+                          title: 'Komplain',
+                          onPressed: () {
+                            Get.to(
+                              const ComplainPage(),
+                              transition: Transition.cupertino,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ProdcutFeatureButton(
+                            title: 'Stok ',
+                            onPressed: () {
+                              Get.to(
+                                const UnavailablePage(),
+                                transition: Transition.cupertino,
+                              );
+                            },
+                          ),
+                        ),
+                        ProdcutFeatureButton(
+                          title: 'Disembuyikan',
+                          onPressed: () {
+                            Get.to(
+                              const HiddenPage(),
+                              transition: Transition.cupertino,
+                            );
+                          },
+                        ),
+                        ProdcutFeatureButton(
+                          title: 'Rekomendasi',
+                          onPressed: () {
+                            Get.to(
+                              const RecommendedPage(),
+                              transition: Transition.cupertino,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
         ],
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: FloatingActionButton(
+          onPressed: () {},
+          heroTag: 'add_prod',
+          elevation: 3,
+          child: const Icon(Icons.add),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+class ItemCategory extends StatelessWidget {
+  const ItemCategory({
+    super.key,
+    required this.category,
+  });
+
+  final ProductCategoryModel category;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 100,
+      width: 100,
+      child: InkWell(
+        onTap: () {
+          Fluttertoast.showToast(msg: category.categoryName ?? 'null');
+        },
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: 45,
+              backgroundColor:
+                  Colors.transparent, // Set the background color to transparent
+              child: ClipOval(
+                child: CachedNetworkImage(
+                  imageUrl: category.photo ?? '',
+                  placeholder: (context, url) {
+                    return Image.asset(PasarAjaImage.icGoogle);
+                  },
+                  errorWidget: (context, url, error) {
+                    return const Text('error');
+                  },
+                  fit: BoxFit.cover,
+                  width: 80,
+                  height: 80,
+                ),
+              ),
+            ),
+            Text(
+              category.categoryName ?? 'null',
+              textAlign: TextAlign.center,
+              style: PasarAjaTypography.sfpdBold,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -34,8 +34,6 @@ class ProductProvider extends ChangeNotifier {
       state = const OnLoadingState();
       notifyListeners();
 
-      await Future.delayed(Duration(seconds: 5));
-
       // call controller
       final dataState = await _productController.productPage(
         idShop: 1,
