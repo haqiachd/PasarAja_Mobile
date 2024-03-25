@@ -7,6 +7,7 @@ import 'package:pasaraja_mobile/config/widgets/something_wrong.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/recommended_provider.dart';
+import 'package:pasaraja_mobile/module/merchant/widgets/item_recommended.dart';
 import 'package:provider/provider.dart';
 
 class RecommendedPage extends StatefulWidget {
@@ -46,22 +47,30 @@ class RecommendedPageState extends State<RecommendedPage> {
           await PasarAjaConstant.onRefreshDelay;
           _fetchData();
         },
+        // MENDAPATKAN DATA
         child: Consumer<RecommendedProvider>(
           builder: (context, value, child) {
-            // on loading
+            // menampilkan loading
             if (value.state is OnLoadingState) {
               return const LoadingIndicator();
             }
 
+            // jika error
             if (value.state is OnFailureState) {
               return PageErrorMessage(
                 onFailureState: value.state as OnFailureState,
               );
             }
 
+            // berhasil
             if (value.state is OnSuccessState) {
-              return const Center(
-                child: Text("success"),
+              return ListView.builder(
+                itemCount: value.recommendeds.length,
+                itemBuilder: (context, index) {
+                  return ItemRecommended(
+                    product: value.recommendeds[index],
+                  );
+                },
               );
             }
 

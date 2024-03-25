@@ -49,19 +49,22 @@ class _BestSellingPageState extends State<BestSellingPage> {
           await PasarAjaConstant.onRefreshDelay;
           _fetchData();
         },
+        // MENDAPATKAN DATA
         child: Consumer<BestSellingProvider>(
           builder: (context, value, child) {
-            // loading state
+            // menampilkan loading
             if (value.state is OnLoadingState) {
               return const LoadingIndicator();
             }
 
+            // jika error
             if (value.state is OnFailureState) {
               return PageErrorMessage(
                 onFailureState: value.state as OnFailureState,
               );
             }
 
+            // berhasil
             if (value.state is OnSuccessState) {
               return Padding(
                 padding: const EdgeInsets.all(10),

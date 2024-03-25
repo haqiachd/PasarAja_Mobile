@@ -7,6 +7,7 @@ import 'package:pasaraja_mobile/config/widgets/something_wrong.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/unavailable_provider.dart';
+import 'package:pasaraja_mobile/module/merchant/widgets/item_unavailable.dart';
 import 'package:provider/provider.dart';
 
 class UnavailablePage extends StatefulWidget {
@@ -46,22 +47,30 @@ class UnavailablePageState extends State<UnavailablePage> {
           await PasarAjaConstant.onRefreshDelay;
           _fetchData();
         },
+        // MENAMPILKAN DATA
         child: Consumer<UnavailableProvider>(
           builder: (context, value, child) {
-            // on loading
+            // menampilkan loading
             if (value.state is OnLoadingState) {
               return const LoadingIndicator();
             }
 
+            // jika error
             if (value.state is OnFailureState) {
               return PageErrorMessage(
                 onFailureState: value.state as OnFailureState,
               );
             }
 
+            // berhasil
             if (value.state is OnSuccessState) {
-              return const Center(
-                child: Text("success"),
+              return ListView.builder(
+                itemCount: value.unavailables.length,
+                itemBuilder: (context, index) {
+                  return ItemUnavailable(
+                    product: value.unavailables[index],
+                  );
+                },
               );
             }
 
