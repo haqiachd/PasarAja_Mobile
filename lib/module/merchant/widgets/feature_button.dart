@@ -37,6 +37,7 @@ class ProdcutFeatureButton extends StatelessWidget {
               title,
               textAlign: TextAlign.center,
               style: PasarAjaTypography.sfpdSemibold.copyWith(
+                fontSize: 12,
                 color: Colors.black,
               ),
             ),
