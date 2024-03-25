@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
@@ -309,16 +308,6 @@ class ProductController {
       // send request
       final response = await _dio.post(
         "http://192.168.170.152:8000/api/m/prod/create",
-        // data: {
-        //   "id_shop": idShop,
-        //   "id_cp_prod": idCategory,
-        //   "product_name": productName,
-        //   "description": description,
-        //   "unit": unit,
-        //   "selling_unit": sellingUnit,
-        //   "photo": await MultipartFile.fromFile(photo.path, filename: 'product.png'),
-        //   "price": price,
-        // },
         data: formData,
         options: Options(
           validateStatus: (status) {

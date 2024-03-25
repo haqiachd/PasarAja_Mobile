@@ -104,7 +104,7 @@ class _ProductPageState extends State<ProductPage> {
                           List<ProductCategoryModel> categories =
                               context.read<ProductProvider>().categories;
                           return SizedBox(
-                            height: 150,
+                            height: 151,
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
@@ -126,32 +126,6 @@ class _ProductPageState extends State<ProductPage> {
                               ),
                             ),
                           );
-
-                          // return SizedBox(
-                          //   height: 150,
-                          //   child: SingleChildScrollView(
-                          //     scrollDirection: Axis.horizontal,
-                          //     child: Row(
-                          //       children: context
-                          //           .read<ProductProvider>()
-                          //           .categories
-                          //           .map(
-                          //             (e) => ItemCategory(
-                          //               category: e,
-                          //               selected: ctgSelected == e.categoryName,
-                          //               onTap: () {
-                          //                 Provider.of<ProductProvider>(
-                          //                   context,
-                          //                   listen: false,
-                          //                 ).category =
-                          //                     e.categoryName ?? 'Semua';
-                          //               },
-                          //             ),
-                          //           )
-                          //           .toList(),
-                          //     ),
-                          //   ),
-                          // );
                         },
                       ),
                       Consumer<ProductProvider>(
@@ -176,7 +150,9 @@ class _ProductPageState extends State<ProductPage> {
                                         product: e,
                                         onTap: () {
                                           Get.to(
-                                            const DetailProductPage(),
+                                            DetailProductPage(
+                                              idProduct: e.id ?? 0,
+                                            ),
                                             transition: Transition.zoom,
                                           );
                                         },
@@ -198,7 +174,9 @@ class _ProductPageState extends State<ProductPage> {
                                           product: e,
                                           onTap: () {
                                             Get.to(
-                                              const DetailProductPage(),
+                                              DetailProductPage(
+                                                idProduct: e.id ?? 0,
+                                              ),
                                               transition: Transition.zoom,
                                             );
                                           },

@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
 
 class DetailProductPage extends StatefulWidget {
-  const DetailProductPage({super.key});
+  final int idProduct;
+  const DetailProductPage({
+    super.key,
+    required this.idProduct,
+  });
 
   @override
   State<DetailProductPage> createState() => _DetailProductPageState();
