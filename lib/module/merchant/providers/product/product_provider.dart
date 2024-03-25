@@ -29,6 +29,14 @@ class ProductProvider extends ChangeNotifier {
   List<ProductModel> _sellings = [];
   List<ProductModel> get sellings => _sellings;
 
+  // category selected
+  String _category = 'Semua';
+  String get category => _category;
+  set category(String c) {
+    _category = c;
+    notifyListeners();
+  }
+
   Future<void> fetchData() async {
     try {
       state = const OnLoadingState();

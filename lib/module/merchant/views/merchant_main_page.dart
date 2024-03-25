@@ -110,7 +110,7 @@ class _MerchantMainPageState extends State<MerchantMainPage> {
         inactiveIcon: const Icon(Icons.discount_outlined),
       ),
       bottomNavItem(
-        itemName: "Promo",
+        itemName: "Pesanan",
         activeIcon: const Icon(Icons.library_books),
         inactiveIcon: const Icon(Icons.library_books_outlined),
       ),

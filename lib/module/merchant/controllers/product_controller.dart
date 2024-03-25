@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
@@ -267,6 +268,74 @@ class ProductController {
       // return status
       if (response.statusCode == HttpStatus.ok) {
         return DataSuccess(ProductModel.fromList(payload['data']));
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<bool>> addProduct({
+    required int idShop,
+    required int idCategory,
+    required String productName,
+    required String description,
+    required String unit,
+    required int sellingUnit,
+    required File photo,
+    required int price,
+  }) async {
+    try {
+      // Create FormData
+      FormData formData = FormData.fromMap({
+        "id_shop": idShop,
+        "id_cp_prod": idCategory,
+        "product_name": productName,
+        "description": description,
+        "unit": unit,
+        "selling_unit": sellingUnit,
+        "photo":
+            await MultipartFile.fromFile(photo.path, filename: 'product.png'),
+        "price": price,
+      });
+      // send request
+      final response = await _dio.post(
+        "http://192.168.170.152:8000/api/m/prod/create",
+        // data: {
+        //   "id_shop": idShop,
+        //   "id_cp_prod": idCategory,
+        //   "product_name": productName,
+        //   "description": description,
+        //   "unit": unit,
+        //   "selling_unit": sellingUnit,
+        //   "photo": await MultipartFile.fromFile(photo.path, filename: 'product.png'),
+        //   "price": price,
+        // },
+        data: formData,
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.created ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.internalServerError ||
+                status == HttpStatus.ok;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+
+      // return status
+      if (response.statusCode == HttpStatus.created) {
+        return const DataSuccess(true);
       } else {
         return DataFailed(
           DioException(
