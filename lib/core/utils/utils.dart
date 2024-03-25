@@ -55,6 +55,13 @@ class PasarAjaUtils {
     return number.toString().padLeft(2, '0');
   }
 
+  static String formatPrice(int price) {
+  return price.toStringAsFixed(0).replaceAllMapped(
+        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+        (Match match) => '${match[1]},',
+      );
+}
+
   static Future<String> getDeviceModel() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (Platform.isAndroid) {

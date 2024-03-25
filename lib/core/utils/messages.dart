@@ -89,15 +89,16 @@ class PasarAjaMessage {
   ///
   static showLoading({bool canPop = false}) {
     Get.dialog(
-      PopScope(
-        canPop: canPop,
-        child: const Center(
-          child: CircularProgressIndicator(
-            color: PasarAjaColor.green2,
-          ),
+      // PopScope(
+      //   canPop: canPop,
+      //   child:
+      const Center(
+        child: CircularProgressIndicator(
+          color: PasarAjaColor.green2,
         ),
       ),
-      barrierDismissible: false,
+      // ),
+      barrierDismissible: true,
       transitionCurve: Curves.easeOut,
     );
   }

@@ -5,6 +5,7 @@ class ProductEntity extends Equatable {
   final int? id;
   final int? idShop;
   final int? idCpProd;
+  final String? categoryName;
   final String? productName;
   final String? description;
   final int? totalSold;
@@ -20,6 +21,7 @@ class ProductEntity extends Equatable {
     this.id,
     this.idShop,
     this.idCpProd,
+    this.categoryName,
     this.productName,
     this.description,
     this.totalSold,
@@ -38,6 +40,7 @@ class ProductEntity extends Equatable {
       id,
       idShop,
       idCpProd,
+      categoryName,
       productName,
       description,
       totalSold,
