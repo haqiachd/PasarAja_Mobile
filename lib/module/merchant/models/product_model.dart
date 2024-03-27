@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:pasaraja_mobile/core/entities/product_entity.dart';
+import 'package:pasaraja_mobile/module/merchant/models/product_settings_model.dart';
 
 class ProductModel extends ProductEntity {
   const ProductModel({
@@ -9,9 +12,12 @@ class ProductModel extends ProductEntity {
     final String? productName,
     final String? description,
     final int? sellingUnit,
+    final ProductSettingsModel? settings,
     final String? unit,
     final int? price,
     final int? totalSold,
+    final num? rating,
+    final int? totalReview,
     final String? photo,
     final DateTime? updatedAt,
   }) : super(
@@ -22,8 +28,11 @@ class ProductModel extends ProductEntity {
           productName: productName,
           description: description,
           sellingUnit: sellingUnit,
+          settings: settings,
           unit: unit,
           price: price,
+          rating: rating,
+          totalReview: totalReview,
           totalSold: totalSold,
           photo: photo,
           updatedAt: updatedAt,
@@ -38,12 +47,15 @@ class ProductModel extends ProductEntity {
       productName: map['product_name'] ?? '',
       description: map['description'] ?? '',
       sellingUnit: map['selling_unit'] ?? 0,
+      settings: ProductSettingsModel.fromJson(jsonDecode(map['settings'])),
       unit: map['unit'] ?? '',
       price: map['price'] ?? 0,
       totalSold: map['total_sold'] ?? 0,
       photo: map['photo'] ?? '',
+      rating: map['rating'] ?? 0.0,
+      totalReview: map['total_review'] ?? 0,
       updatedAt:
-          map["updated_at"] == null ? null : DateTime.parse(map["updated_at"]),
+          map["updated_at"] == null ? null : DateTime.parse(map["updated_at"],),
     );
   }
 
