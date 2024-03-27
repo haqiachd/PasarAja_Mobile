@@ -94,116 +94,8 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      Builder(
-                        builder: (context) {
-                          DMethod.log("build categories");
-                          // get selected category
-                          String ctgSelected = context
-                              .select((ProductProvider prod) => prod.category);
-                          // get list
-                          List<ProductCategoryModel> categories =
-                              context.read<ProductProvider>().categories;
-                          return SizedBox(
-                            height: 151,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: categories
-                                    .map(
-                                      (e) => ItemCategory(
-                                        category: e,
-                                        selected: ctgSelected == e.categoryName,
-                                        onTap: () {
-                                          Provider.of<ProductProvider>(
-                                            context,
-                                            listen: false,
-                                          ).category =
-                                              e.categoryName ?? 'Semua';
-                                        },
-                                      ),
-                                    )
-                                    .toList(),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      Consumer<ProductProvider>(
-                        builder: (context, value, child) {
-                          DMethod.log("consume genres");
-                          if (value.state is OnLoadingState) {
-                            return const LoadingIndicator();
-                          }
-
-                          if (value.state is OnFailureState) {
-                            return PageErrorMessage(
-                              onFailureState: value.state as OnFailureState,
-                            );
-                          }
-
-                          if (value.state is OnSuccessState) {
-                            if (value.category == 'Semua') {
-                              return Column(
-                                children: value.products
-                                    .map(
-                                      (e) => ItemProduct(
-                                        product: e,
-                                        onTap: () {
-                                          Get.to(
-                                            DetailProductPage(
-                                              idProduct: e.id ?? 0,
-                                            ),
-                                            transition: Transition.zoom,
-                                          );
-                                        },
-                                      ),
-                                    )
-                                    .toList(),
-                              );
-                            } else {
-                              // filter produk
-                              List<ProductModel> list = value.products
-                                  .where((element) =>
-                                      element.categoryName == value.category)
-                                  .toList();
-                              if (list.isNotEmpty) {
-                                return Column(
-                                  children: list
-                                      .map(
-                                        (e) => ItemProduct(
-                                          product: e,
-                                          onTap: () {
-                                            Get.to(
-                                              DetailProductPage(
-                                                idProduct: e.id ?? 0,
-                                              ),
-                                              transition: Transition.zoom,
-                                            );
-                                          },
-                                        ),
-                                      )
-                                      .toList(),
-                                );
-                              } else {
-                                return SizedBox(
-                                  height: 200,
-                                  child: Center(
-                                    child: Text(
-                                      'Data Kosong',
-                                      style:
-                                          PasarAjaTypography.sfpdBold.copyWith(
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }
-                            }
-                          }
-
-                          return const SomethingWrong();
-                        },
-                      ),
+                      _listCategory(),
+                      _listProduct(),
                     ],
                   ),
                 ),
@@ -226,6 +118,124 @@ class _ProductPageState extends State<ProductPage> {
           child: const Icon(Icons.add),
         ),
       ),
+    );
+  }
+
+  _listCategory() {
+    return Consumer<ProductProvider>(
+      builder: (context, value, child) {
+        DMethod.log("build categories");
+        // get selected category
+        String ctgSelected =
+            context.select((ProductProvider prod) => prod.category);
+        // get list
+        List<ProductCategoryModel> categories =
+            context.read<ProductProvider>().categories;
+        // test show data
+        for (final category in categories) {
+          DMethod.log("name -> ${category.categoryName}");
+        }
+        //
+        return SizedBox(
+          height: 152,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: categories
+                  .map(
+                    (e) => ItemCategory(
+                      category: e,
+                      selected: ctgSelected == e.categoryName,
+                      onTap: () {
+                        Provider.of<ProductProvider>(
+                          context,
+                          listen: false,
+                        ).category = e.categoryName ?? 'Semua';
+                      },
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  _listProduct() {
+    return Consumer<ProductProvider>(
+      builder: (context, value, child) {
+        DMethod.log("consume genres");
+        if (value.state is OnLoadingState) {
+          return const LoadingIndicator();
+        }
+
+        if (value.state is OnFailureState) {
+          return PageErrorMessage(
+            onFailureState: value.state as OnFailureState,
+          );
+        }
+
+        if (value.state is OnSuccessState) {
+          if (value.category == 'Semua') {
+            return Column(
+              children: value.products
+                  .map(
+                    (e) => ItemProduct(
+                      product: e,
+                      onTap: () {
+                        Get.to(
+                          DetailProductPage(
+                            idProduct: e.id ?? 0,
+                          ),
+                          transition: Transition.zoom,
+                        );
+                      },
+                    ),
+                  )
+                  .toList(),
+            );
+          } else {
+            // filter produk
+            List<ProductModel> list = value.products
+                .where((element) => element.categoryName == value.category)
+                .toList();
+            if (list.isNotEmpty) {
+              return Column(
+                children: list
+                    .map(
+                      (e) => ItemProduct(
+                        product: e,
+                        onTap: () {
+                          Get.to(
+                            DetailProductPage(
+                              idProduct: e.id ?? 0,
+                            ),
+                            transition: Transition.zoom,
+                          );
+                        },
+                      ),
+                    )
+                    .toList(),
+              );
+            } else {
+              return SizedBox(
+                height: 200,
+                child: Center(
+                  child: Text(
+                    'Data Kosong',
+                    style: PasarAjaTypography.sfpdBold.copyWith(
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              );
+            }
+          }
+        }
+
+        return const SomethingWrong();
+      },
     );
   }
 }
