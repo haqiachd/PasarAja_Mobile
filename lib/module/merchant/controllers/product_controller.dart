@@ -129,6 +129,132 @@ class ProductController {
     }
   }
 
+  Future<DataState<List<ReviewModel>>> detailListReviewPage({
+    required int idShop,
+    required int idProd,
+  }) async {
+    try {
+      // send request
+      final response = await _dio.get(
+        "$_pageRoute/drvw",
+        queryParameters: {
+          "id_shop": idShop,
+          "id_product": idProd,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.notFound ||
+                status == HttpStatus.badRequest;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+
+      // return status
+      if (response.statusCode == HttpStatus.ok) {
+        return DataSuccess(ReviewModel.fromList(payload['data']));
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<List<ComplainModel>>> detailListComplainPage({
+    required int idShop,
+    required int idProd,
+  }) async {
+    try {
+      // send request
+      final response = await _dio.get(
+        "$_pageRoute/dcomp",
+        queryParameters: {
+          "id_shop": idShop,
+          "id_product": idProd,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.notFound ||
+                status == HttpStatus.badRequest;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+
+      // return status
+      if (response.statusCode == HttpStatus.ok) {
+        return DataSuccess(ComplainModel.fromList(payload['data']));
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<List<ProductHistoriesModel>>> detailListHistoryPage({
+    required int idShop,
+    required int idProd,
+  }) async {
+    try {
+      // send request
+      final response = await _dio.get(
+        "$_pageRoute/dhist",
+        queryParameters: {
+          "id_shop": idShop,
+          "id_product": idProd,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.notFound ||
+                status == HttpStatus.badRequest;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+
+      // return status
+      if (response.statusCode == HttpStatus.ok) {
+        return DataSuccess(ProductHistoriesModel.fromList(payload['data']));
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
   Future<DataState<ProductModel>> dataProduct({
     required int idShop,
     required int idProduct,
@@ -447,15 +573,17 @@ class ProductController {
 void main(List<String> args) async {
   ProductController productController = ProductController();
 
-  final dataState = await productController.detailProductPage(
+  final dataState = await productController.detailListHistoryPage(
     idShop: 1,
     idProd: 1,
   );
 
   if (dataState is DataSuccess) {
-    final data = dataState.data as ProductDetailModel;
+    final data = dataState.data as List<ProductHistoriesModel>;
     print('Data Success');
-    print("Nama : ${data.photo}");
+    for (final r in data) {
+      print(r.productName);
+    }
   }
 
   if (dataState is DataFailed) {

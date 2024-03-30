@@ -8,6 +8,7 @@ import 'package:pasaraja_mobile/module/auth/providers/providers.dart';
 import 'package:pasaraja_mobile/core/services/google_signin_services.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/best_selling_provider.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/complain_provider.dart';
+import 'package:pasaraja_mobile/module/merchant/providers/product/detail_list_provider.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/detail_product_provider.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/hidden_provider.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/product_provider.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => HiddenProvider()),
         ChangeNotifierProvider(create: (context) => RecommendedProvider()),
         ChangeNotifierProvider(create: (context) => DetailProductProvider()),
+        ChangeNotifierProvider(create: (context) => DetailListProvider()),
       ],
       child: GetMaterialApp(
         title: 'PasarAja',

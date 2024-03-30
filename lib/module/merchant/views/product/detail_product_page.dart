@@ -16,6 +16,7 @@ import 'package:pasaraja_mobile/module/merchant/models/product_histories_model.d
 import 'package:pasaraja_mobile/module/merchant/models/product_settings_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/review_model.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/detail_product_provider.dart';
+import 'package:pasaraja_mobile/module/merchant/views/product/detail_list_page.dart';
 import 'package:pasaraja_mobile/module/merchant/views/product/edit_product_page.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/item_complain.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/item_history.dart';
@@ -34,6 +35,10 @@ class DetailProductPage extends StatefulWidget {
 }
 
 class _DetailProductPageState extends State<DetailProductPage> {
+  // limit list and transiton list
+  final int _limit = 1;
+  final _transition = Transition.cupertino;
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -180,195 +185,235 @@ class _DetailProductPageState extends State<DetailProductPage> {
       ),
     );
   }
-}
 
-_productInfo(ProductDetailModel product) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        product.productName ?? 'Null',
-        style: PasarAjaTypography.sfpdBold.copyWith(
-          fontSize: 30,
-        ),
-      ),
-      const SizedBox(height: 5),
-      Text(
-        "${product.categoryName}",
-        style: PasarAjaTypography.sfpdSemibold.copyWith(
-          fontSize: 16,
-        ),
-      ),
-      const SizedBox(height: 5),
-      Row(
-        children: [
-          const Icon(
-            Icons.star,
-            color: Colors.orange,
+  _productInfo(ProductDetailModel product) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          product.productName ?? 'Null',
+          style: PasarAjaTypography.sfpdBold.copyWith(
+            fontSize: 30,
           ),
-          const SizedBox(width: 5),
-          if (product.totalReview! > 0)
-            Row(
-              children: [
-                Text(
-                  product.rating.toString(),
-                  style: PasarAjaTypography.sfpdSemibold,
-                ),
-                const SizedBox(width: 2),
-                Text(
-                  "(${product.totalReview})",
-                  style: PasarAjaTypography.sfpdSemibold,
-                ),
-              ],
-            )
-          else
+        ),
+        const SizedBox(height: 5),
+        Text(
+          "${product.categoryName}",
+          style: PasarAjaTypography.sfpdSemibold.copyWith(
+            fontSize: 16,
+          ),
+        ),
+        const SizedBox(height: 5),
+        Row(
+          children: [
+            const Icon(
+              Icons.star,
+              color: Colors.orange,
+            ),
+            const SizedBox(width: 5),
+            if (product.totalReview! > 0)
+              Row(
+                children: [
+                  Text(
+                    product.rating.toString(),
+                    style: PasarAjaTypography.sfpdSemibold,
+                  ),
+                  const SizedBox(width: 2),
+                  Text(
+                    "(${product.totalReview})",
+                    style: PasarAjaTypography.sfpdSemibold,
+                  ),
+                ],
+              )
+            else
+              Text(
+                'belum ada ulasan',
+                style: PasarAjaTypography.sfpdSemibold,
+              ),
+            const SizedBox(width: 5),
             Text(
-              'belum ada ulasan',
+              '*',
+              style: PasarAjaTypography.sfpdBold,
+            ),
+            const SizedBox(width: 5),
+            Text(
+              '${product.totalSold} terjual',
               style: PasarAjaTypography.sfpdSemibold,
             ),
-          const SizedBox(width: 5),
-          Text(
-            '*',
-            style: PasarAjaTypography.sfpdBold,
-          ),
-          const SizedBox(width: 5),
-          Text(
-            '${product.totalSold} terjual',
-            style: PasarAjaTypography.sfpdSemibold,
-          ),
-        ],
-      ),
-      const SizedBox(height: 5),
-      Text(
-        "${PasarAjaUtils.formatPrice(product.price ?? 0)} / ${product.sellingUnit} ${product.unit}",
-        style: PasarAjaTypography.sfpdRegular.copyWith(fontSize: 25),
-      ),
-      const SizedBox(height: 10),
-      Text(
-        product.description ?? '',
-        style: PasarAjaTypography.sfpdRegular,
-      ),
-    ],
-  );
-}
-
-_keteranganProduct(ProductSettingsModel? settings) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        "Keterangan Produk",
-        style: PasarAjaTypography.sfpdBold.copyWith(
-          fontSize: 20,
+          ],
         ),
-      ),
-      Text(
-        "Direkomendasikan : ${settings?.isRecommended}",
-        style: PasarAjaTypography.sfpdMedium,
-      ),
-      const SizedBox(height: 3),
-      Text(
-        "Ketersediaan Stok : ${settings?.isAvailable}",
-        style: PasarAjaTypography.sfpdMedium,
-      ),
-      const SizedBox(height: 3),
-      Text(
-        "Ditampilkan : ${settings?.isShown}",
-        textAlign: TextAlign.justify,
-        style: PasarAjaTypography.sfpdMedium,
-      ),
-    ],
-  );
-}
+        const SizedBox(height: 5),
+        Text(
+          "${PasarAjaUtils.formatPrice(product.price ?? 0)} / ${product.sellingUnit} ${product.unit}",
+          style: PasarAjaTypography.sfpdRegular.copyWith(fontSize: 25),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          product.description ?? '',
+          style: PasarAjaTypography.sfpdRegular,
+        ),
+      ],
+    );
+  }
 
-Center _nothingList(String msg) {
-  return Center(
-    child: Text(
-      msg,
-      style: PasarAjaTypography.sfpdSemibold,
-    ),
-  );
-}
-
-Text _listTitle(String title) {
-  return Text(
-    title,
-    style: PasarAjaTypography.sfpdBold.copyWith(
-      fontSize: 20,
-    ),
-  );
-}
-
-TextButton _seeAll(VoidCallback onPressed) {
-  return TextButton(
-    onPressed: onPressed,
-    child: const Text(
-      'See All',
-      style: TextStyle(color: Colors.blue),
-    ),
-  );
-}
-
-Widget _ulasanPengguna(List<ReviewModel>? reviews) {
-  // limit list menjadi 5
-  List<ReviewModel>? limitedReviews = reviews?.take(5).toList();
-
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      // menampilkan list
-      _listTitle("Ulasan Pengguna"),
-      if (limitedReviews != null && limitedReviews.isNotEmpty)
-        ...limitedReviews.map(
-          (e) => ItemUlasan(
-            review: e,
-            showProduct: false,
+  _keteranganProduct(ProductSettingsModel? settings) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Keterangan Produk",
+          style: PasarAjaTypography.sfpdBold.copyWith(
+            fontSize: 20,
           ),
         ),
-      // menampilkan button lihat semua
-      if (reviews != null && reviews.length > 1) _seeAll(() {}),
-      if (reviews == null || reviews.isEmpty) _nothingList("Belum ada ulasan"),
-    ],
-  );
-}
-
-Widget _complainPengguna(List<ComplainModel>? complains) {
-  // Batasi keluhan menjadi lima item
-  List<ComplainModel>? limitedComplains = complains?.take(5).toList();
-
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      _listTitle("Komplain Pengguna"),
-      if (limitedComplains != null && limitedComplains.isNotEmpty)
-        ...limitedComplains.map(
-          (e) => ItemComplain(complain: e),
+        Text(
+          "Direkomendasikan : ${settings?.isRecommended}",
+          style: PasarAjaTypography.sfpdMedium,
         ),
-      if (complains != null && complains.length > 5) _seeAll(() {}),
-      if (complains == null || complains.isEmpty)
-        _nothingList("Belum ada komplain"),
-    ],
-  );
-}
+        const SizedBox(height: 3),
+        Text(
+          "Ketersediaan Stok : ${settings?.isAvailable}",
+          style: PasarAjaTypography.sfpdMedium,
+        ),
+        const SizedBox(height: 3),
+        Text(
+          "Ditampilkan : ${settings?.isShown}",
+          textAlign: TextAlign.justify,
+          style: PasarAjaTypography.sfpdMedium,
+        ),
+      ],
+    );
+  }
 
-Widget _historyTrx(List<ProductHistoriesModel>? histories) {
-  // Batasi riwayat transaksi menjadi lima item
-  List<ProductHistoriesModel>? limitedHistories = histories?.take(5).toList();
+  Center _nothingList(String msg) {
+    return Center(
+      child: Text(
+        msg,
+        style: PasarAjaTypography.sfpdSemibold,
+      ),
+    );
+  }
 
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      _listTitle("Riwayat Transaksi"),
-      if (limitedHistories != null && limitedHistories.isNotEmpty)
-        ...limitedHistories.map(
-          (e) => Align(
-            alignment: Alignment.centerLeft,
-            child: ItemHistory(history: e),
+  Text _listTitle(String title) {
+    return Text(
+      title,
+      style: PasarAjaTypography.sfpdBold.copyWith(
+        fontSize: 20,
+      ),
+    );
+  }
+
+  TextButton _seeAll(VoidCallback onPressed) {
+    return TextButton(
+      onPressed: onPressed,
+      child: const Text(
+        'See All',
+        style: TextStyle(color: Colors.blue),
+      ),
+    );
+  }
+
+  Widget _ulasanPengguna(List<ReviewModel>? reviews) {
+    // limit list review
+    List<ReviewModel>? limitedReviews = reviews?.take(_limit).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // menampilkan list
+        _listTitle("Ulasan Pengguna"),
+        if (limitedReviews != null && limitedReviews.isNotEmpty)
+          ...limitedReviews.map(
+            (e) => ItemUlasan(
+              review: e,
+              showProduct: false,
+            ),
           ),
-        ),
-      if (histories != null && histories.length > 5) _seeAll(() {}),
-      if (histories == null || histories.isEmpty)
-        _nothingList("Belum ada riwayat transaksi"),
-    ],
-  );
+        // menampilkan button lihat semua
+        if (reviews != null && reviews.length > _limit)
+          _seeAll(
+            () {
+              Get.to(
+                DetailListPage(
+                  title: "Ulasan Pembeli",
+                  type: DetailListPage.listReview,
+                  idProduct: widget.idProduct,
+                ),
+                transition: _transition,
+              );
+            },
+          ),
+        if (reviews == null || reviews.isEmpty)
+          _nothingList("Belum ada ulasan"),
+      ],
+    );
+  }
+
+  Widget _complainPengguna(List<ComplainModel>? complains) {
+    // limit list complain
+    List<ComplainModel>? limitedComplains = complains?.take(_limit).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // show list
+        _listTitle("Komplain Pengguna"),
+        if (limitedComplains != null && limitedComplains.isNotEmpty)
+          ...limitedComplains.map(
+            (e) => ItemComplain(complain: e),
+          ),
+        if (complains != null && complains.length > _limit)
+          _seeAll(
+            () {
+              Get.to(
+                DetailListPage(
+                  title: "Komplain Pembeli",
+                  type: DetailListPage.listComplain,
+                  idProduct: widget.idProduct,
+                ),
+                transition: _transition,
+              );
+            },
+          ),
+        if (complains == null || complains.isEmpty)
+          _nothingList("Belum ada komplain"),
+      ],
+    );
+  }
+
+  Widget _historyTrx(List<ProductHistoriesModel>? histories) {
+    // limit list history
+    List<ProductHistoriesModel>? limitedHistories =
+        histories?.take(_limit).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // menampilkan list
+        _listTitle("Riwayat Transaksi"),
+        if (limitedHistories != null && limitedHistories.isNotEmpty)
+          ...limitedHistories.map(
+            (e) => Align(
+              alignment: Alignment.centerLeft,
+              child: ItemHistory(history: e),
+            ),
+          ),
+        if (histories != null && histories.length > _limit)
+          _seeAll(
+            () {
+              Get.to(
+                DetailListPage(
+                  title: "Riwayat Transaksi",
+                  type: DetailListPage.listHistory,
+                  idProduct: widget.idProduct,
+                ),
+                transition: _transition,
+              );
+            },
+          ),
+        if (histories == null || histories.isEmpty)
+          _nothingList("Belum ada riwayat transaksi"),
+      ],
+    );
+  }
 }
