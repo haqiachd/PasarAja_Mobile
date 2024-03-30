@@ -2,16 +2,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
-import 'package:pasaraja_mobile/module/merchant/models/review_model.dart';
+import 'package:pasaraja_mobile/core/utils/utils.dart';
+import 'package:pasaraja_mobile/module/merchant/models/product_histories_model.dart';
 
-class ItemUlasan extends StatelessWidget {
-  const ItemUlasan({
+class ItemHistory extends StatelessWidget {
+  const ItemHistory({
     super.key,
-    required this.review,
+    required this.history,
     this.showProduct = true,
   });
 
-  final ReviewModel review;
+  final ProductHistoriesModel history;
   final bool showProduct;
 
   @override
@@ -25,7 +26,7 @@ class ItemUlasan extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: CachedNetworkImage(
-              imageUrl: review.photo ?? '',
+              imageUrl: history.photo ?? '',
               placeholder: (context, url) {
                 return const CupertinoActivityIndicator();
               },
@@ -36,12 +37,9 @@ class ItemUlasan extends StatelessWidget {
             ),
           ),
         ),
-        title: Visibility(
-          visible: showProduct,
-          child: Text(
-            review.productName ?? 'null',
-            style: PasarAjaTypography.sfpdBold,
-          ),
+        title: Text(
+          history.fullName ?? 'null',
+          style: PasarAjaTypography.sfpdBold,
         ),
         subtitle: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -51,24 +49,17 @@ class ItemUlasan extends StatelessWidget {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: "Rating : ${review.star} ~ ",
+                    text: "(${history.quantity}) ~ ",
                     style: PasarAjaTypography.sfpdSemibold,
                   ),
-                  if (review.orderDate != null)
-                    TextSpan(
-                      text:
-                          review.orderDate!.toIso8601String().substring(0, 10),
-                      style: PasarAjaTypography.sfpdMedium.copyWith(
-                        color: Colors.grey,
-                      ),
-                    ),
+                  TextSpan(
+                    text:
+                        "Rp.${PasarAjaUtils.formatPrice(history.totalPrice ?? 0)}",
+                  ),
                 ],
               ),
             ),
-            Text(
-              "Komentar : ${review.comment}",
-              style: PasarAjaTypography.sfpdRegular,
-            ),
+            Text(history.takenDate!.toIso8601String().substring(0, 10))
           ],
         ),
       ),

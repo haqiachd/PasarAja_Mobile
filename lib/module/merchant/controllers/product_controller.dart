@@ -447,15 +447,15 @@ class ProductController {
 void main(List<String> args) async {
   ProductController productController = ProductController();
 
-  final dataState = await productController.dataProduct(
+  final dataState = await productController.detailProductPage(
     idShop: 1,
-    idProduct: 1,
+    idProd: 1,
   );
 
   if (dataState is DataSuccess) {
-    ProductModel model = dataState.data as ProductModel;
+    final data = dataState.data as ProductDetailModel;
     print('Data Success');
-    print("Nama : ${model.productName}");
+    print("Nama : ${data.photo}");
   }
 
   if (dataState is DataFailed) {
