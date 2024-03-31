@@ -13,14 +13,15 @@ import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/module/merchant/models/complain_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product/product_detail_page_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product_histories_model.dart';
-import 'package:pasaraja_mobile/module/merchant/models/product_settings_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/review_model.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/detail_product_provider.dart';
 import 'package:pasaraja_mobile/module/merchant/views/product/detail_list_page.dart';
 import 'package:pasaraja_mobile/module/merchant/views/product/edit_product_page.dart';
+import 'package:pasaraja_mobile/module/merchant/widgets/action_button.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/item_complain.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/item_history.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/item_ulasan.dart';
+import 'package:pasaraja_mobile/module/merchant/widgets/switcher_setting.dart';
 import 'package:provider/provider.dart';
 
 class DetailProductPage extends StatefulWidget {
@@ -135,14 +136,14 @@ class _DetailProductPageState extends State<DetailProductPage> {
                         const SizedBox(height: 20),
                         _productInfo(product),
                         const SizedBox(height: 10),
-                        _keteranganProduct(product.settings),
+                        _keteranganProduct(),
                         const SizedBox(height: 10),
                         _ulasanPengguna(product.reviews),
                         const SizedBox(height: 10),
                         _complainPengguna(product.complains),
                         const SizedBox(height: 10),
                         _historyTrx(product.histories),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 60),
                       ],
                     ),
                   ),
@@ -160,28 +161,123 @@ class _DetailProductPageState extends State<DetailProductPage> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton(
-            onPressed: () {
-              Get.to(const EditProductPage());
-            },
-            heroTag: 'editprod',
-            backgroundColor: Colors.blueAccent[100],
-            child: const Icon(
-              Icons.edit,
-              color: Colors.white,
-            ),
-          ),
+          _buttonSetting(context),
           const SizedBox(width: 10),
-          FloatingActionButton(
-            onPressed: () {},
-            heroTag: 'deleteprod',
-            backgroundColor: Colors.redAccent[100],
-            child: const Icon(
-              Icons.delete,
-              color: Colors.white,
-            ),
-          )
+          _buttonEdit(),
+          const SizedBox(width: 10),
+          _buttonDelete(context),
         ],
+      ),
+    );
+  }
+
+  _buttonSetting(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (BuildContext context) {
+            return Container(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Keterangan Produk',
+                    style: PasarAjaTypography.sfpdBold.copyWith(
+                      fontSize: 22,
+                    ),
+                  ),
+                  const SizedBox(height: 20.0),
+                  Consumer<DetailProductProvider>(
+                    builder: (context, value, child) {
+                      return SwitcherSetting(
+                        title: 'Stok Tersedia',
+                        value: value.isAvailableTemp,
+                        onChanged: (value) {
+                          context
+                              .read<DetailProductProvider>()
+                              .isAvailableTemp = value;
+                        },
+                      );
+                    },
+                  ),
+                  Consumer<DetailProductProvider>(
+                    builder: (context, value, child) {
+                      return SwitcherSetting(
+                        title: 'Rekomendasikan Produk',
+                        value: value.isRecommendedTemp,
+                        onChanged: (value) {
+                          context
+                              .read<DetailProductProvider>()
+                              .isRecommendedTemp = value;
+                        },
+                      );
+                    },
+                  ),
+                  Consumer<DetailProductProvider>(
+                    builder: (context, value, child) {
+                      return SwitcherSetting(
+                        title: 'Tampilkan Produk',
+                        value: value.isShownTemp,
+                        onChanged: (value) {
+                          context.read<DetailProductProvider>().isShownTemp =
+                              value;
+                        },
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 20.0),
+                  ActionButton(
+                    title: 'Simpan',
+                    backgroundColor: Colors.blue.shade400,
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+      heroTag: 'settingsprod',
+      backgroundColor: Colors.blueGrey[300],
+      child: const Icon(
+        Icons.settings,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  _buttonDelete(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        // delete provider
+        context.read<DetailProductProvider>().onPressedDelete(
+              idProduct: widget.idProduct,
+            );
+      },
+      heroTag: 'deleteprod',
+      backgroundColor: Colors.redAccent[100],
+      child: const Icon(
+        Icons.delete,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  _buttonEdit() {
+    return FloatingActionButton(
+      onPressed: () {
+        Get.to(const EditProductPage());
+      },
+      heroTag: 'editprod',
+      backgroundColor: Colors.blueAccent[100],
+      child: const Icon(
+        Icons.edit,
+        color: Colors.white,
       ),
     );
   }
@@ -256,32 +352,36 @@ class _DetailProductPageState extends State<DetailProductPage> {
     );
   }
 
-  _keteranganProduct(ProductSettingsModel? settings) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Keterangan Produk",
-          style: PasarAjaTypography.sfpdBold.copyWith(
-            fontSize: 20,
-          ),
-        ),
-        Text(
-          "Direkomendasikan : ${settings?.isRecommended}",
-          style: PasarAjaTypography.sfpdMedium,
-        ),
-        const SizedBox(height: 3),
-        Text(
-          "Ketersediaan Stok : ${settings?.isAvailable}",
-          style: PasarAjaTypography.sfpdMedium,
-        ),
-        const SizedBox(height: 3),
-        Text(
-          "Ditampilkan : ${settings?.isShown}",
-          textAlign: TextAlign.justify,
-          style: PasarAjaTypography.sfpdMedium,
-        ),
-      ],
+  _keteranganProduct() {
+    return Consumer<DetailProductProvider>(
+      builder: (context, value, child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Keterangan Produk",
+              style: PasarAjaTypography.sfpdBold.copyWith(
+                fontSize: 20,
+              ),
+            ),
+            Text(
+              "Ketersediaan Stok : ${value.isAvailable}",
+              style: PasarAjaTypography.sfpdMedium,
+            ),
+            const SizedBox(height: 3),
+            Text(
+              "Direkomendasikan : ${value.isRecommended}",
+              style: PasarAjaTypography.sfpdMedium,
+            ),
+            const SizedBox(height: 3),
+            Text(
+              "Ditampilkan : ${value.isShown}",
+              textAlign: TextAlign.justify,
+              style: PasarAjaTypography.sfpdMedium,
+            ),
+          ],
+        );
+      },
     );
   }
 

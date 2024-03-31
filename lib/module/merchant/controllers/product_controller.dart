@@ -82,10 +82,179 @@ class ProductController {
     return const DataSuccess(true);
   }
 
-  Future<DataState<bool>> deleteProductt({
+  Future<DataState<bool>> updateSettingStok({
     required int idShop,
+    required int idProduct,
+    required bool stokStatus,
   }) async {
-    return const DataSuccess(true);
+    try {
+      // request delete
+      final response = await _dio.put(
+        "$_apiRoute/update/stok",
+        data: {
+          "id_shop": idShop,
+          "id_product": idProduct,
+          "stock_status": stokStatus,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.methodNotAllowed;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+      // print(payload);
+
+      // return status
+      if (response.statusCode == HttpStatus.ok) {
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<bool>> updateSettingRecommended({
+    required int idShop,
+    required int idProduct,
+    required bool recommendedStatus,
+  }) async {
+    try {
+      // request delete
+      final response = await _dio.put(
+        "$_apiRoute/update/recommended",
+        data: {
+          "id_shop": idShop,
+          "id_product": idProduct,
+          "recommended_status": recommendedStatus,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.methodNotAllowed;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+      // print(payload);
+
+      // return status
+      if (response.statusCode == HttpStatus.ok) {
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<bool>> updateSettingVisibility({
+    required int idShop,
+    required int idProduct,
+    required bool visibilityStatus,
+  }) async {
+    try {
+      // request delete
+      final response = await _dio.put(
+        "$_apiRoute/update/visibility",
+        data: {
+          "id_shop": idShop,
+          "id_product": idProduct,
+          "visibility_status": visibilityStatus,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.methodNotAllowed;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+      // print(payload);
+
+      // return status
+      if (response.statusCode == HttpStatus.ok) {
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<bool>> deleteProduct({
+    required int idShop,
+    required int idProduct,
+  }) async {
+    try {
+      // request delete
+      final response = await _dio.delete(
+        "$_apiRoute/delete",
+        data: {
+          "id_shop": idShop,
+          "id_product": idProduct,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok || status == HttpStatus.badRequest;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+
+      // return status
+      if (response.statusCode == HttpStatus.ok) {
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
   }
 
   Future<DataState<ProductDetailModel>> detailProductPage({
@@ -573,17 +742,14 @@ class ProductController {
 void main(List<String> args) async {
   ProductController productController = ProductController();
 
-  final dataState = await productController.detailListHistoryPage(
+  final dataState = await productController.updateSettingVisibility(
     idShop: 1,
-    idProd: 1,
+    idProduct: 1,
+    visibilityStatus: false,
   );
 
   if (dataState is DataSuccess) {
-    final data = dataState.data as List<ProductHistoriesModel>;
     print('Data Success');
-    for (final r in data) {
-      print(r.productName);
-    }
   }
 
   if (dataState is DataFailed) {
