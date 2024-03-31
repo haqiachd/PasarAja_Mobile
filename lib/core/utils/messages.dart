@@ -49,6 +49,24 @@ class PasarAjaMessage {
     );
   }
 
+    ///
+  static Future<bool> showWarning(
+    String message, {
+    bool barrierDismissible = false,
+    bool triggerVibration = false,
+    String? actionYes,
+  }) async {
+    return await _createPop(
+      InformationDialog(
+        title: "Peringatan",
+        message: message,
+        actionYes: actionYes,
+      ),
+      barrierDismissible: barrierDismissible,
+      triggerVibration: triggerVibration,
+    );
+  }
+
   ///
   static Future<bool> showConfirmation(
     String message, {
