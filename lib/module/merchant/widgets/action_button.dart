@@ -1,31 +1,84 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
 
 class ActionButton extends StatelessWidget {
+  static const int stateDisabledButton = 1;
+  static const int stateLoadingButton = 2;
+  static const int stateEnabledButton = 3;
+  //
+  final VoidCallback onPressed;
+  final String title;
+  final double width;
+  final double height;
+  final int state;
+  //
   const ActionButton({
     super.key,
-    required this.title,
-    required this.backgroundColor,
     required this.onPressed,
+    required this.title,
+    required this.state,
+    this.width = 330,
+    this.height = 43,
   });
-
-  final String title;
-  final Color backgroundColor;
-  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ButtonStyle(
-        backgroundColor: MaterialStatePropertyAll(backgroundColor),
-      ),
-      child: Text(
-        title,
-        style: PasarAjaTypography.sfpdBold.copyWith(
-          color: Colors.white,
+    return SizedBox(
+      width: width,
+      height: height,
+      child: Material(
+        color: _background(state),
+        shape: const StadiumBorder(),
+        shadowColor: _background(state),
+        elevation: 2,
+        child: InkWell(
+          onTap: state == stateEnabledButton ? onPressed : null,
+          splashColor: PasarAjaColor.gray2,
+          customBorder: const StadiumBorder(),
+          child: Center(
+            child: Stack(
+              children: [
+                Visibility(
+                  visible: state != stateLoadingButton,
+                  child: Text(
+                    title,
+                    style: PasarAjaTypography.sfpdAuthFilledButton,
+                  ),
+                ),
+                Visibility(
+                  visible: state == stateLoadingButton,
+                  child: SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: ColorFiltered(
+                      colorFilter: const ColorFilter.mode(
+                        Colors.white,
+                        BlendMode.srcIn,
+                      ),
+                      child: LottieBuilder.asset(
+                        'assets/raws/loading.json',
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
+  }
+}
+
+_background(int state) {
+  switch (state) {
+    case ActionButton.stateEnabledButton:
+      return PasarAjaColor.green2;
+    case ActionButton.stateLoadingButton:
+      return PasarAjaColor.green2;
+    case ActionButton.stateDisabledButton:
+      return PasarAjaColor.gray4.withOpacity(0.5);
   }
 }
