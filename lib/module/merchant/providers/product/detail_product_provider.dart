@@ -1,3 +1,4 @@
+import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -129,6 +130,74 @@ class DetailProductProvider extends ChangeNotifier {
 
         Get.back();
       }
+    } catch (ex) {
+      PasarAjaUtils.triggerVibration();
+      Fluttertoast.showToast(msg: ex.toString());
+    }
+  }
+
+  Future<void> updateSettings({required idProduct}) async {
+    try {
+      Get.back();
+
+      PasarAjaMessage.showLoading();
+
+      final updateStok = await _controller.updateSettingStok(
+        idShop: 1,
+        idProduct: idProduct,
+        stokStatus: isAvailableTemp,
+      );
+
+      if (updateStok is DataSuccess) {
+        isAvailable = isAvailableTemp;
+        DMethod.log('update stok berhasil');
+      }
+      if (updateStok is DataFailed) {
+        DMethod.log(
+            'update stok gagal berhasil --> ${updateStok.error!.error}');
+      }
+
+      final updateRecommended = await _controller.updateSettingRecommended(
+        idShop: 1,
+        idProduct: idProduct,
+        recommendedStatus: isRecommendedTemp,
+      );
+
+      if (updateRecommended is DataSuccess) {
+        isRecommended = isRecommendedTemp;
+        DMethod.log('update rekomendasi berhasil');
+      }
+      if (updateRecommended is DataFailed) {
+        DMethod.log(
+            'update rekomendasi gagal berhasil --> ${updateRecommended.error!.error}');
+      }
+
+      final updateShown = await _controller.updateSettingVisibility(
+        idShop: 1,
+        idProduct: idProduct,
+        visibilityStatus: isShownTemp,
+      );
+
+      if (updateShown is DataSuccess) {
+        isShown = isShownTemp;
+        DMethod.log('update visibility berhasil');
+      }
+      if (updateShown is DataFailed) {
+        DMethod.log(
+            'update visibilty gagal berhasil --> ${updateShown.error!.error}');
+      }
+
+      Get.back();
+
+      if (updateStok is DataSuccess &&
+          updateRecommended is DataSuccess &&
+          updateShown is DataSuccess) {
+        PasarAjaMessage.showInformation("Update berhasil");
+      } else {
+        PasarAjaMessage.showSnackbarError("Keternagan produk gagal diupdate");
+      }
+
+      notifyListeners();
     } catch (ex) {
       PasarAjaUtils.triggerVibration();
       Fluttertoast.showToast(msg: ex.toString());
