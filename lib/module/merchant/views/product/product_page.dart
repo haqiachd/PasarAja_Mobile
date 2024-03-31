@@ -13,8 +13,8 @@ import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product_category_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product_model.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/product_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/views/product/add_product_page.dart';
 import 'package:pasaraja_mobile/module/merchant/views/product/best_selling_page.dart';
+import 'package:pasaraja_mobile/module/merchant/views/product/choose_categories_page.dart';
 import 'package:pasaraja_mobile/module/merchant/views/product/complain_page.dart';
 import 'package:pasaraja_mobile/module/merchant/views/product/detail_product_page.dart';
 import 'package:pasaraja_mobile/module/merchant/views/product/hidden_page.dart';
@@ -109,7 +109,8 @@ class _ProductPageState extends State<ProductPage> {
         child: FloatingActionButton(
           onPressed: () {
             Get.to(
-              const AddProductPage(),
+              // const AddProductPage(),
+              const ChooseCategoriesPage(),
               transition: Transition.downToUp,
             );
           },

@@ -231,9 +231,11 @@ class _DetailProductPageState extends State<DetailProductPage> {
                   const SizedBox(height: 20.0),
                   ActionButton(
                     title: 'Simpan',
-                    backgroundColor: Colors.blue.shade400,
+                    state: ActionButton.stateEnabledButton,
                     onPressed: () {
-                      Get.back();
+                      context.read<DetailProductProvider>().updateSettings(
+                            idProduct: widget.idProduct,
+                          );
                     },
                   ),
                 ],
