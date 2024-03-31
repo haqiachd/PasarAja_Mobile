@@ -21,6 +21,7 @@ class AppTextField extends StatelessWidget {
   final String? errorText;
   final Widget? suffixIcon;
   final VoidCallback? suffixAction;
+  final bool? showCounter;
   const AppTextField({
     super.key,
     required this.controller,
@@ -38,6 +39,7 @@ class AppTextField extends StatelessWidget {
     this.errorText,
     this.suffixIcon,
     this.suffixAction,
+    this.showCounter,
   });
 
   @override
@@ -60,7 +62,9 @@ class AppTextField extends StatelessWidget {
       cursorWidth: 2.5,
       inputFormatters: formatters,
       decoration: InputDecoration(
-        counterStyle: PasarAjaTypography.sfProDisplay,
+        counterStyle: showCounter ?? false
+            ? PasarAjaTypography.sfpdSemibold
+            : const TextStyle(color: Colors.transparent),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 7.5,
           vertical: 4.7,
