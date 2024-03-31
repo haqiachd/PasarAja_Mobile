@@ -18,4 +18,12 @@ class ProductSettingsModel extends ProductSettingsEntity {
       isAvailable: json['is_available'] ?? false,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '"is_recommended"': isRecommended ?? false,
+      '"is_shown"': isShown ?? true,
+      '"is_available"': isAvailable ?? false,
+    };
+  }
 }

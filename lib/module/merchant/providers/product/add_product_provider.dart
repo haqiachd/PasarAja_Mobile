@@ -2,13 +2,17 @@ import 'dart:io';
 
 import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/constants/local_data.dart';
 import 'package:pasaraja_mobile/core/entities/choose_photo.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
+import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/merchant/controllers/product_controller.dart';
+import 'package:pasaraja_mobile/module/merchant/models/product_settings_model.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/action_button.dart';
 
 class AddProductProvider extends ChangeNotifier {
@@ -20,10 +24,8 @@ class AddProductProvider extends ChangeNotifier {
   final _controller = ProductController();
   final nameCont = TextEditingController();
   final descCont = TextEditingController();
-  final unitCont = TextEditingController();
   final sellingCont = TextEditingController();
   final priceCont = TextEditingController();
-  final categoryCont = TextEditingController();
   ProviderState state = const OnInitState();
 
   // list unit
@@ -159,26 +161,58 @@ class AddProductProvider extends ChangeNotifier {
   }
 
   Future<void> addProduct({
-    required int idShop,
     required int idCategory,
-    required String productName,
-    required String description,
-    required String unit,
-    required int sellingUnit,
-    required File photo,
-    required int price,
   }) async {
     try {
-      state = const OnLoadingState();
-      notifyListeners();
-
+      // print data
+      DMethod.log("----------------------");
       DMethod.log("Nama : ${nameCont.text}");
-      DMethod.log("Category : ${categoryCont.text}");
+      DMethod.log("Category : $idCategory");
       DMethod.log("Deskripsi : ${descCont.text}");
-      DMethod.log("Unit : ${descCont.text}");
+      DMethod.log("Unit : $selectedUnit");
       DMethod.log("Satuan Jual : ${sellingCont.text}");
-      DMethod.log("Harag : ${priceCont.text}");
-      DMethod.log("File : ${photo.path}");
+      DMethod.log("Harga : ${priceCont.text}");
+      DMethod.log("File : ${photo.imageSelected?.path}");
+      DMethod.log('Tampilkan Produk : $isShown');
+      DMethod.log('Rekomendasikan Produk : $isRecommended');
+
+      // validasi data unit
+      if (selectedUnit == 'Pilih Unit') {
+        PasarAjaUtils.triggerVibration();
+        PasarAjaMessage.showSnackbarWarning('Anda belum memilih unit jual');
+        return;
+      }
+      // validasi data foto
+      if (photo.imageSelected == null || photo.imageSelected?.path == null) {
+        PasarAjaUtils.triggerVibration();
+        PasarAjaMessage.showSnackbarWarning('Anda belum memilih foto produk');
+        return;
+      }
+      // validasi ukuran foto
+      File? imageFile = File(photo.imageSelected!.path);
+      int fileSizeInBytes = imageFile.lengthSync();
+      int maxSizeInBytes = 512 * 1024; // 512 KB
+      if (fileSizeInBytes > maxSizeInBytes) {
+        PasarAjaUtils.triggerVibration();
+        PasarAjaMessage.showSnackbarWarning(
+            'Ukuran file foto melebihi batas maksimum (512 KB)');
+        return;
+      }
+
+      // show loading
+      PasarAjaMessage.showLoading();
+
+      // create product setting
+      final settings = ProductSettingsModel(
+        isAvailable: true,
+        isRecommended: isRecommended,
+        isShown: isShown,
+      );
+
+      DMethod.log("Settings : ${settings.toJson()}");
+      DMethod.log("----------------------");
+
+      DMethod.log("VALIDATE SUCCESS");
 
       // get id shop from preferences
       int idShop = 1;
@@ -187,31 +221,38 @@ class AddProductProvider extends ChangeNotifier {
       final dataState = await _controller.addProduct(
         idShop: idShop,
         idCategory: idCategory,
-        productName: productName,
-        description: description,
-        unit: unit,
-        sellingUnit: sellingUnit,
-        photo: photo,
-        price: price,
+        productName: nameCont.text,
+        description: descCont.text,
+        unit: selectedUnit,
+        sellingUnit: int.parse(sellingCont.text),
+        photo: photo.imageSelected!,
+        price: int.parse(priceCont.text),
+        settings: settings,
       );
+
+      Get.back();
 
       // produk berhasil disimpan
       if (dataState is DataSuccess) {
-        //
+        DMethod.log('product ditambahkan');
+        await PasarAjaMessage.showInformation("Produk berhasil ditambahkan");
+        Get.back();
+        Get.back();
+        notifyListeners();
       }
 
-      // produk gagal disimpan
+      // // produk gagal disimpan
       if (dataState is DataFailed) {
-        state = OnFailureState(
-          message: dataState.error?.error.toString(),
-          dioException: dataState.error,
-        );
+        _message = dataState.error?.error.toString() ?? '';
+        DMethod.log('product gagal ditambahkan --> $_message');
+        PasarAjaMessage.showWarning(_message.toString());
+        notifyListeners();
       }
-
-      notifyListeners();
     } catch (ex) {
-      state = const OnFailureState();
+      DMethod.log('has exception');
       message = ex.toString();
+      PasarAjaMessage.showWarning(_message.toString());
+      Get.back();
     }
   }
 
@@ -227,12 +268,11 @@ class AddProductProvider extends ChangeNotifier {
     _selectedUnit = 'Pilih Unit';
     nameCont.text = '';
     descCont.text = '';
-    categoryCont.text = '';
-    unitCont.text = '';
     sellingCont.text = '';
     priceCont.text = '';
     _isRecommended = false;
     _isShown = true;
+    photo = const ChoosePhotoEntity(image: null, imageSelected: null);
     _buttonState = ActionButton.stateDisabledButton;
     vNama = PasarAjaValidation.name(null);
     vDesc = PasarAjaValidation.descriptionProduct(null);

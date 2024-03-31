@@ -11,6 +11,7 @@ import 'package:pasaraja_mobile/module/merchant/models/product/product_detail_pa
 import 'package:pasaraja_mobile/module/merchant/models/product/product_page_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product_histories_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product_model.dart';
+import 'package:pasaraja_mobile/module/merchant/models/product_settings_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/review_model.dart';
 
 class ProductController {
@@ -27,6 +28,7 @@ class ProductController {
     required int sellingUnit,
     required File photo,
     required int price,
+    required ProductSettingsModel settings,
   }) async {
     try {
       // Create FormData
@@ -40,6 +42,7 @@ class ProductController {
         "photo":
             await MultipartFile.fromFile(photo.path, filename: 'product.png'),
         "price": price,
+        "settings": '${settings.toJson()}',
       });
 
       // send request
@@ -818,13 +821,13 @@ class ProductController {
 void main(List<String> args) async {
   ProductController productController = ProductController();
 
-  final dataState = await productController.getUnits(
-    // idShop: 1,
+  final dataState = await productController.listCategory(
+    idShop: 1,
   );
 
   if (dataState is DataSuccess) {
-    for (var data in dataState.data as List<String>) {
-      print('data --> ${data}');
+    for (var data in dataState.data as List<ChooseCategoriesModel>) {
+      print('data --> ${data.idCategory}');
     }
   }
 

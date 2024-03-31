@@ -15,7 +15,7 @@ class ChooseCategoriesModel extends Equatable {
 
   factory ChooseCategoriesModel.fromJson(Map<String, dynamic> json) {
     return ChooseCategoriesModel(
-      idCategory: json['id_cp_shop'] ?? 0,
+      idCategory: json['id_cp_prod'] ?? 0,
       categoryName: json['category_name'] ?? '',
       photo: json['photo'] ?? '',
       prodCount: json['prod_count'] ?? 0,

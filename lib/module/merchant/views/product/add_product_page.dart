@@ -405,7 +405,9 @@ class _DetailProductPageState extends State<AddProductPage> {
     return Consumer<AddProductProvider>(
       builder: (context, prov, child) {
         return ActionButton(
-          onPressed: () {},
+          onPressed: () {
+            prov.addProduct(idCategory: widget.idCategory);
+          },
           title: 'Simpan',
           state: prov.buttonState,
         );
