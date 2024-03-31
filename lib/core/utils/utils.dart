@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:d_method/d_method.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:pasaraja_mobile/core/entities/choose_photo.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 import 'package:vibration/vibration.dart';
 
@@ -56,11 +58,11 @@ class PasarAjaUtils {
   }
 
   static String formatPrice(int price) {
-  return price.toStringAsFixed(0).replaceAllMapped(
-        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-        (Match match) => '${match[1]},',
-      );
-}
+    return price.toStringAsFixed(0).replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match match) => '${match[1]},',
+        );
+  }
 
   static Future<String> getDeviceModel() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -78,6 +80,21 @@ class PasarAjaUtils {
       return macInfo.model;
     } else {
       return 'Unknown';
+    }
+  }
+
+  static Future<ChoosePhotoEntity?>? pickPhoto(ImageSource imageSource) async {
+    final returnImage = await ImagePicker().pickImage(source: imageSource);
+    DMethod.log('from photo');
+    if (returnImage != null) {
+      return ChoosePhotoEntity(
+        image: File(returnImage.path).readAsBytesSync(),
+        imageSelected: File(
+          returnImage.path,
+        ),
+      );
+    } else {
+      return null;
     }
   }
 }

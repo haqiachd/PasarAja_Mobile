@@ -21,6 +21,27 @@ class PasarAjaLocalData {
           'Tidak Perlu Khawatir Stok Habis, Pesan Kebutuhanmu di Aplikasi Kami Terlebih Dahulu!',
     )
   ];
+
+    static final List<String> defaultUnits = [
+    'Gram',
+    'Kilogram',
+    'Ons',
+    'Kuintal',
+    'Ton',
+    'Liter',
+    'Milliliter',
+    'Sendok',
+    'Cangkir',
+    'Bungkus',
+    'Mangkok',
+    'Botol',
+    'Karton',
+    'Dus',
+    'Buah',
+    'Ekor',
+    'Gelas',
+    'Piring'
+  ];
 }
 
 class WelcomeModel {

@@ -45,7 +45,7 @@ class PasarAjaValidation {
       );
     }
 
-    // Phone harus diatara 9-15 karakter
+    // Phone harus diatara 9-15 karakter 😃
     if (phone.length <= 9 || phone.length > 15) {
       return const ValidationModel(
         message: 'Panjang nomor hp harus di antara 9-15 karakter',
@@ -81,6 +81,75 @@ class PasarAjaValidation {
     if (containsSymbolWithExceptions(name)) {
       return const ValidationModel(
         message: "Simbol yang diperbolehkan hanya . , ' ` dan -",
+      );
+    }
+
+    // Nama valid
+    return const ValidationModel(
+      status: true,
+      message: 'Data valid',
+    );
+  }
+
+  static ValidationModel productName(String? name) {
+    if (name == null) {
+      return const ValidationModel(message: 'Name null');
+    }
+    // Nama tidak boleh kosong
+    if (name.isEmpty || name.trim().isEmpty) {
+      return const ValidationModel(
+        message: 'Nama produk tidak boleh kosong',
+      );
+    }
+
+    // Panjang dari nama harus diatara 4-50 karakter
+    if (name.length < 4 || name.length > 50) {
+      return const ValidationModel(
+        message: 'Panjang dari nama harus di antara 4-50 karakter',
+      );
+    }
+
+    // Nama valid
+    return const ValidationModel(
+      status: true,
+      message: 'Data valid',
+    );
+  }
+
+  static ValidationModel descriptionProduct(String? description) {
+    if (description == null) {
+      return const ValidationModel(message: 'Desc null');
+    }
+
+    // Panjang dari deskripsi harus kurang dari 250
+    if (description.isNotEmpty && description.length > 250) {
+      return const ValidationModel(
+        message: 'Panjang dari deskripsi harus di antara 250 karakter',
+      );
+    }
+
+    // Nama valid
+    return const ValidationModel(
+      status: true,
+      message: 'Data valid',
+    );
+  }
+
+  static ValidationModel sellingUnit(String? selling) {
+    if (selling == null) {
+      return const ValidationModel(message: 'Satuan jual null');
+    }
+
+    // Nama tidak boleh kosong
+    if (selling.isEmpty || selling.trim().isEmpty) {
+      return const ValidationModel(
+        message: 'Satuan jual tidak boleh kosong',
+      );
+    }
+
+    if (int.parse(selling) <= 0) {
+      return const ValidationModel(
+        message: 'Satuan jual minimal 1',
       );
     }
 
@@ -201,7 +270,10 @@ class PasarAjaValidation {
     );
   }
 
-  static ValidationModel price(String price) {
+  static ValidationModel price(String? price) {
+    if (price == null) {
+      return const ValidationModel(message: 'Price null.');
+    }
     if (price.isEmpty && price.trim().isEmpty) {
       return const ValidationModel(
         message: 'Harga tidak boleh kosong.',
