@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/module/merchant/models/complain_model.dart';
+import 'package:pasaraja_mobile/module/merchant/models/product/choose_categories_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product/product_detail_page_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product/product_page_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product_histories_model.dart';
@@ -737,19 +738,94 @@ class ProductController {
       return DataFailed(ex);
     }
   }
+
+  Future<DataState<List<ChooseCategoriesModel>>> listCategory({
+    required int idShop,
+  }) async {
+    try {
+      // request api
+      final response = await _dio.get(
+        "$_pageRoute/category",
+        queryParameters: {
+          "id_shop": idShop,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok || status == HttpStatus.badRequest;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+
+      // return status
+      if (response.statusCode == HttpStatus.ok) {
+        return DataSuccess(ChooseCategoriesModel.fromList(payload['data']));
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<List<String>>> getUnits() async {
+    try {
+      // send request
+      final response = await _dio.get(
+        "$_apiRoute/units",
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok || status == HttpStatus.badRequest;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+
+      // return status
+      if (response.statusCode == HttpStatus.ok) {
+        // convert to list string
+        final List<dynamic> data = payload['data'];
+        final List<String> units = data.cast<String>();
+        // return data
+        return DataSuccess(units);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
 }
 
 void main(List<String> args) async {
   ProductController productController = ProductController();
 
-  final dataState = await productController.updateSettingVisibility(
-    idShop: 1,
-    idProduct: 1,
-    visibilityStatus: false,
+  final dataState = await productController.getUnits(
+    // idShop: 1,
   );
 
   if (dataState is DataSuccess) {
-    print('Data Success');
+    for (var data in dataState.data as List<String>) {
+      print('data --> ${data}');
+    }
   }
 
   if (dataState is DataFailed) {
