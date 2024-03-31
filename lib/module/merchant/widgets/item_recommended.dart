@@ -8,34 +8,39 @@ class ItemRecommended extends StatelessWidget {
   const ItemRecommended({
     super.key,
     required this.product,
+    required this.onTap,
   });
 
   final ProductModel product;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: ListTile(
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: CachedNetworkImage(
-            imageUrl: product.photo ?? '',
-            placeholder: (context, url) {
-              return const CupertinoActivityIndicator();
-            },
-            errorWidget: (context, url, error) {
-              return const Text("ALT IMAGE");
-            },
+      child: InkWell(
+        onTap: onTap,
+        child: ListTile(
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: CachedNetworkImage(
+              imageUrl: product.photo ?? '',
+              placeholder: (context, url) {
+                return const CupertinoActivityIndicator();
+              },
+              errorWidget: (context, url, error) {
+                return const Text("ALT IMAGE");
+              },
+            ),
           ),
-        ),
-        title: Text(
-          product.productName ?? 'null',
-          style: PasarAjaTypography.sfpdBold,
-        ),
-        subtitle: Text(
-          "Direkomendasikan sejak : ${product.updatedAt?.toIso8601String().substring(0, 10)}",
-          style: PasarAjaTypography.sfpdRegular,
+          title: Text(
+            product.productName ?? 'null',
+            style: PasarAjaTypography.sfpdBold,
+          ),
+          subtitle: Text(
+            "Direkomendasikan sejak : ${product.updatedAt?.toIso8601String().substring(0, 10)}",
+            style: PasarAjaTypography.sfpdRegular,
+          ),
         ),
       ),
     );

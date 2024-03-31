@@ -18,6 +18,7 @@ class UnavailableProvider extends ChangeNotifier {
   List<ProductModel> _unavailables = [];
   List<ProductModel> get unavailables => _unavailables;
 
+  // stok status
   bool _isAvailable = false;
   bool get isAvailable => _isAvailable;
   set isAvailable(bool value) {

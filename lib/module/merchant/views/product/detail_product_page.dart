@@ -175,6 +175,7 @@ class _DetailProductPageState extends State<DetailProductPage> {
     return FloatingActionButton(
       onPressed: () {
         showModalBottomSheet(
+          backgroundColor: Colors.white,
           context: context,
           builder: (BuildContext context) {
             return Container(
