@@ -17,16 +17,20 @@ class ItemBestSelling extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: ListTile(
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: CachedNetworkImage(
-            imageUrl: product.photo ?? '',
-            placeholder: (context, url) {
-              return const CupertinoActivityIndicator();
-            },
-            errorWidget: (context, url, error) {
-              return const Text("ALT IMAGE");
-            },
+        leading: SizedBox(
+          width: 100,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: CachedNetworkImage(
+              imageUrl: product.photo ?? '',
+              placeholder: (context, url) {
+                return const CupertinoActivityIndicator();
+              },
+              errorWidget: (context, url, error) {
+                return const Text("ALT IMAGE");
+              },
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         title: Text(
