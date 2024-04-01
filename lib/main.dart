@@ -17,6 +17,7 @@ import 'package:pasaraja_mobile/module/merchant/providers/product/product_provid
 import 'package:pasaraja_mobile/module/merchant/providers/product/recommended_provider.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/review_provider.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/unavailable_provider.dart';
+import 'package:pasaraja_mobile/module/merchant/providers/qr/qr_scan_provider.dart';
 import 'package:pasaraja_mobile/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -67,6 +68,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => DetailProductProvider()),
         ChangeNotifierProvider(create: (context) => DetailListProvider()),
         ChangeNotifierProvider(create: (context) => ChooseCategoriesProvider()),
+        ChangeNotifierProvider(create: (context) => QrScanProvider()),
       ],
       child: GetMaterialApp(
         title: 'PasarAja',

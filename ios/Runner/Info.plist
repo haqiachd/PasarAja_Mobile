@@ -2,6 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<!-- FIREBASE -->
 	<key>GIDClientID</key>
 	<string>542394367344-q7264j3rsfrd7fjdk6resd5e3dn3qfka.apps.googleusercontent.com</string>
 	<key>CFBundleURLTypes</key>
@@ -15,6 +16,18 @@
 			</array>
 		</dict>
 	</array>
+	<!-- QR SCAN -->
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+	<key>NSCameraUsageDescription</key>
+	<key>LSApplicationQueriesSchemes</key>
+	<!-- URL LAUNCHER -->
+	<array>
+	  <string>sms</string>
+	  <string>tel</string>
+	</array>
+	<!-- DEFAULT -->
+	<string>This app needs camera access to scan QR codes</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

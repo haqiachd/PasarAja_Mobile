@@ -288,7 +288,7 @@ class ProductFeature extends StatelessWidget {
             Expanded(
               // unavailable_page.dart
               child: ProdcutFeatureButton(
-                title: 'Stok',
+                title: 'Stok Habis',
                 onPressed: () {
                   Get.to(
                     const UnavailablePage(),
