@@ -39,6 +39,9 @@ dependencies:
   talker_dio_logger: ^4.0.3
   device_info_plus: ^9.1.2
   persistent_bottom_nav_bar: any
+  qr_code_scanner: ^1.0.1
+  pretty_qr_code: ^3.3.0
+  # url_launcher: any
 
 dev_dependencies:
   flutter_test:
