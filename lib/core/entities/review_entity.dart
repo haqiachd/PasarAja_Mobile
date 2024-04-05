@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 class ReviewEntity extends Equatable {
   final int? idReview;
   final int? idUser;
+  final int? idTrx;
   final int? idProduct;
   final String? star;
   final DateTime? orderDate;
@@ -17,6 +18,7 @@ class ReviewEntity extends Equatable {
   const ReviewEntity({
     this.idReview,
     this.idUser,
+    this.idTrx,
     this.idProduct,
     this.star,
     this.orderDate,
@@ -34,6 +36,7 @@ class ReviewEntity extends Equatable {
     return [
       idReview,
       idUser,
+      idTrx,
       idProduct,
       star,
       orderDate,

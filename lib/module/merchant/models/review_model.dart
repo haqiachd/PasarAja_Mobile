@@ -4,6 +4,7 @@ class ReviewModel extends ReviewEntity {
   const ReviewModel({
     final int? idReview,
     final int? idUser,
+    final int? idTrx,
     final int? idProduct,
     final String? star,
     final DateTime? orderDate,
@@ -15,6 +16,7 @@ class ReviewModel extends ReviewEntity {
   }) : super(
           idReview: idReview,
           idUser: idUser,
+          idTrx: idTrx,
           idProduct: idProduct,
           star: star,
           orderDate: orderDate,
@@ -28,6 +30,7 @@ class ReviewModel extends ReviewEntity {
   factory ReviewModel.fromJson(Map<String, dynamic> json) => ReviewModel(
         idReview: json["id_review"] ?? '',
         idUser: json["id_user"] ?? '',
+        idTrx: json['id_trx'] ?? '',
         idProduct: json["id_product"] ?? '',
         star: json["star"],
         orderDate: json["order_date"] == null

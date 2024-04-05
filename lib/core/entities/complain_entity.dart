@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class ComplainEntity extends Equatable {
   final int? idComplain;
+  final int? idTrx;
   final int? idUser;
   final int? idShop;
   final int? idProduct;
@@ -13,10 +14,12 @@ class ComplainEntity extends Equatable {
   final String? userPhoto;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final DateTime? orderDate;
 
   const ComplainEntity({
     this.idComplain,
     this.idUser,
+    this.idTrx,
     this.idShop,
     this.idProduct,
     this.reason,
@@ -27,12 +30,14 @@ class ComplainEntity extends Equatable {
     this.userPhoto,
     this.createdAt,
     this.updatedAt,
+    this.orderDate,
   });
 
   @override
   List<Object?> get props {
     return [
       idComplain,
+      idTrx,
       idUser,
       idShop,
       idProduct,
@@ -44,6 +49,7 @@ class ComplainEntity extends Equatable {
       userPhoto,
       createdAt,
       updatedAt,
+      orderDate,
     ];
   }
 }

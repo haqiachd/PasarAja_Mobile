@@ -4,6 +4,7 @@ class ComplainModel extends ComplainEntity {
   const ComplainModel({
     final int? idComplain,
     final int? idUser,
+    final int? idTrx,
     final int? idShop,
     final int? idProduct,
     final String? reason,
@@ -14,9 +15,11 @@ class ComplainModel extends ComplainEntity {
     final String? userPhoto,
     final DateTime? createdAt,
     final DateTime? updatedAt,
+    final DateTime? orderDate,
   }) : super(
           idComplain: idComplain,
           idUser: idUser,
+          idTrx: idTrx,
           idShop: idShop,
           idProduct: idProduct,
           reason: reason,
@@ -27,11 +30,13 @@ class ComplainModel extends ComplainEntity {
           userPhoto: userPhoto,
           createdAt: createdAt,
           updatedAt: updatedAt,
+          orderDate: orderDate,
         );
 
   factory ComplainModel.fromJson(Map<String, dynamic> json) => ComplainModel(
         idComplain: json["id_complain"],
         idUser: json["id_user"],
+        idTrx: json['id_trx'],
         idShop: json["id_shop"],
         idProduct: json["id_product"],
         reason: json["reason"],
@@ -46,6 +51,9 @@ class ComplainModel extends ComplainEntity {
         fullName: json["full_name"],
         email: json["email"],
         userPhoto: json["user_photo"],
+        orderDate: json["order_date"] == null
+            ? null
+            : DateTime.parse(json["order_date"]),
       );
 
   static List<ComplainModel> fromList(List<dynamic> json) =>
