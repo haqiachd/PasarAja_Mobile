@@ -953,6 +953,139 @@ class ProductController {
       return DataFailed(ex);
     }
   }
+
+  Future<DataState<bool>> addComplain({
+    required String orderCode,
+    required int idUser,
+    required int idShop,
+    required int idProduct,
+    required String reason,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '$_apiRoute/comp/add',
+        data: {
+          "order_code": orderCode,
+          "id_user": idUser,
+          "id_shop": idShop,
+          "id_product": idProduct,
+          "reason": reason,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.created ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.notFound;
+          },
+        ),
+      );
+
+      final Map<String, dynamic> payload = response.data;
+
+      if (response.statusCode == HttpStatus.created) {
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<bool>> updateComplain({
+    required int idComp,
+    required int idTrx,
+    required int idShop,
+    required int idProduct,
+    required String reason,
+  }) async {
+    try {
+      final response = await _dio.put(
+        '$_apiRoute/comp/update',
+        data: {
+          "id_complain": idComp,
+          "id_trx": idTrx,
+          "id_shop": idShop,
+          "id_product": idProduct,
+          "reason": reason,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.notFound;
+          },
+        ),
+      );
+
+      final Map<String, dynamic> payload = response.data;
+
+      if (response.statusCode == HttpStatus.ok) {
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<bool>> deleteComplain({
+    required int idComp,
+    required int idTrx,
+    required int idShop,
+    required int idProduct,
+  }) async {
+    try {
+      final response = await _dio.delete(
+        '$_apiRoute/comp/delete',
+        data: {
+          "id_complain": idComp,
+          "id_trx": idTrx,
+          "id_shop": idShop,
+          "id_product": idProduct,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.notFound;
+          },
+        ),
+      );
+
+      final Map<String, dynamic> payload = response.data;
+
+      if (response.statusCode == HttpStatus.ok) {
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
 }
 
 void main(List<String> args) async {
@@ -963,23 +1096,24 @@ void main(List<String> args) async {
   //   idUser: 3,
   //   idShop: 1,
   //   idProduct: 1,
-  //   star: '1',
-  //   comment: 'jelek ga sesuai ekspestasi',
+  //   star: "3",
+  //   comment: "Lumayan sih yg ini",
   // );
+
   // final test = await productController.updateReview(
-  //   idReview: 9,
+  //   idReview: 10,
   //   idTrx: 31,
   //   idShop: 1,
-  //   idProduct: 1,
-  //   star: "5",
-  //   comment: "anjay kali produk nya",
+  //   idProduct: 2,
+  //   star: "3",
+  //   comment: "B aja ternyata",
   // );
 
   final test = await productController.deleteReview(
-    idReview: 9,
+    idReview: 10,
     idTrx: 31,
     idShop: 1,
-    idProduct: 1,
+    idProduct: 2,
   );
 
   if (test is DataSuccess) {
