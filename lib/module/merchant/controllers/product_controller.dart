@@ -816,22 +816,177 @@ class ProductController {
       return DataFailed(ex);
     }
   }
+
+  Future<DataState<bool>> addReview({
+    required String orderCode,
+    required int idUser,
+    required int idShop,
+    required int idProduct,
+    required String star,
+    required String comment,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '$_apiRoute/rvw/add',
+        data: {
+          "order_code": orderCode,
+          "id_user": idUser,
+          "id_shop": idShop,
+          "id_product": idProduct,
+          "star": star,
+          "comment": comment,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.created ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.notFound;
+          },
+        ),
+      );
+
+      final Map<String, dynamic> payload = response.data;
+
+      if (response.statusCode == HttpStatus.created) {
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<bool>> updateReview({
+    required int idReview,
+    required int idTrx,
+    required int idShop,
+    required int idProduct,
+    required String star,
+    required String comment,
+  }) async {
+    try {
+      final response = await _dio.put(
+        '$_apiRoute/rvw/update',
+        data: {
+          "id_review": idReview,
+          "id_trx": idTrx,
+          "id_shop": idShop,
+          "id_product": idProduct,
+          "star": star,
+          "comment": comment,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.notFound;
+          },
+        ),
+      );
+
+      final Map<String, dynamic> payload = response.data;
+
+      if (response.statusCode == HttpStatus.ok) {
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<bool>> deleteReview({
+    required int idReview,
+    required int idTrx,
+    required int idShop,
+    required int idProduct,
+  }) async {
+    try {
+      final response = await _dio.delete(
+        '$_apiRoute/rvw/delete',
+        data: {
+          "id_review": idReview,
+          "id_trx": idTrx,
+          "id_shop": idShop,
+          "id_product": idProduct,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.notFound;
+          },
+        ),
+      );
+
+      final Map<String, dynamic> payload = response.data;
+
+      if (response.statusCode == HttpStatus.ok) {
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
 }
 
 void main(List<String> args) async {
   ProductController productController = ProductController();
 
-  final dataState = await productController.listCategory(
+  // final test = await productController.addReview(
+  //   orderCode: "PasarAja-749a8261-696d-4739-8f53-f5d3f51a366a",
+  //   idUser: 3,
+  //   idShop: 1,
+  //   idProduct: 1,
+  //   star: '1',
+  //   comment: 'jelek ga sesuai ekspestasi',
+  // );
+  // final test = await productController.updateReview(
+  //   idReview: 9,
+  //   idTrx: 31,
+  //   idShop: 1,
+  //   idProduct: 1,
+  //   star: "5",
+  //   comment: "anjay kali produk nya",
+  // );
+
+  final test = await productController.deleteReview(
+    idReview: 9,
+    idTrx: 31,
     idShop: 1,
+    idProduct: 1,
   );
 
-  if (dataState is DataSuccess) {
-    for (var data in dataState.data as List<ChooseCategoriesModel>) {
-      print('data --> ${data.idCategory}');
-    }
+  if (test is DataSuccess) {
+    print('data success');
   }
 
-  if (dataState is DataFailed) {
-    print("Data Failed : ${dataState.error}");
+  if (test is DataFailed) {
+    print('data failed : ${test.error?.error}');
   }
 }
