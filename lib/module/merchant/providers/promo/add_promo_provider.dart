@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
 
-class PromoProvider extends ChangeNotifier {
+class AddPromoProvider extends ChangeNotifier {
   //
 }

@@ -59,6 +59,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => DetailListProvider()),
         ChangeNotifierProvider(create: (context) => ChooseCategoriesProvider()),
         ChangeNotifierProvider(create: (context) => QrScanProvider()),
+        ChangeNotifierProvider(create: (context) => AddPromoProvider()),
+        ChangeNotifierProvider(create: (context) => EditPromoProvider()),
+        ChangeNotifierProvider(create: (context) => DetailPromoProvider()),
+        ChangeNotifierProvider(create: (context) => PromoProvider()),
+        ChangeNotifierProvider(create: (context) => PromoActiveProvider()),
+        ChangeNotifierProvider(create: (context) => PromoSoonProvider()),
+        ChangeNotifierProvider(create: (context) => PromoExpiredProvider()),
       ],
       child: GetMaterialApp(
         title: 'PasarAja',
