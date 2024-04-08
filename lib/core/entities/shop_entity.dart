@@ -13,7 +13,7 @@ class ShopEntity extends Equatable {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  const ShopEntity(
+  const ShopEntity({
     this.idShop,
     this.idUser,
     this.phoneNumber,
@@ -24,7 +24,7 @@ class ShopEntity extends Equatable {
     this.photo,
     this.createdAt,
     this.updatedAt,
-  );
+  });
 
   @override
   List<Object?> get props {

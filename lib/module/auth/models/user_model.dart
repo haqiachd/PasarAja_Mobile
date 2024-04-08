@@ -1,4 +1,5 @@
 import 'package:pasaraja_mobile/core/entities/user_entity.dart';
+import 'package:pasaraja_mobile/module/auth/models/shop_model.dart';
 
 class UserModel extends UserEntity {
   const UserModel({
@@ -10,6 +11,7 @@ class UserModel extends UserEntity {
     final String? level,
     final int? isVerified,
     final String? photo,
+    final ShopModel? shopData,
   }) : super(
           idUser: idUser,
           phoneNumber: phoneNumber,
@@ -19,6 +21,7 @@ class UserModel extends UserEntity {
           level: level,
           isVerified: isVerified,
           photo: photo,
+          shopData: shopData,
         );
 
   factory UserModel.fromJson(Map<String, dynamic> map) {
@@ -30,6 +33,9 @@ class UserModel extends UserEntity {
       level: map['level'] ?? '',
       isVerified: map['is_verified'] ?? 0,
       photo: map['photo'] ?? '',
+      shopData: map.containsKey('shop_data')
+          ? ShopModel.fromJson(map['shop_data'])
+          : const ShopModel(),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:pasaraja_mobile/core/entities/shop_entity.dart';
 
 class UserEntity extends Equatable {
   final int? idUser;
@@ -12,6 +13,7 @@ class UserEntity extends Equatable {
   final String? photo;
   final String? createdAt;
   final String? updatedAt;
+  final ShopEntity? shopData;
 
   const UserEntity({
     this.idUser,
@@ -25,6 +27,7 @@ class UserEntity extends Equatable {
     this.photo,
     this.createdAt,
     this.updatedAt,
+    this.shopData,
   });
 
   @override
@@ -40,6 +43,7 @@ class UserEntity extends Equatable {
       photo,
       createdAt,
       updatedAt,
+      shopData,
     ];
   }
 }
