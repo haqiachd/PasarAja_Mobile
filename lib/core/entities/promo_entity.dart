@@ -6,6 +6,7 @@ class PromoEntity extends Equatable {
   final int? idShop;
   final int? idProduct;
   final String? productName;
+  final String? categoryProd;
   final int? price;
   final int? promoPrice;
   final num? percentage;
@@ -21,6 +22,7 @@ class PromoEntity extends Equatable {
     this.idShop,
     this.idProduct,
     this.productName,
+    this.categoryProd,
     this.price,
     this.promoPrice,
     this.percentage,
@@ -38,6 +40,8 @@ class PromoEntity extends Equatable {
       idCpProd,
       idShop,
       idProduct,
+      productName,
+      categoryProd,
       price,
       promoPrice,
       percentage,

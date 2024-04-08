@@ -11,4 +11,5 @@ class PasarAjaConstant {
   static Future onRefreshDelay = Future.delayed(
     const Duration(milliseconds: 2500),
   );
+  static int onRefreshDelaySecond = 2;
 }
