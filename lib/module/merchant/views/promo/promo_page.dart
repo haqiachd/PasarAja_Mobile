@@ -63,6 +63,7 @@ class _PromoPageState extends State<PromoPage>
           Expanded(
             child: TabBarView(
               controller: _tabController,
+              physics: const NeverScrollableScrollPhysics(),
               children: const [
                 PromoSoonTab(),
                 PromoActiveTab(),
