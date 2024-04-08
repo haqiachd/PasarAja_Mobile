@@ -22,7 +22,7 @@ class PasarAjaLocalData {
     )
   ];
 
-    static final List<String> defaultUnits = [
+  static final List<String> defaultUnits = [
     'Gram',
     'Kilogram',
     'Ons',

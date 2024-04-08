@@ -1,6 +1,6 @@
 class PasarAjaImage {
   static const String _dir = 'assets/images/';
-    static const String icBack = '${_dir}ic-back.png';
+  static const String icBack = '${_dir}ic-back.png';
   static const String icGoogle = '${_dir}ic-google.png';
   static const String icIndonesianFlag = '${_dir}ic-indonesian-flag.png';
   static const String icMoreThan = '${_dir}ic-more-than.png';
@@ -15,4 +15,5 @@ class PasarAjaImage {
   static const String ilWelcome1 = '${_dir}il-welcome-1.png';
   static const String ilWelcome2 = '${_dir}il-welcome-2.png';
   static const String ilWelcome3 = '${_dir}il-welcome-3.png';
+  static const String pasaraja = '${_dir}pasaraja.png';
 }
