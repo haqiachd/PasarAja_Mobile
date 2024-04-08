@@ -1,10 +1,14 @@
 import 'dart:io';
 
+import 'package:d_method/d_method.dart';
 import 'package:dio/dio.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:flutter_session_jwt/flutter_session_jwt.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
+import 'package:pasaraja_mobile/core/services/jwt_services.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/dio_log.dart';
+import 'package:pasaraja_mobile/module/auth/models/shop_model.dart';
 import 'package:pasaraja_mobile/module/auth/models/user_model.dart';
 
 class SignInController {
@@ -40,11 +44,23 @@ class SignInController {
 
       // jika success maka akan mengembalikan data dari reponse
       if (response.statusCode == HttpStatus.ok) {
-        // decode jwt
+        // get jwt token
         String jwtToken = payload['data'];
-        Map<String, dynamic> decodedToken = JwtDecoder.decode(jwtToken);
 
-        return DataSuccess(UserModel.fromJson(decodedToken['data'][0]));
+        // save token
+        await FlutterSessionJwt.saveToken(jwtToken);
+        DMethod.log(
+          "expired in : ${await FlutterSessionJwt.getExpirationDateTime()}",
+        );
+
+        // decode jwt
+        final decodedToken = JWT.verify(
+          jwtToken,
+          SecretKey(JWtServices.jwtSecretKey),
+        );
+
+        // return user model
+        return DataSuccess(UserModel.fromJson(decodedToken.payload['data']));
       } else {
         // jika gagal maka akan mengembalikan pesan error
         return DataFailed(
@@ -91,11 +107,23 @@ class SignInController {
 
       // jika login berhasil
       if (response.statusCode == HttpStatus.ok) {
-        // decode jwt
+        // get jwt token
         String jwtToken = payload['data'];
-        Map<String, dynamic> decodedToken = JwtDecoder.decode(jwtToken);
 
-        return DataSuccess(UserModel.fromJson(decodedToken['data'][0]));
+        // save token
+        await FlutterSessionJwt.saveToken(jwtToken);
+        DMethod.log(
+          "expired in : ${await FlutterSessionJwt.getExpirationDateTime()}",
+        );
+
+        // decode jwt
+        final decodedToken = JWT.verify(
+          jwtToken,
+          SecretKey(JWtServices.jwtSecretKey),
+        );
+
+        // return user model
+        return DataSuccess(UserModel.fromJson(decodedToken.payload['data']));
       } else {
         // jika login gagal
         return DataFailed(
@@ -142,11 +170,23 @@ class SignInController {
 
       // jika login berhasil
       if (response.statusCode == HttpStatus.ok) {
-        // decode jwt
+        // get jwt token
         String jwtToken = payload['data'];
-        Map<String, dynamic> decodedToken = JwtDecoder.decode(jwtToken);
 
-        return DataSuccess(UserModel.fromJson(decodedToken['data'][0]));
+        // save token
+        await FlutterSessionJwt.saveToken(jwtToken);
+        DMethod.log(
+          "expired in : ${await FlutterSessionJwt.getExpirationDateTime()}",
+        );
+
+        // decode jwt
+        final decodedToken = JWT.verify(
+          jwtToken,
+          SecretKey(JWtServices.jwtSecretKey),
+        );
+
+        // return user model
+        return DataSuccess(UserModel.fromJson(decodedToken.payload['data']));
       } else {
         // jika login gagal
         return DataFailed(
@@ -166,9 +206,9 @@ class SignInController {
 
 void main(List<String> args) async {
   DataState dataState = await SignInController().signInPhone(
-    // email: 'hakiahmad756@gmail.coms',
+    // email: 'hakiahmad756@gmail.com',
     // password: 'Haqi.1234',
-    phone: '628565586462s',
+    phone: '6285655864625',
     pin: "123456",
     deviceName: 'Vivo V2157',
     deviceToken:
@@ -177,7 +217,14 @@ void main(List<String> args) async {
 
   if (dataState is DataSuccess) {
     UserModel model = dataState.data as UserModel;
+    ShopModel shopModel = model.shopData as ShopModel;
     print('login berhasil ${model.fullName}');
+    if (model.level == 'Penjual') {
+      print('ID Toko : ${shopModel.idShop}');
+      print('Nomor Toko : ${shopModel.phoneNumber}');
+      print('Nama Toko : ${shopModel.shopName}');
+      print('Deskripsi : ${shopModel.description}');
+    }
   }
 
   if (dataState is DataFailed) {

@@ -16,21 +16,30 @@ class ItemWelcome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        children: [
-          AuthImage(image: image),
-          const SizedBox(height: 27),
-          AuthTitle(title: title),
-          Padding(
-            padding: const EdgeInsets.only(left: 24, right: 24),
-            child: AuthDescription(
-              description: description,
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 4,
+        right: 4,
+      ),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          children: [
+            AuthImage(image: image),
+            const SizedBox(height: 27),
+            AuthTitle(
+              title: title,
               textAlign: TextAlign.center,
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.only(left: 24, right: 24),
+              child: AuthDescription(
+                description: description,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -49,7 +49,7 @@ class PasarAjaMessage {
     );
   }
 
-    ///
+  ///
   static Future<bool> showWarning(
     String message, {
     bool barrierDismissible = false,
@@ -109,12 +109,11 @@ class PasarAjaMessage {
     Get.dialog(
       PopScope(
         canPop: canPop,
-        child:
-      const Center(
-        child: CircularProgressIndicator(
-          color: PasarAjaColor.green2,
+        child: const Center(
+          child: CircularProgressIndicator(
+            color: PasarAjaColor.green2,
+          ),
         ),
-      ),
       ),
       barrierDismissible: true,
       transitionCurve: Curves.easeOut,
