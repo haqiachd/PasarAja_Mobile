@@ -29,6 +29,9 @@ dependencies:
   http: ^1.1.2
   dio: ^5.4.1
   jwt_decoder: ^2.0.1
+  carousel_slider: ^4.2.1
+  dart_jsonwebtoken: ^2.13.0
+  flutter_session_jwt: ^0.0.6
   flutter_native_splash: ^2.2.4
   logger: ^2.0.2+1
   image_picker: ^1.0.7
