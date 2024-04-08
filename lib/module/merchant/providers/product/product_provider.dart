@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pasaraja_mobile/core/services/user_services.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/module/merchant/controllers/product_controller.dart';
@@ -42,9 +43,11 @@ class ProductProvider extends ChangeNotifier {
       state = const OnLoadingState();
       notifyListeners();
 
+      int idShop = await PasarAjaUserService.getShopId();
+
       // call controller
       final dataState = await _productController.productPage(
-        idShop: 1,
+        idShop: idShop,
       );
 
       if (dataState is DataSuccess) {

@@ -1,5 +1,6 @@
 library pasaraja_mobile;
 
+export 'welcome_provider.dart';
 export 'change/change_pin_provider.dart';
 export 'change/change_password_provider.dart';
 export 'signin/signin_google_provider.dart';

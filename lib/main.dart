@@ -6,18 +6,7 @@ import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/firebase_options.dart';
 import 'package:pasaraja_mobile/module/auth/providers/providers.dart';
 import 'package:pasaraja_mobile/core/services/google_signin_services.dart';
-import 'package:pasaraja_mobile/module/merchant/providers/product/add_product_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/providers/product/best_selling_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/providers/product/choose_categories_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/providers/product/complain_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/providers/product/detail_list_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/providers/product/detail_product_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/providers/product/hidden_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/providers/product/product_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/providers/product/recommended_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/providers/product/review_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/providers/product/unavailable_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/providers/qr/qr_scan_provider.dart';
+import 'package:pasaraja_mobile/module/merchant/providers/providers.dart';
 import 'package:pasaraja_mobile/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -46,6 +35,7 @@ class MyApp extends StatelessWidget {
       providers: [
         // auth
         ChangeNotifierProvider(create: (context) => GoogleSignService()),
+        ChangeNotifierProvider(create: (context) => WelcomeProvider()),
         ChangeNotifierProvider(create: (context) => ChangePasswordProvider()),
         ChangeNotifierProvider(create: (context) => ChangePinProvider()),
         ChangeNotifierProvider(create: (context) => SignInGoogleProvider()),
