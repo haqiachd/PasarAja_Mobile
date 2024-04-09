@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:lottie/lottie.dart';
+import 'package:pasaraja_mobile/config/themes/lotties.dart';
 
 class SomethingWrong extends StatelessWidget {
   const SomethingWrong({
@@ -7,8 +9,16 @@ class SomethingWrong extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text("Something Wrong"),
+    return ListView(
+      children: [
+        SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height / 2,
+          child: LottieBuilder.asset(
+            PasarAjaLottie.somethingWrong,
+          ),
+        )
+      ],
     );
   }
 }
