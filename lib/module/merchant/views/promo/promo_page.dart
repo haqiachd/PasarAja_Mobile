@@ -25,53 +25,56 @@ class _PromoPageState extends State<PromoPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: PasarAjaColor.white,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(97 - MediaQuery.of(context).padding.top),
-        child: PasarAjaAppbar(
-          title: 'Promo',
-          action: ElevatedButton(
-            onPressed: () {},
-            style: const ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(Colors.blue),
-              foregroundColor: MaterialStatePropertyAll(Colors.white),
-            ),
-            child: Text(
-              "Tambah",
-              style: PasarAjaTypography.sfpdBold,
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        backgroundColor: PasarAjaColor.white,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(97 - MediaQuery.of(context).padding.top),
+          child: PasarAjaAppbar(
+            title: 'Promo',
+            action: ElevatedButton(
+              onPressed: () {},
+              style: const ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Colors.blue),
+                foregroundColor: MaterialStatePropertyAll(Colors.white),
+              ),
+              child: Text(
+                "Tambah",
+                style: PasarAjaTypography.sfpdBold,
+              ),
             ),
           ),
         ),
-      ),
-      body: Column(
-        children: [
-          TabBar(
-            controller: _tabController,
-            labelStyle: PasarAjaTypography.sfpdBold,
-            labelColor: PasarAjaColor.green1,
-            unselectedLabelColor: PasarAjaColor.black,
-            indicatorColor: PasarAjaColor.green1,
-            indicatorWeight: 4,
-            labelPadding: const EdgeInsets.symmetric(horizontal: 16),
-            tabs: const [
-              Tab(text: 'Akan Datang'),
-              Tab(text: 'Sedang Aktif'),
-              Tab(text: 'Kadaluarsa'),
-            ],
-          ),
-          Expanded(
-            child: TabBarView(
+        body: Column(
+          children: [
+            TabBar(
               controller: _tabController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: const [
-                PromoSoonTab(),
-                PromoActiveTab(),
-                PromoExpiredTab(),
+              labelStyle: PasarAjaTypography.sfpdBold,
+              labelColor: PasarAjaColor.green1,
+              unselectedLabelColor: PasarAjaColor.black,
+              indicatorColor: PasarAjaColor.green1,
+              indicatorWeight: 4,
+              labelPadding: const EdgeInsets.symmetric(horizontal: 16),
+              tabs: const [
+                Tab(text: 'Akan Datang'),
+                Tab(text: 'Sedang Aktif'),
+                Tab(text: 'Kadaluarsa'),
               ],
             ),
-          ),
-        ],
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                physics: const NeverScrollableScrollPhysics(),
+                children: const [
+                  PromoSoonTab(),
+                  PromoActiveTab(),
+                  PromoExpiredTab(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
