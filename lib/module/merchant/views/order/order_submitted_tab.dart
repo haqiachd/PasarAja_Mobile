@@ -68,7 +68,7 @@ class _OrderSubmittedTabState extends State<OrderSubmittedTab> {
                     height: MediaQuery.of(context).size.height / 2,
                     child: Center(
                       child: Text(
-                        'Order Request',
+                        'Order Submitted',
                         style: PasarAjaTypography.sfpdBold.copyWith(
                           fontSize: 25,
                           color: PasarAjaColor.green1,

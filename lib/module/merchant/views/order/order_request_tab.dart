@@ -24,7 +24,7 @@ class _OrderRequestTabState extends State<OrderRequestTab> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      _fetchData();
+      await _fetchData();
     });
   }
 
@@ -57,31 +57,28 @@ class _OrderRequestTabState extends State<OrderRequestTab> {
               onFailureState: order.state as OnFailureState,
             );
           }
-
           if (order.state is OnSuccessState) {
             List<TransactionModel> orders = order.orders;
-            // jika data order tidak kosong
             if (orders.isNotEmpty) {
               return ListView(
                 children: [
-                  Center(
-                    child: Text(
-                      'Order Request',
-                      style: PasarAjaTypography.sfpdBold.copyWith(
-                        fontSize: 25,
-                        color: PasarAjaColor.green1,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 2,
+                    child: Center(
+                      child: Text(
+                        'Order Request',
+                        style: PasarAjaTypography.sfpdBold.copyWith(
+                          fontSize: 25,
+                          color: PasarAjaColor.green1,
+                        ),
                       ),
                     ),
                   ),
                 ],
               );
             } else {
-              return ListView(
-                children: const [
-                  // SizedBox(height: 100),
-                  EmptyOrder('Belum ada Permintaan Pesanan'),
-                ],
-              );
+              return const EmptyOrder("Belum ada Pesanan yang Dikonfirmasi");
             }
           }
 
