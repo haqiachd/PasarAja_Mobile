@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/widgets/app_bar.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
-import 'package:pasaraja_mobile/config/widgets/coming_soon.dart';
+import 'package:pasaraja_mobile/module/merchant/views/order/order_cancel_customer_tab.dart';
+import 'package:pasaraja_mobile/module/merchant/views/order/order_cancel_merchant_tab.dart';
+import 'package:pasaraja_mobile/module/merchant/views/order/order_confirmed_tab.dart';
+import 'package:pasaraja_mobile/module/merchant/views/order/order_expired_tab.dart';
+import 'package:pasaraja_mobile/module/merchant/views/order/order_finished_tab.dart';
+import 'package:pasaraja_mobile/module/merchant/views/order/order_intaking_tab.dart';
+import 'package:pasaraja_mobile/module/merchant/views/order/order_request_tab.dart';
+import 'package:pasaraja_mobile/module/merchant/views/order/order_submitted_tab.dart';
 
 class OrderPage extends StatelessWidget {
   const OrderPage({Key? key}) : super(key: key);
@@ -52,14 +59,14 @@ class OrderPage extends StatelessWidget {
                   child: const TabBarView(
                     physics: NeverScrollableScrollPhysics(),
                     children: [
-                      ComingSoon(),
-                      ComingSoon(),
-                      ComingSoon(),
-                      ComingSoon(),
-                      ComingSoon(),
-                      ComingSoon(),
-                      ComingSoon(),
-                      ComingSoon(),
+                      OrderRequestTab(),
+                      OrderConfirmedTab(),
+                      OrderInTakingTab(),
+                      OrderSubmittedTab(),
+                      OrderFinished(),
+                      OrderCancelMerchant(),
+                      OrderCancelCustomer(),
+                      OrderExpiredTab(),
                     ],
                   ),
                 ),
