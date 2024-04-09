@@ -13,7 +13,7 @@ class OrderController {
   final String _routeUrl = '${PasarAjaConstant.baseUrl}/trx';
   final String _pageUrl = '${PasarAjaConstant.baseUrl}/page/merchant/trx';
 
-  Future<DataState<List<TransactionModel>>> lisfOfTrx({
+  Future<DataState<List<TransactionModel>>> _lisfOfTrx({
     required int idShop,
     required String status,
   }) async {
@@ -56,49 +56,49 @@ class OrderController {
   Future<DataState<List<TransactionModel>>> tabRequest({
     required int idShop,
   }) async {
-    return await lisfOfTrx(idShop: idShop, status: "Request");
+    return await _lisfOfTrx(idShop: idShop, status: "Request");
   }
 
   Future<DataState<List<TransactionModel>>> tabCancelByCustomer({
     required int idShop,
   }) async {
-    return await lisfOfTrx(idShop: idShop, status: "Cancel_Customer");
+    return await _lisfOfTrx(idShop: idShop, status: "Cancel_Customer");
   }
 
   Future<DataState<List<TransactionModel>>> tabCancelByMerchant({
     required int idShop,
   }) async {
-    return await lisfOfTrx(idShop: idShop, status: "Cancel_Merchant");
+    return await _lisfOfTrx(idShop: idShop, status: "Cancel_Merchant");
   }
 
   Future<DataState<List<TransactionModel>>> tabConfirmed({
     required int idShop,
   }) async {
-    return await lisfOfTrx(idShop: idShop, status: "Confirmed");
+    return await _lisfOfTrx(idShop: idShop, status: "Confirmed");
   }
 
   Future<DataState<List<TransactionModel>>> tabInTaking({
     required int idShop,
   }) async {
-    return await lisfOfTrx(idShop: idShop, status: "InTaking");
+    return await _lisfOfTrx(idShop: idShop, status: "InTaking");
   }
 
   Future<DataState<List<TransactionModel>>> tabSubmitted({
     required int idShop,
   }) async {
-    return await lisfOfTrx(idShop: idShop, status: "Submitted");
+    return await _lisfOfTrx(idShop: idShop, status: "Submitted");
   }
 
   Future<DataState<List<TransactionModel>>> tabFinished({
     required int idShop,
   }) async {
-    return await lisfOfTrx(idShop: idShop, status: "Finished");
+    return await _lisfOfTrx(idShop: idShop, status: "Finished");
   }
 
   Future<DataState<List<TransactionModel>>> tabExpired({
     required int idShop,
   }) async {
-    return await lisfOfTrx(idShop: idShop, status: "Expired");
+    return await _lisfOfTrx(idShop: idShop, status: "Expired");
   }
 
   Future<DataState<bool>> createTrx({
