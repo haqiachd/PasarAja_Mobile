@@ -25,12 +25,12 @@ class OrderSubmittedProvider extends ChangeNotifier {
     try {
       // cek apakah data sudah diload atau tidak
       if (_orders.isNotEmpty) {
-        DMethod.log("Load From Data");
+        DMethod.log("Load From Data (Submitted)");
         state = const OnSuccessState();
         notifyListeners();
         return;
       }
-      DMethod.log("Load From API");
+      DMethod.log("Load From API (Submitted)");
 
       // set loading
       state = const OnLoadingState();
@@ -63,6 +63,7 @@ class OrderSubmittedProvider extends ChangeNotifier {
   }
 
   void onRefresh() {
+    DMethod.log("OnRefresh (Submitted)");
     _orders = [];
     state = const OnLoadingState();
     notifyListeners();

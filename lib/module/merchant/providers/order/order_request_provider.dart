@@ -25,12 +25,12 @@ class OrderRequestProvider extends ChangeNotifier {
     try {
       // cek apakah data sudah diload atau tidak
       if (_orders.isNotEmpty) {
-        DMethod.log("Load From Data");
+        DMethod.log("Load From Data (Request)");
         state = const OnSuccessState();
         notifyListeners();
         return;
       }
-      DMethod.log("Load From API");
+      DMethod.log("Load From API (Request)");
 
       // set loading
       state = const OnLoadingState();
@@ -63,6 +63,7 @@ class OrderRequestProvider extends ChangeNotifier {
   }
 
   void onRefresh() {
+    DMethod.log("OnRefresh (Request)");
     _orders = [];
     state = const OnLoadingState();
     notifyListeners();
