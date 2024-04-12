@@ -1,8 +1,12 @@
 import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/services/user_services.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/module/merchant/controllers/order_controller.dart';
 import 'package:pasaraja_mobile/module/merchant/models/transaction_model.dart';
 
@@ -59,6 +63,46 @@ class OrderConfirmedProvider extends ChangeNotifier {
     } catch (ex) {
       state = OnFailureState(message: ex.toString());
       notifyListeners();
+    }
+  }
+
+  Future<void> onButtonCancelPressed({
+    required int idShop,
+    required String orderCode,
+  }) async {
+    try {
+      // show loading
+      PasarAjaMessage.showLoading();
+
+      // call controller
+      final dataState = await _controller.confirmTrx(
+        idShop: idShop,
+        orderCode: orderCode,
+      );
+
+      // close loading
+      Get.back();
+
+      // jika pesanan berhasil dikonfirmasi
+      if (dataState is DataSuccess) {
+        await PasarAjaMessage.showInformation("Pesanan Berhasil Dikonfirmasi");
+
+        // reset list
+        _orders = [];
+
+        // mengambil ulang data pesanan
+        await fetchData();
+      }
+
+      // jika pesanan gagal dikonfirmasi
+      if (dataState is DataFailed) {
+        Fluttertoast.showToast(
+          msg: dataState.error?.error.toString() ??
+              PasarAjaConstant.unknownError,
+        );
+      }
+    } catch (ex) {
+      Fluttertoast.showToast(msg: ex.toString());
     }
   }
 
