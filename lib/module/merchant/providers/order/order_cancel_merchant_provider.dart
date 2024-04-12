@@ -1,8 +1,12 @@
 import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/services/user_services.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/module/merchant/controllers/order_controller.dart';
 import 'package:pasaraja_mobile/module/merchant/models/transaction_model.dart';
 
@@ -59,6 +63,44 @@ class OrderCancelMerchantProvider extends ChangeNotifier {
     } catch (ex) {
       state = OnFailureState(message: ex.toString());
       notifyListeners();
+    }
+  }
+
+  Future<void> onButtonCancelPressed({
+    required int idShop,
+    required String orderCode,
+    required String reason,
+    required String message,
+  }) async {
+    try {
+      // show loading
+      PasarAjaMessage.showLoading();
+
+      // call controller
+      final dataState = await _controller.cancelByMerchantTrx(
+        idShop: idShop,
+        orderCode: orderCode,
+        reason: reason,
+        message: message,
+      );
+
+      // close loading
+      Get.back();
+
+      // jika pesanan berhasil dibatalakn
+      if (dataState is DataSuccess) {
+        await PasarAjaMessage.showInformation("Pesanan Berhasil Dibatalkan");
+      }
+
+      // jika pesanan gagal dibatalkan
+      if (dataState is DataFailed) {
+        Fluttertoast.showToast(
+          msg: dataState.error?.error.toString() ??
+              PasarAjaConstant.unknownError,
+        );
+      }
+    } catch (ex) {
+      Fluttertoast.showToast(msg: ex.toString());
     }
   }
 
