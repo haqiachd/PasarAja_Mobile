@@ -1,11 +1,14 @@
 import 'package:equatable/equatable.dart';
+import 'package:pasaraja_mobile/core/entities/shop_entity.dart';
 import 'package:pasaraja_mobile/core/entities/transaction_detail_entity.dart';
+import 'package:pasaraja_mobile/core/entities/user_entity.dart';
 
 class TransactionEntity extends Equatable {
   final int? idTrx;
   final int? idUser;
   final String? orderCode;
   final String? orderPin;
+  final String? orderId;
   final String? status;
   final DateTime? takenDate;
   final int? expirationTime;
@@ -16,13 +19,21 @@ class TransactionEntity extends Equatable {
   final String? fullName;
   final String? phoneNumber;
   final String? userPhoto;
+  final int? totalProduct;
+  final int? totalQuantity;
+  final int? totalPromo;
+  final int? subTotal;
+  final int? totalPrice;
   final List<TransactionDetailEntity>? details;
+  final ShopEntity? shopData;
+  final UserEntity? userData;
 
   const TransactionEntity({
     this.idTrx,
     this.idUser,
     this.orderCode,
     this.orderPin,
+    this.orderId,
     this.status,
     this.takenDate,
     this.expirationTime,
@@ -34,6 +45,13 @@ class TransactionEntity extends Equatable {
     this.phoneNumber,
     this.userPhoto,
     this.details,
+    this.totalProduct,
+    this.totalQuantity,
+    this.totalPromo,
+    this.subTotal,
+    this.totalPrice,
+    this.shopData,
+    this.userData,
   });
 
   @override
@@ -43,6 +61,7 @@ class TransactionEntity extends Equatable {
       idUser,
       orderCode,
       orderPin,
+      orderId,
       status,
       takenDate,
       expirationTime,
@@ -54,6 +73,13 @@ class TransactionEntity extends Equatable {
       phoneNumber,
       userPhoto,
       details,
+      totalProduct,
+      totalQuantity,
+      totalPromo,
+      subTotal,
+      totalPrice,
+      shopData,
+      userData,
     ];
   }
 }

@@ -9,6 +9,8 @@ class TransactionDetailEntity extends Equatable {
   final int? sellingUnit;
   final int? price;
   final int? promoPrice;
+  final int? totalPrice;
+  final String? notes;
 
   const TransactionDetailEntity({
     this.idProduct,
@@ -19,6 +21,8 @@ class TransactionDetailEntity extends Equatable {
     this.sellingUnit,
     this.price,
     this.promoPrice,
+    this.totalPrice,
+    this.notes,
   });
 
   @override
@@ -32,6 +36,8 @@ class TransactionDetailEntity extends Equatable {
       sellingUnit,
       price,
       promoPrice,
+      totalPrice,
+      notes,
     ];
   }
 }

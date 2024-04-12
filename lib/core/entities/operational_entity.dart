@@ -9,7 +9,7 @@ class OperationalEntity extends Equatable {
   final String? sabtu;
   final String? minggu;
 
-  const OperationalEntity(
+  const OperationalEntity({
     this.senin,
     this.selasa,
     this.rabu,
@@ -17,7 +17,7 @@ class OperationalEntity extends Equatable {
     this.jumat,
     this.sabtu,
     this.minggu,
-  );
+  });
 
   @override
   List<Object?> get props {
