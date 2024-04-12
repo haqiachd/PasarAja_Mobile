@@ -74,6 +74,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => OrderInTakingProvider()),
         ChangeNotifierProvider(create: (context) => OrderRequestProvider()),
         ChangeNotifierProvider(create: (context) => OrderSubmittedProvider()),
+        ChangeNotifierProvider(create: (context) => OrderDetailProvider()),
+        ChangeNotifierProvider(create: (context) => OrderCancelProvider()),
       ],
       child: GetMaterialApp(
         title: 'PasarAja',

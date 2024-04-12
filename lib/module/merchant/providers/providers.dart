@@ -29,4 +29,6 @@ export 'order/order_finished_provider.dart';
 export 'order/order_intaking_provider.dart';
 export 'order/order_request_provider.dart';
 export 'order/order_submitted_provider.dart';
+export 'order/order_detail_provider.dart';
+export 'order/order_cancel_provider.dart';
 export 'qr/qr_scan_provider.dart';
