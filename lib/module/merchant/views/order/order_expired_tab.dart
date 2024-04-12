@@ -85,7 +85,10 @@ class _OrderExpiredTabState extends State<OrderExpiredTab> {
     return InkWell(
       onTap: () {
         Get.to(
-          OrderDetailPage(orderCode: order.orderCode ?? ''),
+          OrderDetailPage(
+            orderCode: order.orderCode ?? '',
+            provider: OrderExpiredProvider(),
+          ),
           transition: Transition.cupertino,
           duration: PasarAjaConstant.transitionDuration,
         );

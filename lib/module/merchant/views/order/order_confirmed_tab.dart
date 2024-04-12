@@ -1,4 +1,3 @@
-import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -11,6 +10,7 @@ import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/module/merchant/models/transaction_model.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/providers.dart';
+import 'package:pasaraja_mobile/module/merchant/views/order/order_cancel_page.dart';
 import 'package:pasaraja_mobile/module/merchant/views/order/order_detail_page.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/empty_order.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/order_reject.dart';
@@ -87,7 +87,10 @@ class _OrderConfirmedTabState extends State<OrderConfirmedTab> {
     return InkWell(
       onTap: () {
         Get.to(
-          OrderDetailPage(orderCode: order.orderCode ?? ''),
+          OrderDetailPage(
+            orderCode: order.orderCode ?? '',
+            provider: OrderConfirmedProvider(),
+          ),
           transition: Transition.cupertino,
           duration: PasarAjaConstant.transitionDuration,
         );
@@ -148,12 +151,7 @@ class _OrderConfirmedTabState extends State<OrderConfirmedTab> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                OrderReject(
-                  title: 'Batalkan',
-                  onPressed: () {
-                    DMethod.log('confirmed');
-                  },
-                ),
+                _buildButtonReject(order),
                 const SizedBox(width: 10),
               ],
             ),
@@ -161,6 +159,19 @@ class _OrderConfirmedTabState extends State<OrderConfirmedTab> {
           ],
         ),
       ),
+    );
+  }
+
+  OrderReject _buildButtonReject(TransactionModel order) {
+    return OrderReject(
+      title: 'Batalkan',
+      onPressed: () {
+        Get.to(
+          OrderCancelPage(orderCode: order.orderCode ?? ''),
+          transition: Transition.cupertino,
+          duration: PasarAjaConstant.transitionDuration,
+        );
+      },
     );
   }
 }

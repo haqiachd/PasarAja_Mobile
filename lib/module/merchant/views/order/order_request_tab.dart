@@ -86,7 +86,10 @@ class _OrderRequestTabState extends State<OrderRequestTab> {
     return InkWell(
       onTap: () {
         Get.to(
-          OrderDetailPage(orderCode: order.orderCode ?? ''),
+          OrderDetailPage(
+            orderCode: order.orderCode ?? '',
+            provider: OrderRequestProvider(),
+          ),
           transition: Transition.cupertino,
           duration: PasarAjaConstant.transitionDuration,
         );
@@ -108,7 +111,7 @@ class _OrderRequestTabState extends State<OrderRequestTab> {
               style: PasarAjaTypography.sfpdBold,
             ),
             Text(
-              "${order.details?.length ?? 0} x product",
+              "${order.details?.length ?? 0} x produk",
               style: PasarAjaTypography.sfpdSemibold,
             ),
             const Text("_"),
@@ -175,6 +178,7 @@ class _OrderRequestTabState extends State<OrderRequestTab> {
           onPressed: () {
             order.onButtonConfirmPressed(
               orderCode: data.orderCode ?? '',
+              orderId: data.orderId ?? '',
               fullName: data.fullName ?? '',
             );
           },

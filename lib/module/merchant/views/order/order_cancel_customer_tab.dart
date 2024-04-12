@@ -87,7 +87,10 @@ class _OrderCancelCustomerState extends State<OrderCancelCustomer> {
     return InkWell(
       onTap: () {
         Get.to(
-          OrderDetailPage(orderCode: order.orderCode ?? ''),
+          OrderDetailPage(
+            orderCode: order.orderCode ?? '',
+            provider: OrderCancelCustomerProvider(),
+          ),
           transition: Transition.cupertino,
           duration: PasarAjaConstant.transitionDuration,
         );

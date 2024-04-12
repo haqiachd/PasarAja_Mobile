@@ -105,4 +105,52 @@ class OrderDetailProvider extends ChangeNotifier {
       PasarAjaMessage.showWarning(ex.toString());
     }
   }
+
+  Future<void> onButtonSubmittedPressed({
+    required String orderCode,
+    required String fullName,
+    required String orderId,
+  }) async {
+    try {
+      // show serahkan dialog
+      final confirm = await PasarAjaMessage.showConfirmation(
+        "Apakah Anda Yakin Ingin Menyerahkan Pesanan $orderId dari $fullName",
+      );
+
+      if (!confirm) {
+        return;
+      }
+
+      // show loading
+      PasarAjaMessage.showLoading();
+
+      // get id shop
+      final idShop = await PasarAjaUserService.getShopId();
+
+      // call controller
+      final dataState = await _controller.submittedTrx(
+        idShop: idShop,
+        orderCode: orderCode,
+      );
+
+      // close loading
+      Get.back();
+
+      // jika pesanan berhasil diserahkan
+      if (dataState is DataSuccess) {
+        await PasarAjaMessage.showInformation("Pesanan Berhasil Diserahkan");
+        Get.back();
+      }
+
+      // jika pesanan gagal diserahkan
+      if (dataState is DataFailed) {
+        PasarAjaMessage.showWarning(
+          dataState.error?.error.toString() ?? PasarAjaConstant.unknownError,
+        );
+      }
+    } catch (ex) {
+      PasarAjaMessage.showWarning(ex.toString());
+      Get.back();
+    }
+  }
 }

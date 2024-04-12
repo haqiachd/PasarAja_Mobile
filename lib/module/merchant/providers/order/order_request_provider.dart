@@ -70,11 +70,12 @@ class OrderRequestProvider extends ChangeNotifier {
   Future<void> onButtonConfirmPressed({
     required String orderCode,
     required String fullName,
+    required String orderId,
   }) async {
     try {
       // show confirmation dialog
       final confirm = await PasarAjaMessage.showConfirmation(
-        "Apakah Anda Yakin Ingin Mengkonfirmasi Pesanan $orderCode dari $fullName",
+        "Apakah Anda Yakin Ingin Mengkonfirmasi Pesanan $orderId dari $fullName",
       );
 
       if (!confirm) {

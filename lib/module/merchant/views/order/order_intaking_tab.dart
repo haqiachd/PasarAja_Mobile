@@ -1,4 +1,3 @@
-import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -89,7 +88,10 @@ class _OrderInTakingTabState extends State<OrderInTakingTab> {
     return InkWell(
       onTap: () {
         Get.to(
-          OrderDetailPage(orderCode: order.orderCode ?? ''),
+          OrderDetailPage(
+            orderCode: order.orderCode ?? '',
+            provider: OrderInTakingProvider(),
+          ),
           transition: Transition.cupertino,
           duration: PasarAjaConstant.transitionDuration,
         );
@@ -150,12 +152,7 @@ class _OrderInTakingTabState extends State<OrderInTakingTab> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                OrderAcc(
-                  title: 'Serahkan',
-                  onPressed: () {
-                    DMethod.log('serahkan');
-                  },
-                ),
+                _buildButtonSerahkan(order),
                 const SizedBox(width: 10),
               ],
             ),
@@ -163,6 +160,23 @@ class _OrderInTakingTabState extends State<OrderInTakingTab> {
           ],
         ),
       ),
+    );
+  }
+
+  _buildButtonSerahkan(TransactionModel order) {
+    return Consumer<OrderInTakingProvider>(
+      builder: (context, trx, child) {
+        return OrderAcc(
+          title: 'Serahkan Pesanan',
+          onPressed: () {
+            trx.onButtonSubmittedPressed(
+              orderCode: order.orderCode ?? '',
+              fullName: order.fullName ?? '',
+              orderId: order.orderId ?? '',
+            );
+          },
+        );
+      },
     );
   }
 }

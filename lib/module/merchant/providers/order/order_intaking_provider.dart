@@ -1,8 +1,11 @@
 import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/services/user_services.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/module/merchant/controllers/order_controller.dart';
 import 'package:pasaraja_mobile/module/merchant/models/transaction_model.dart';
 
@@ -59,6 +62,58 @@ class OrderInTakingProvider extends ChangeNotifier {
     } catch (ex) {
       state = OnFailureState(message: ex.toString());
       notifyListeners();
+    }
+  }
+
+  Future<void> onButtonSubmittedPressed({
+    required String orderCode,
+    required String fullName,
+    required String orderId,
+  }) async {
+    try {
+      // show serahkan dialog
+      final confirm = await PasarAjaMessage.showConfirmation(
+        "Apakah Anda Yakin Ingin Menyerahkan Pesanan $orderId dari $fullName",
+      );
+
+      if (!confirm) {
+        return;
+      }
+
+      // show loading
+      PasarAjaMessage.showLoading();
+
+      // get id shop
+      final idShop = await PasarAjaUserService.getShopId();
+
+      // call controller
+      final dataState = await _controller.submittedTrx(
+        idShop: idShop,
+        orderCode: orderCode,
+      );
+
+      // close loading
+      Get.back();
+
+      // jika pesanan berhasil diserahkan
+      if (dataState is DataSuccess) {
+        await PasarAjaMessage.showInformation("Pesanan Berhasil Diserahkan");
+
+        // reset list
+        _orders = [];
+
+        // mengambil ulang data pesanan
+        await fetchData();
+      }
+
+      // jika pesanan gagal diserahkan
+      if (dataState is DataFailed) {
+        PasarAjaMessage.showWarning(
+          dataState.error?.error.toString() ?? PasarAjaConstant.unknownError,
+        );
+      }
+    } catch (ex) {
+      PasarAjaMessage.showWarning(ex.toString());
     }
   }
 

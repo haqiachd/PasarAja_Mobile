@@ -35,6 +35,7 @@ class EmptyOrder extends StatelessWidget {
                 Text(
                   title,
                   maxLines: 2,
+                  textAlign: TextAlign.center,
                   style: PasarAjaTypography.sfpdBold.copyWith(
                     fontSize: 20,
                   ),

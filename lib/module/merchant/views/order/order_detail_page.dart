@@ -14,7 +14,7 @@ import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/module/merchant/models/transaction_model.dart';
-import 'package:pasaraja_mobile/module/merchant/providers/order/order_detail_provider.dart';
+import 'package:pasaraja_mobile/module/merchant/providers/providers.dart';
 import 'package:pasaraja_mobile/module/merchant/views/order/order_cancel_page.dart';
 import 'package:pasaraja_mobile/config/widgets/action_button.dart';
 import 'package:provider/provider.dart';
@@ -23,9 +23,11 @@ class OrderDetailPage extends StatefulWidget {
   const OrderDetailPage({
     super.key,
     required this.orderCode,
+    required this.provider,
   });
 
   final String orderCode;
+  final ChangeNotifier? provider;
 
   @override
   State<OrderDetailPage> createState() => _OrderDetailPageState();
@@ -281,6 +283,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           const Text("_"),
           const Divider(),
           const SizedBox(height: 20),
+          _buildSubmittedButton(order),
           _buildConfirmButton(order),
           const SizedBox(height: 10),
           _buildRejectButton(order),
@@ -291,53 +294,87 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   }
 
   _buildConfirmButton(TransactionModel order) {
-    return Consumer<OrderDetailProvider>(
-      builder: (context, prov, child) {
-        return SizedBox(
-          width: double.infinity,
-          child: ActionButton(
-            onPressed: () {
-              prov.onButtonConfirmPressed(
-                orderCode: order.orderCode ?? '',
-                fullName: order.userData?.fullName ?? '',
-              );
-            },
-            title:
-                "Konfirmasi Pesanan (Rp. ${PasarAjaUtils.formatPrice(order.totalPrice ?? 0)})",
-            state: ActionButton.stateEnabledButton,
-          ),
-        );
-      },
-    );
+    if (widget.provider is OrderRequestProvider) {
+      return Consumer<OrderDetailProvider>(
+        builder: (context, prov, child) {
+          return SizedBox(
+            width: double.infinity,
+            child: ActionButton(
+              onPressed: () {
+                prov.onButtonConfirmPressed(
+                  orderCode: order.orderCode ?? '',
+                  fullName: order.userData?.fullName ?? '',
+                );
+              },
+              title:
+                  "Konfirmasi Pesanan (Rp. ${PasarAjaUtils.formatPrice(order.totalPrice ?? 0)})",
+              state: ActionButton.stateEnabledButton,
+            ),
+          );
+        },
+      );
+    } else {
+      return const Material();
+    }
+  }
+
+  _buildSubmittedButton(TransactionModel order) {
+    if (widget.provider is OrderInTakingProvider) {
+      return Consumer<OrderInTakingProvider>(
+        builder: (context, prov, child) {
+          return SizedBox(
+            width: double.infinity,
+            child: ActionButton(
+              onPressed: () {
+                prov.onButtonSubmittedPressed(
+                  orderCode: order.orderCode ?? '',
+                  fullName: order.userData?.fullName ?? '',
+                  orderId: order.orderId ?? '',
+                );
+              },
+              title: "Serahkan Pesanan",
+              state: ActionButton.stateEnabledButton,
+            ),
+          );
+        },
+      );
+    } else {
+      return const Material();
+    }
   }
 
   _buildRejectButton(TransactionModel order) {
-    return SizedBox(
-      width: double.infinity,
-      child: OutlinedButton(
-        onPressed: () {
-          Get.off(
-            OrderCancelPage(orderCode: order.orderCode ?? ''),
-            transition: Transition.cupertino,
-            duration: PasarAjaConstant.transitionDuration,
-          );
-        },
-        style: OutlinedButton.styleFrom(
-          side: const BorderSide(
-            color: Colors.red,
-            width: 2,
+    if (widget.provider is OrderRequestProvider ||
+        widget.provider is OrderConfirmedProvider) {
+      return SizedBox(
+        width: double.infinity,
+        child: OutlinedButton(
+          onPressed: () {
+            Get.off(
+              OrderCancelPage(orderCode: order.orderCode ?? ''),
+              transition: Transition.cupertino,
+              duration: PasarAjaConstant.transitionDuration,
+            );
+          },
+          style: OutlinedButton.styleFrom(
+            side: const BorderSide(
+              color: Colors.red,
+              width: 2,
+            ),
+          ),
+          child: const Text(
+            'Batalkan Pesanan',
+            style: TextStyle(
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
           ),
         ),
-        child: const Text(
-          'Batalkan Pesanan',
-          style: TextStyle(
-            color: Colors.red,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-        ),
-      ),
-    );
+      );
+    } else {
+      return const Material();
+    }
   }
 
 //
