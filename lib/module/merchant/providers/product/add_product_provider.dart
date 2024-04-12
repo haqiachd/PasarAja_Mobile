@@ -13,7 +13,7 @@ import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/merchant/controllers/product_controller.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product_settings_model.dart';
-import 'package:pasaraja_mobile/module/merchant/widgets/action_button.dart';
+import 'package:pasaraja_mobile/config/widgets/action_button.dart';
 
 class AddProductProvider extends ChangeNotifier {
   // controller, validation, state

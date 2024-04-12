@@ -16,7 +16,7 @@ import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/module/merchant/models/transaction_model.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/order/order_detail_provider.dart';
 import 'package:pasaraja_mobile/module/merchant/views/order/order_cancel_page.dart';
-import 'package:pasaraja_mobile/module/merchant/widgets/action_button.dart';
+import 'package:pasaraja_mobile/config/widgets/action_button.dart';
 import 'package:provider/provider.dart';
 
 class OrderDetailPage extends StatefulWidget {

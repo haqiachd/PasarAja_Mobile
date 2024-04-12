@@ -9,7 +9,7 @@ import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product_model.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/hidden_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/widgets/action_button.dart';
+import 'package:pasaraja_mobile/config/widgets/action_button.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/item_hidden.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/switcher_setting.dart';
 import 'package:provider/provider.dart';

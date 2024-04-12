@@ -17,7 +17,7 @@ import 'package:pasaraja_mobile/module/merchant/models/review_model.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/detail_product_provider.dart';
 import 'package:pasaraja_mobile/module/merchant/views/product/detail_list_page.dart';
 import 'package:pasaraja_mobile/module/merchant/views/product/edit_product_page.dart';
-import 'package:pasaraja_mobile/module/merchant/widgets/action_button.dart';
+import 'package:pasaraja_mobile/config/widgets/action_button.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/item_complain.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/item_history.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/item_ulasan.dart';

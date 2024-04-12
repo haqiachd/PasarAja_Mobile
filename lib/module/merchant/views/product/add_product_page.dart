@@ -16,12 +16,12 @@ import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/widgets.dart';
 import 'package:pasaraja_mobile/module/merchant/controllers/product_controller.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/add_product_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/widgets/action_button.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/switcher_setting.dart';
-import 'package:pasaraja_mobile/module/merchant/widgets/textfield.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pasaraja_mobile/config/widgets/action_button.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -259,7 +259,7 @@ class _DetailProductPageState extends State<AddProductPage> {
         hintText: '',
         suffixIcon: const Material(),
         keyboardType: TextInputType.number,
-        formatters: MerchantTextField.numberFormatter(),
+        formatters: AppTextField.numberFormatter(),
       ),
     );
   }
@@ -325,7 +325,7 @@ class _DetailProductPageState extends State<AddProductPage> {
             textInputAction: TextInputAction.next,
             errorText: prov.vSelling.message,
             keyboardType: TextInputType.number,
-            formatters: MerchantTextField.numberFormatter(),
+            formatters: AppTextField.numberFormatter(),
             onChanged: (value) {
               prov.onValidateSelling(value);
             },
@@ -355,7 +355,7 @@ class _DetailProductPageState extends State<AddProductPage> {
             showCounter: true,
             hintText: '1000',
             keyboardType: TextInputType.number,
-            formatters: MerchantTextField.numberFormatter(),
+            formatters: AppTextField.numberFormatter(),
             textInputAction: TextInputAction.done,
             onChanged: (value) {
               prov.onValidatePrice(value);
