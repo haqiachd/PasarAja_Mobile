@@ -10,6 +10,8 @@ class TransactionDetailModel extends TransactionDetailEntity {
     final int? sellingUnit,
     final int? price,
     final int? promoPrice,
+    final int? totalPrice,
+    final String? notes,
   }) : super(
           idProduct: idProduct,
           quantity: quantity,
@@ -19,18 +21,22 @@ class TransactionDetailModel extends TransactionDetailEntity {
           sellingUnit: sellingUnit,
           price: price,
           promoPrice: promoPrice,
+          totalPrice: totalPrice,
+          notes: notes,
         );
 
   factory TransactionDetailModel.fromJson(Map<String, dynamic> json) =>
       TransactionDetailModel(
-        idProduct: json["id_product"],
-        quantity: json["quantity"],
-        productName: json["product_name"],
-        productPhoto: json["product_photo"],
-        unit: json["unit"],
-        sellingUnit: json["selling_unit"],
-        price: json["price"],
-        promoPrice: json["promo_price"],
+        idProduct: json["id_product"] ?? '',
+        quantity: json["quantity"] ?? '',
+        productName: json["product_name"] ?? '',
+        productPhoto: json["product_photo"] ?? '',
+        unit: json["unit"] ?? '',
+        sellingUnit: json["selling_unit"] ?? '',
+        price: json["price"] ?? '',
+        promoPrice: json["promo_price"] ?? '',
+        totalPrice: json['total_price'] ?? '',
+        notes: json['notes'] ?? '',
       );
 
   static List<TransactionDetailModel> fromList(List<dynamic> json) {
