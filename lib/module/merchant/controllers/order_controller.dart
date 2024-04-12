@@ -13,6 +13,53 @@ class OrderController {
   final String _routeUrl = '${PasarAjaConstant.baseUrl}/trx';
   final String _pageUrl = '${PasarAjaConstant.baseUrl}/page/merchant/trx';
 
+  Future<DataState<TransactionModel>> dataTrx({
+    required int idShop,
+    required String orderCode,
+    bool userData = false,
+    bool shopData = false,
+  }) async {
+    try {
+      // request api
+      final response = await _dio.get(
+        '$_routeUrl/e',
+        queryParameters: {
+          "id_shop": idShop,
+          "order_code": orderCode,
+          "user_data": userData,
+          "shop_data": shopData,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.notFound ||
+                status == HttpStatus.internalServerError;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+
+      // return response
+      if (response.statusCode == HttpStatus.ok) {
+        return DataSuccess(TransactionModel.fromJson(payload['data']));
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
   Future<DataState<List<TransactionModel>>> _lisfOfTrx({
     required int idShop,
     required String status,
@@ -420,20 +467,43 @@ class OrderController {
 void main(List<String> args) async {
   OrderController controller = OrderController();
 
-  final update = await controller.finishTrx(
+  final dataTrx = await controller.dataTrx(
     idShop: 1,
     orderCode: "PasarAja-749a8261-696d-4739-8f53-f5d3f51a366a",
-    // reason: "Stok nya sudah habis!",
-    // message: "Mohon maaf stok-nya sudah habis :)",
+    shopData: true,
+    userData: true,
   );
 
-  if (update is DataSuccess) {
-    print('data success');
+  if (dataTrx is DataSuccess) {
+    TransactionModel trx = dataTrx.data as TransactionModel;
+    print('---> TRX DATA');
+    print('\nSHOP DATA');
+    print(trx.shopData?.shopName);
+    print(trx.shopData?.description);
+
+    print('\nUSER DATA');
+    print(trx.userData?.fullName);
+    print(trx.userData?.email);
   }
 
-  if (update is DataFailed) {
-    print('data failed : ${update.error?.error}');
+  if (dataTrx is DataFailed) {
+    print('data failed : ${dataTrx.error?.error}');
   }
+
+  // final update = await controller.finishTrx(
+  //   idShop: 1,
+  //   orderCode: "PasarAja-749a8261-696d-4739-8f53-f5d3f51a366a",
+  //   // reason: "Stok nya sudah habis!",
+  //   // message: "Mohon maaf stok-nya sudah habis :)",
+  // );
+
+  // if (update is DataSuccess) {
+  //   print('data success');
+  // }
+
+  // if (update is DataFailed) {
+  //   print('data failed : ${update.error?.error}');
+  // }
 
   // List<ProductTransactionModel> products = [
   //   const ProductTransactionModel(
