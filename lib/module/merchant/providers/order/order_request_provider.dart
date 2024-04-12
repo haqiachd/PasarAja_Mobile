@@ -1,10 +1,15 @@
 import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/services/user_services.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
+import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/module/merchant/controllers/order_controller.dart';
 import 'package:pasaraja_mobile/module/merchant/models/transaction_model.dart';
+import 'package:pasaraja_mobile/module/merchant/views/order/order_cancel_page.dart';
 
 class OrderRequestProvider extends ChangeNotifier {
   // controller
@@ -59,6 +64,71 @@ class OrderRequestProvider extends ChangeNotifier {
     } catch (ex) {
       state = OnFailureState(message: ex.toString());
       notifyListeners();
+    }
+  }
+
+  Future<void> onButtonConfirmPressed({
+    required String orderCode,
+    required String fullName,
+  }) async {
+    try {
+      // show confirmation dialog
+      final confirm = await PasarAjaMessage.showConfirmation(
+        "Apakah Anda Yakin Ingin Mengkonfirmasi Pesanan $orderCode dari $fullName",
+      );
+
+      if (!confirm) {
+        return;
+      }
+
+      // show loading
+      PasarAjaMessage.showLoading();
+
+      // get id shop
+      final idShop = await PasarAjaUserService.getShopId();
+
+      // call controller
+      final dataState = await _controller.confirmTrx(
+        idShop: idShop,
+        orderCode: orderCode,
+      );
+
+      // close loading
+      Get.back();
+
+      // jika pesanan berhasil dikonfirmasi
+      if (dataState is DataSuccess) {
+        await PasarAjaMessage.showInformation("Pesanan Berhasil Dikonfirmasi");
+
+        // reset list
+        _orders = [];
+
+        // mengambil ulang data pesanan
+        await fetchData();
+      }
+
+      // jika pesanan gagal dikonfirmasi
+      if (dataState is DataFailed) {
+        PasarAjaMessage.showWarning(
+          dataState.error?.error.toString() ?? PasarAjaConstant.unknownError,
+        );
+      }
+    } catch (ex) {
+      PasarAjaMessage.showWarning(ex.toString());
+    }
+  }
+
+  Future<void> onButtonRejectPressed({
+    required String orderCode,
+  }) async {
+    try {
+      Get.to(
+        OrderCancelPage(orderCode: orderCode),
+        transition: Transition.cupertino,
+        duration: PasarAjaConstant.transitionDuration,
+      );
+    } catch (ex) {
+      Fluttertoast.showToast(msg: ex.toString());
     }
   }
 
