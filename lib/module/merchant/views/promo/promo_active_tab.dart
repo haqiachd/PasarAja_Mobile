@@ -79,7 +79,9 @@ class _PromoActiveTabState extends State<PromoActiveTab> {
               return ListView(
                 children: const [
                   SizedBox(height: 100),
-                  EmptyPromo(),
+                  EmptyPromo(
+                    title: "Tidak Ada Promo yang Sedang Aktif",
+                  ),
                 ],
               );
             }

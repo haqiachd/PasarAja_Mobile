@@ -74,7 +74,9 @@ class _PromoSoonTabState extends State<PromoSoonTab> {
                 },
               );
             } else {
-              return const EmptyPromo();
+              return const EmptyPromo(
+                title: "Tidak Ada Promo yang Akan Datang",
+              );
             }
           }
 

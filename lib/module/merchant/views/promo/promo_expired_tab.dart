@@ -75,7 +75,9 @@ class _PromoExpiredTabState extends State<PromoExpiredTab> {
               );
             }
           } else {
-            return const EmptyPromo();
+            return const EmptyPromo(
+              title: "Tidak Ada Promo yang Kadaluarsa",
+            );
           }
 
           return const SomethingWrong();
