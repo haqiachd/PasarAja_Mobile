@@ -67,8 +67,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => PromoActiveProvider()),
         ChangeNotifierProvider(create: (context) => PromoSoonProvider()),
         ChangeNotifierProvider(create: (context) => PromoExpiredProvider()),
-        ChangeNotifierProvider(create: (context) => OrderCancelCustomerProvider()),
-        ChangeNotifierProvider(create: (context) => OrderCancelMerchantProvider()),
+        ChangeNotifierProvider(
+            create: (context) => OrderCancelCustomerProvider()),
+        ChangeNotifierProvider(
+            create: (context) => OrderCancelMerchantProvider()),
         ChangeNotifierProvider(create: (context) => OrderConfirmedProvider()),
         ChangeNotifierProvider(create: (context) => OrderExpiredProvider()),
         ChangeNotifierProvider(create: (context) => OrderFinishedProvider()),
@@ -93,6 +95,19 @@ class MyApp extends StatelessWidget {
           dialogTheme: const DialogTheme(
             backgroundColor: Colors.white,
             surfaceTintColor: Colors.white,
+          ),
+          datePickerTheme: const DatePickerThemeData(
+            backgroundColor: Colors.white,
+            surfaceTintColor: Colors.white,
+            headerBackgroundColor: Colors.white,
+            confirmButtonStyle: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(PasarAjaColor.green2),
+              foregroundColor: MaterialStatePropertyAll(PasarAjaColor.white),
+            ),
+            cancelButtonStyle: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(PasarAjaColor.red2),
+              foregroundColor: MaterialStatePropertyAll(PasarAjaColor.white),
+            ),
           ),
         ),
         debugShowCheckedModeBanner: false,
