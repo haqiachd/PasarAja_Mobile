@@ -311,6 +311,135 @@ class PasarAjaValidation {
     );
   }
 
+  static ValidationModel promoPrice(String? price, String? promoPrice) {
+    if (price == null) {
+      return const ValidationModel(message: 'Price null.');
+    }
+    if (price.isEmpty && price.trim().isEmpty) {
+      return const ValidationModel(
+        message: 'Harga tidak boleh kosong.',
+      );
+    }
+
+    if (promoPrice == null) {
+      return const ValidationModel(message: 'Promo price null.');
+    }
+    if (promoPrice.isEmpty && promoPrice.trim().isEmpty) {
+      return const ValidationModel(
+        message: 'Harga promo tidak boleh kosong.',
+      );
+    }
+
+    // cek apakah harga valid atau tidak
+    ValidationModel isPriceNumber = PasarAjaValidation.price(price);
+    if (isPriceNumber.status == false) {
+      return isPriceNumber;
+    }
+
+    // cek apakah promo valid atau tidak
+    ValidationModel isPromoNumber = PasarAjaValidation.price(promoPrice);
+    if (isPromoNumber.status == false) {
+      return isPromoNumber;
+    }
+
+    final int priceInt = int.parse(price);
+    final int promoInt = int.parse(promoPrice);
+
+    if (promoInt >= priceInt) {
+      return const ValidationModel(
+        status: false,
+        message: 'Harga promo harus lebih kecil dari harga asli',
+      );
+    }
+
+    return const ValidationModel(
+      status: true,
+      message: 'Data valid',
+    );
+  }
+
+  static ValidationModel startDate(String? startDate) {
+    if (startDate == null) {
+      return const ValidationModel(message: 'Date null.');
+    }
+    if (startDate.isEmpty || startDate.trim().isEmpty) {
+      return const ValidationModel(
+        message: 'Tanggal awal tidak boleh kosong.',
+      );
+    }
+
+    // Membagi string menjadi tahun, bulan, dan hari
+    List<String> dateParts = startDate.split('-');
+    int year = int.parse(dateParts[0]);
+    int month = int.parse(dateParts[1]);
+    int day = int.parse(dateParts[2]);
+
+    // Membuat objek DateTime
+    DateTime selectedDate = DateTime(year, month, day);
+
+    final DateTime today = DateTime.now();
+    final DateTime fiveMonthsFromNow = today.add(const Duration(days: 5 * 30));
+
+    // tanggal harus 1 hari dari sekarang atau setelahnya
+    if (selectedDate.isBefore(today)) {
+      return const ValidationModel(
+        message: 'Tanggal harus satu hari atau setelahnya dari sekarang.',
+        status: false,
+      );
+    }
+
+    // tanggal awal maksimal 5 bulan dari sekarang
+    if (selectedDate.isAfter(fiveMonthsFromNow)) {
+      return const ValidationModel(
+        message: 'Maksimal tanggal yang dipilih adalah 5 bulan dari sekarang.',
+        status: false,
+      );
+    }
+
+    return const ValidationModel(status: true, message: "Data valid");
+  }
+
+  static ValidationModel endDate(String? endDate) {
+    if (endDate == null) {
+      return const ValidationModel(message: 'Date null.');
+    }
+    if (endDate.isEmpty || endDate.trim().isEmpty) {
+      return const ValidationModel(
+        message: 'Tanggal awal tidak boleh kosong.',
+      );
+    }
+
+    // Membagi string menjadi tahun, bulan, dan hari
+    List<String> dateParts = endDate.split('-');
+    int year = int.parse(dateParts[0]);
+    int month = int.parse(dateParts[1]);
+    int day = int.parse(dateParts[2]);
+
+    // Membuat objek DateTime
+    DateTime selectedDate = DateTime(year, month, day);
+
+    final DateTime today = DateTime.now();
+    final DateTime sixMonthsFromNow = today.add(const Duration(days: 6 * 30));
+
+    // tanggal harus 1 hari dari sekarang atau setelahnya
+    if (selectedDate.isBefore(today.add(const Duration(days: 1)))) {
+      return const ValidationModel(
+        message: 'Tanggal harus dua hari dari sekarang.',
+        status: false,
+      );
+    }
+
+    // tanggal awal maksimal 5 bulan dari sekarang
+    if (selectedDate.isAfter(sixMonthsFromNow)) {
+      return const ValidationModel(
+        message: 'Maksimal tanggal yang dipilih adalah 5 bulan dari sekarang.',
+        status: false,
+      );
+    }
+
+    return const ValidationModel(status: true, message: "Data valid");
+  }
+
   static ValidationModel konfirmasiPassword(
       String? password, String? konfirmasi) {
     if (password == null) {
@@ -358,6 +487,12 @@ class PasarAjaValidation {
       message: 'Data valid',
     );
   }
+}
+
+void main() {
+  ValidationModel startDate = PasarAjaValidation.endDate('2024-04-16');
+
+  print(startDate.message);
 }
 
 class ValidationModel extends Equatable {
