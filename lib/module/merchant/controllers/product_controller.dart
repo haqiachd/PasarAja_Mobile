@@ -261,6 +261,45 @@ class ProductController {
     }
   }
 
+  Future<DataState<List<ProductModel>>> allProducts({
+    required int idShop,
+  }) async {
+    try {
+      // request api
+      final response = await _dio.get(
+        "$_apiRoute/",
+        queryParameters: {
+          "id_shop": idShop,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.notFound;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+
+      // return response
+      if (response.statusCode == HttpStatus.ok) {
+        return DataSuccess(ProductModel.fromList(payload['data']));
+      } else {
+        return DataFailed(
+          DioException(
+              requestOptions: response.requestOptions,
+              response: response,
+              type: DioExceptionType.badResponse,
+              error: payload['message']),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
   Future<DataState<ProductDetailModel>> detailProductPage({
     required int idShop,
     required int idProd,
@@ -1091,36 +1130,17 @@ class ProductController {
 void main(List<String> args) async {
   ProductController productController = ProductController();
 
-  // final test = await productController.addReview(
-  //   orderCode: "PasarAja-749a8261-696d-4739-8f53-f5d3f51a366a",
-  //   idUser: 3,
-  //   idShop: 1,
-  //   idProduct: 1,
-  //   star: "3",
-  //   comment: "Lumayan sih yg ini",
-  // );
+  final dataState = await productController.allProducts(idShop: 1);
 
-  // final test = await productController.updateReview(
-  //   idReview: 10,
-  //   idTrx: 31,
-  //   idShop: 1,
-  //   idProduct: 2,
-  //   star: "3",
-  //   comment: "B aja ternyata",
-  // );
-
-  final test = await productController.deleteReview(
-    idReview: 10,
-    idTrx: 31,
-    idShop: 1,
-    idProduct: 2,
-  );
-
-  if (test is DataSuccess) {
-    print('data success');
+  if(dataState is DataSuccess){
+    print('data berhasil');
+    List<ProductModel> prods = dataState.data as List<ProductModel>;
+    for(var prod in prods){
+      print('name : ${prod.productName}');
+    }
   }
 
-  if (test is DataFailed) {
-    print('data failed : ${test.error?.error}');
+  if(dataState is DataFailed){
+    print('data gagal : ${dataState.error?.error}');
   }
 }

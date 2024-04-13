@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
 import 'package:pasaraja_mobile/config/widgets/app_bar.dart';
+import 'package:pasaraja_mobile/module/merchant/views/promo/add_promo_page.dart';
+import 'package:pasaraja_mobile/module/merchant/views/promo/choose_product_page.dart';
 import 'package:pasaraja_mobile/module/merchant/views/promo/promo_active_tab.dart';
 import 'package:pasaraja_mobile/module/merchant/views/promo/promo_expired_tab.dart';
 import 'package:pasaraja_mobile/module/merchant/views/promo/promo_soon_tab.dart';
@@ -30,11 +33,17 @@ class _PromoPageState extends State<PromoPage>
       child: Scaffold(
         backgroundColor: PasarAjaColor.white,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(97 - MediaQuery.of(context).padding.top),
+          preferredSize:
+              Size.fromHeight(97 - MediaQuery.of(context).padding.top),
           child: PasarAjaAppbar(
             title: 'Promo',
             action: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.to(
+                  const ChooseProductPage(),
+                  transition: Transition.rightToLeft,
+                );
+              },
               style: const ButtonStyle(
                 backgroundColor: MaterialStatePropertyAll(Colors.blue),
                 foregroundColor: MaterialStatePropertyAll(Colors.white),

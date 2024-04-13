@@ -14,6 +14,7 @@ export 'product/product_provider.dart';
 export 'product/recommended_provider.dart';
 export 'product/review_provider.dart';
 export 'product/unavailable_provider.dart';
+export 'promo/choose_product_provider.dart';
 export 'promo/promo_provider.dart';
 export 'promo/promo_active_provider.dart';
 export 'promo/promo_expired_provider.dart';

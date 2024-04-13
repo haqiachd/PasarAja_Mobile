@@ -59,6 +59,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => DetailListProvider()),
         ChangeNotifierProvider(create: (context) => ChooseCategoriesProvider()),
         ChangeNotifierProvider(create: (context) => QrScanProvider()),
+        ChangeNotifierProvider(create: (context) => ChooseProductProvider()),
         ChangeNotifierProvider(create: (context) => AddPromoProvider()),
         ChangeNotifierProvider(create: (context) => EditPromoProvider()),
         ChangeNotifierProvider(create: (context) => DetailPromoProvider()),
