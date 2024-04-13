@@ -44,6 +44,7 @@ dependencies:
   persistent_bottom_nav_bar: any
   qr_code_scanner: ^1.0.1
   pretty_qr_code: ^3.3.0
+  intl: ^0.19.0
   # url_launcher: any
 
 dev_dependencies:
