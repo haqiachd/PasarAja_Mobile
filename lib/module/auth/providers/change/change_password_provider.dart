@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/messages.dart';
+import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/change_controller.dart';
 import 'package:pasaraja_mobile/module/auth/views/welcome_page.dart';
@@ -137,8 +138,9 @@ class ChangePasswordProvider extends ChangeNotifier {
 
       // jika password gagal diubah
       if (dataState is DataFailed) {
+        PasarAjaUtils.triggerVibration();
         Fluttertoast.showToast(
-          msg: dataState.error!.message ?? PasarAjaConstant.unknownError,
+          msg: dataState.error!.error.toString(),
         );
       }
 
