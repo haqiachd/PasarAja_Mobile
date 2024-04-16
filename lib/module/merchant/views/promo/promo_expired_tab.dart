@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
 import 'package:pasaraja_mobile/config/widgets/loading_indicator.dart';
@@ -10,6 +11,7 @@ import 'package:pasaraja_mobile/config/widgets/something_wrong.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/providers.dart';
+import 'package:pasaraja_mobile/module/merchant/views/promo/detail_promo_page.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/empty_promo.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/item_promo.dart';
 import 'package:provider/provider.dart';
@@ -67,9 +69,19 @@ class _PromoExpiredTabState extends State<PromoExpiredTab> {
                 itemCount: data.length,
                 itemBuilder: (context, index) {
                   final promo = data[index];
-                  return ItemPromo(
-                    promo: promo,
-                    status: ItemPromo.expired,
+                  return InkWell(
+                    onTap: () {
+                      Get.to(
+                        DetailPromoPage(
+                          idPromo: promo.idPromo,
+                        ),
+                        transition: Transition.cupertino,
+                      );
+                    },
+                    child: ItemPromo(
+                      promo: promo,
+                      status: ItemPromo.expired,
+                    ),
                   );
                 },
               );

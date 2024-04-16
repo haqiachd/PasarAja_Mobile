@@ -291,11 +291,65 @@ class PromoController {
     }
   }
 
+  Future<DataState<PromoModel>> detailPromo({
+    required int? idShop,
+    required int? idPromo,
+  }) async {
+    try {
+      // call response
+      final response = await _dio.get(
+        '$_apiRoute/detail',
+        queryParameters: {
+          "id_shop": idShop,
+          "id_promo": idPromo,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.notFound;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = await response.data;
+
+      // return response
+      if (response.statusCode == HttpStatus.ok) {
+        return DataSuccess(PromoModel.fromJson(payload['data']));
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
 }
 
 void main(List<String> args) async {
   // PromoController controller = PromoController();
-
+  //
+  // final detail = await controller.detailPromo(
+  //   idShop: 1,
+  //   idPromo: 2,
+  // );
+  //
+  // if (detail is DataSuccess) {
+  //   PromoModel promo = detail.data as PromoModel;
+  //   print(promo.productName);
+  // }
+  //
+  // if (detail is DataFailed) {
+  //   print('error');
+  // }
 
   // final cek = await controller.isPromo(
   //   idShop: 1,
