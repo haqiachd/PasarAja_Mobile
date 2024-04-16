@@ -99,7 +99,7 @@ class AddPromoProvider extends ChangeNotifier {
   ///
   void _updateButtonState() {
     if (vPromo.status == null ||
-        startDateCont.text == null ||
+        vStartDate.status == null ||
         vEndDate.status == null) {
       _buttonState = ActionButton.stateDisabledButton;
     }
