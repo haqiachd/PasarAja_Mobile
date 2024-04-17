@@ -9,6 +9,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pasaraja_mobile/config/widgets/app_combobox.dart';
 import 'package:pasaraja_mobile/config/widgets/app_input_combobox.dart';
 import 'package:pasaraja_mobile/config/widgets/app_input_text.dart';
+import 'package:pasaraja_mobile/config/widgets/app_input_textarea.dart';
+import 'package:pasaraja_mobile/config/widgets/app_textarea.dart';
 import 'package:pasaraja_mobile/config/widgets/app_textfield.dart';
 import 'package:pasaraja_mobile/config/widgets/merchant_sub_appbar.dart';
 import 'package:pasaraja_mobile/core/entities/choose_photo.dart';
@@ -270,9 +272,9 @@ class _DetailProductPageState extends State<AddProductPage> {
         // controller
         final descCont = prov.descCont;
 
-        return AppInputText(
+        return AppInputTextArea(
           title: "Deskripsi (opsional)",
-          textField: AppTextField(
+          textArea: AppTextArea(
             controller: descCont,
             fontSize: 15,
             maxLength: 250,
