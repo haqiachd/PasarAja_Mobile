@@ -18,6 +18,7 @@ import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product/choose_categories_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product/product_detail_page_model.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/edit_product_provider.dart';
+import 'package:pasaraja_mobile/module/merchant/views/product/choose_photo_page.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/switcher_setting.dart';
 import 'package:provider/provider.dart';
 
@@ -103,7 +104,8 @@ class _EditProductPageState extends State<EditProductPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   child: Text(
                     'Silahkan Pilih Kategori',
                     style: PasarAjaTypography.sfpdBold.copyWith(fontSize: 24),
@@ -157,7 +159,12 @@ class _EditProductPageState extends State<EditProductPage> {
             height: 130,
             child: InkWell(
               onTap: () {
-                Fluttertoast.showToast(msg: 'foto di tap');
+                Get.to(
+                  ChoosePhotoPage(
+                    idProduct: prov.idProductSelected,
+                  ),
+                  transition: Transition.cupertino,
+                );
               },
               child: photoCont.text.isNotEmpty
                   ? ClipRRect(
@@ -407,7 +414,7 @@ class _EditProductPageState extends State<EditProductPage> {
       builder: (context, prov, child) {
         return ActionButton(
           onPressed: () {
-           prov.updateProduct();
+            prov.updateProduct();
           },
           title: 'Update',
           state: prov.buttonState,

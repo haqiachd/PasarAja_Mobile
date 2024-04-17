@@ -134,7 +134,7 @@ class _ProductPageState extends State<ProductPage> {
             context.read<ProductProvider>().categories;
         // test show data
         for (final category in categories) {
-          DMethod.log("name -> ${category.categoryName}");
+          // DMethod.log("name -> ${category.categoryName}");
         }
         //
         return SizedBox(

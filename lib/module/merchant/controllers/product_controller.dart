@@ -147,6 +147,55 @@ class ProductController {
     }
   }
 
+  Future<DataState<bool>> updatePhoto({
+    required int idShop,
+    required int idProduct,
+    required File photo,
+  }) async {
+    try {
+      // create form
+      FormData formData = FormData.fromMap(
+        {
+          "id_shop": idShop,
+          "id_product": idProduct,
+          "photo": photo,
+        },
+      );
+
+      // call api
+      final response = await _dio.post(
+        '$_apiRoute/update/photo',
+        data: formData,
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.notFound;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+
+      // return response
+      if (response.statusCode == HttpStatus.ok) {
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
   Future<DataState<bool>> updateSettingStok({
     required int idShop,
     required int idProduct,

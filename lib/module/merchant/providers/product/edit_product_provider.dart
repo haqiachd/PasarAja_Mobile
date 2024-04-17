@@ -29,22 +29,19 @@ class EditProductProvider extends ChangeNotifier {
   TextEditingController priceCont = TextEditingController();
 
   int _idProductSelected = 0;
+  int get idProductSelected => _idProductSelected;
 
   // list unit
   List<String> _units = [];
-
   List<String> get units => _units;
 
   // list category
   List<ChooseCategoriesModel> _categories = [];
-
   List<ChooseCategoriesModel> get categories => _categories;
 
   // stok
   bool _isAvailable = false;
-
   bool get isAvailable => _isAvailable;
-
   set isAvailable(bool value) {
     _isAvailable = value;
     notifyListeners();
@@ -52,9 +49,7 @@ class EditProductProvider extends ChangeNotifier {
 
   // rekomendasi
   bool _isRecommended = false;
-
   bool get isRecommended => _isRecommended;
-
   set isRecommended(bool value) {
     _isRecommended = value;
     if (_isRecommended) {
@@ -65,9 +60,7 @@ class EditProductProvider extends ChangeNotifier {
 
   // visibilty
   bool _isShown = false;
-
   bool get isShown => _isShown;
-
   set isShown(bool value) {
     _isShown = value;
     if (!_isShown) {
@@ -78,9 +71,7 @@ class EditProductProvider extends ChangeNotifier {
 
   // button state status
   int _buttonState = ActionButton.stateDisabledButton;
-
   int get buttonState => _buttonState;
-
   set buttonState(int n) {
     _buttonState = n;
     notifyListeners();
