@@ -3,8 +3,12 @@ import 'dart:io';
 import 'package:d_method/d_method.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pasaraja_mobile/core/entities/choose_photo.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 import 'package:vibration/vibration.dart';
 
@@ -84,17 +88,82 @@ class PasarAjaUtils {
   }
 
   static Future<ChoosePhotoEntity?>? pickPhoto(ImageSource imageSource) async {
-    final returnImage = await ImagePicker().pickImage(source: imageSource);
-    DMethod.log('from photo');
-    if (returnImage != null) {
-      return ChoosePhotoEntity(
-        image: File(returnImage.path).readAsBytesSync(),
-        imageSelected: File(
-          returnImage.path,
-        ),
+    // request permission
+    Map<Permission, PermissionStatus> status = await [
+      Permission.storage,
+      Permission.camera,
+    ].request();
+
+    // cek permission
+    if (status[Permission.storage]!.isGranted &&
+        status[Permission.camera]!.isGranted) {
+      // choose photo
+      final returnImage = await ImagePicker().pickImage(
+        source: imageSource,
       );
+
+      // get photo
+      DMethod.log('from photo');
+      if (returnImage != null) {
+        return ChoosePhotoEntity(
+          image: File(returnImage.path).readAsBytesSync(),
+          imageSelected: File(
+            returnImage.path,
+          ),
+        );
+      } else {
+        return null;
+      }
     } else {
-      return null;
+      Fluttertoast.showToast(msg: 'Permission dibutuhkan');
     }
+    return null;
+  }
+
+  static Future<File?>? cropImage(
+    File imgFile, {
+    CropStyle cropStyle = CropStyle.rectangle,
+  }) async {
+    // crop image
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: imgFile.path,
+      compressFormat: ImageCompressFormat.png,
+      compressQuality: 70,
+      cropStyle: cropStyle,
+      aspectRatioPresets: Platform.isAndroid
+          ? [
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio3x2,
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.ratio4x3,
+              CropAspectRatioPreset.ratio16x9,
+            ]
+          : [
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.ratio3x2,
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.ratio4x3,
+              CropAspectRatioPreset.ratio16x9,
+              CropAspectRatioPreset.ratio5x3,
+              CropAspectRatioPreset.ratio5x4,
+              CropAspectRatioPreset.ratio7x5,
+              CropAspectRatioPreset.ratio16x9,
+            ],
+      uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: 'Sesuaikan Gambar',
+          toolbarWidgetColor: Colors.black,
+          initAspectRatio: CropAspectRatioPreset.original,
+          toolbarColor: Colors.white,
+          lockAspectRatio: false,
+        ),
+        IOSUiSettings(title: 'Sesuaikan Gambar'),
+      ],
+    );
+
+    if (croppedFile != null) {
+      return File(croppedFile.path);
+    }
+    return null;
   }
 }
