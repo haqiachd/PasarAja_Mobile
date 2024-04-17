@@ -26,6 +26,7 @@ import 'package:provider/provider.dart';
 
 class DetailProductPage extends StatefulWidget {
   final int idProduct;
+
   const DetailProductPage({
     super.key,
     required this.idProduct,
@@ -272,16 +273,24 @@ class _DetailProductPageState extends State<DetailProductPage> {
   }
 
   _buttonEdit() {
-    return FloatingActionButton(
-      onPressed: () {
-        Get.to(const EditProductPage());
+    return Consumer<DetailProductProvider>(
+      builder: (context, provider, child) {
+        return FloatingActionButton(
+          onPressed: () {
+            Get.to(
+              EditProductPage(
+                prodDetail: provider.detailProd,
+              ),
+            );
+          },
+          heroTag: 'editprod',
+          backgroundColor: Colors.blueAccent[100],
+          child: const Icon(
+            Icons.edit,
+            color: Colors.white,
+          ),
+        );
       },
-      heroTag: 'editprod',
-      backgroundColor: Colors.blueAccent[100],
-      child: const Icon(
-        Icons.edit,
-        color: Colors.white,
-      ),
     );
   }
 

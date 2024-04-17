@@ -49,6 +49,7 @@ class MyApp extends StatelessWidget {
         // merchant
         ChangeNotifierProvider(create: (context) => ProductProvider()),
         ChangeNotifierProvider(create: (context) => AddProductProvider()),
+        ChangeNotifierProvider(create: (context) => EditProductProvider()),
         ChangeNotifierProvider(create: (context) => BestSellingProvider()),
         ChangeNotifierProvider(create: (context) => ReviewProvider()),
         ChangeNotifierProvider(create: (context) => ComplainProvider()),
@@ -108,6 +109,10 @@ class MyApp extends StatelessWidget {
               backgroundColor: MaterialStatePropertyAll(PasarAjaColor.red2),
               foregroundColor: MaterialStatePropertyAll(PasarAjaColor.white),
             ),
+          ),
+          bottomSheetTheme: const BottomSheetThemeData(
+            backgroundColor: Colors.white,
+            surfaceTintColor: Colors.white,
           ),
         ),
         debugShowCheckedModeBanner: false,
