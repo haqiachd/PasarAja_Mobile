@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:d_method/d_method.dart';
 import 'package:dio/dio.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
@@ -80,10 +81,70 @@ class ProductController {
     }
   }
 
-  Future<DataState<bool>> updateeProduct({
+  Future<DataState<bool>> updateProduct({
     required int idShop,
+    required int idProduct,
+    required int idCategory,
+    required String productName,
+    required String description,
+    required String unit,
+    required int sellingUnit,
+    required int price,
+    required ProductSettingsModel settings,
   }) async {
-    return const DataSuccess(true);
+    DMethod.log("\n\n");
+    DMethod.log("ID Shop : $idShop");
+    DMethod.log("ID Product : $idProduct");
+    DMethod.log('Product Name : $productName');
+    DMethod.log("Category Prod : $idCategory");
+    DMethod.log("Description : $description");
+    DMethod.log("Unit Jual : $unit");
+    DMethod.log("Satuan Jual : $sellingUnit");
+    DMethod.log("Harga Jual : $price");
+    DMethod.log("Settings : ${settings.toJson()}");
+
+    try {
+      final response = await _dio.post(
+        '$_apiRoute/update/data',
+        data: {
+          "id_shop": idShop,
+          "id_product": idProduct,
+          "id_cp_prod": idCategory,
+          "product_name": productName,
+          "description": description,
+          "unit": unit,
+          "selling_unit": sellingUnit,
+          "price": price,
+          "settings": '${settings.toJson()}',
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.notFound ||
+                status == HttpStatus.methodNotAllowed;
+          },
+        ),
+      );
+
+      final Map<String, dynamic> payload = response.data;
+      // DMethod.log("payload : ${response.statusCode} -> $payload");
+
+      if (response.statusCode == HttpStatus.ok) {
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
   }
 
   Future<DataState<bool>> updateSettingStok({
@@ -1132,15 +1193,15 @@ void main(List<String> args) async {
 
   final dataState = await productController.allProducts(idShop: 1);
 
-  if(dataState is DataSuccess){
+  if (dataState is DataSuccess) {
     print('data berhasil');
     List<ProductModel> prods = dataState.data as List<ProductModel>;
-    for(var prod in prods){
+    for (var prod in prods) {
       print('name : ${prod.productName}');
     }
   }
 
-  if(dataState is DataFailed){
+  if (dataState is DataFailed) {
     print('data gagal : ${dataState.error?.error}');
   }
 }
