@@ -34,7 +34,9 @@ dependencies:
   flutter_session_jwt: ^0.0.6
   flutter_native_splash: ^2.2.4
   logger: ^2.0.2+1
+  permission_handler: ^11.3.1
   image_picker: ^1.0.7
+  image_cropper: ^5.0.1
   shared_preferences: ^2.2.2
   fluttertoast: ^8.0.8
   d_input: ^0.1.2
