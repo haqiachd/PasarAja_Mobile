@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/constants/local_data.dart';
 import 'package:pasaraja_mobile/core/entities/choose_photo.dart';
+import 'package:pasaraja_mobile/core/services/user_services.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/core/utils/messages.dart';
@@ -260,7 +261,7 @@ class AddProductProvider extends ChangeNotifier {
       DMethod.log("VALIDATE SUCCESS");
 
       // get id shop from preferences
-      int idShop = 1;
+      final int idShop = await PasarAjaUserService.getShopId();
 
       // call controller
       final dataState = await _controller.addProduct(

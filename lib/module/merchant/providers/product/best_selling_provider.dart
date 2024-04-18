@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pasaraja_mobile/core/services/user_services.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/module/merchant/controllers/product_controller.dart';
@@ -22,9 +23,12 @@ class BestSellingProvider extends ChangeNotifier {
       state = const OnLoadingState();
       notifyListeners();
 
+      // get id shop from preferences
+      final int idShop = await PasarAjaUserService.getShopId();
+
       // call controller
       final dataState = await _prodController.bestSellingPage(
-        idShop: 1,
+        idShop: idShop,
       );
 
       // response is successful

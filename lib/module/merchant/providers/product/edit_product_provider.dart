@@ -9,6 +9,7 @@ import 'package:pasaraja_mobile/core/constants/local_data.dart';
 import 'package:pasaraja_mobile/core/entities/choose_photo.dart';
 import 'package:pasaraja_mobile/core/services/user_services.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
+import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
@@ -30,6 +31,8 @@ class EditProductProvider extends ChangeNotifier {
   TextEditingController descCont = TextEditingController();
   TextEditingController sellingCont = TextEditingController();
   TextEditingController priceCont = TextEditingController();
+
+  ProviderState state = const OnInitState();
 
   int _idProductSelected = 0;
 
@@ -293,6 +296,10 @@ class EditProductProvider extends ChangeNotifier {
 
   Future<void> setData(ProductDetailModel detailProd) async {
     try {
+      // set loading state
+      state = const OnLoadingState();
+      notifyListeners();
+
       // get unit jual
       DataState dataState = await _controller.getUnits();
       if (dataState is DataSuccess) {
@@ -309,10 +316,17 @@ class EditProductProvider extends ChangeNotifier {
       if (dataState is DataSuccess) {
         _categories = dataState.data as List<ChooseCategoriesModel>;
       }
-
       if (dataState is DataFailed) {
         Fluttertoast.showToast(msg: "Gagal mendapatkan data kategori produk");
+        // set failure state
+        state = OnFailureState(dioException: dataState.error);
+        notifyListeners();
+        return;
       }
+
+      // set success state
+      state = const OnSuccessState();
+      notifyListeners();
 
       // save data to controller
       _idProductSelected = detailProd.idProduct ?? 0;
