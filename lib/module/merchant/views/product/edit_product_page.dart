@@ -15,6 +15,10 @@ import 'package:pasaraja_mobile/config/widgets/app_textarea.dart';
 import 'package:pasaraja_mobile/config/widgets/app_textfield.dart';
 import 'package:pasaraja_mobile/config/widgets/image_network_error.dart';
 import 'package:pasaraja_mobile/config/widgets/image_network_placeholder.dart';
+import 'package:pasaraja_mobile/config/widgets/loading_indicator.dart';
+import 'package:pasaraja_mobile/config/widgets/page_error_message.dart';
+import 'package:pasaraja_mobile/config/widgets/something_wrong.dart';
+import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product/choose_categories_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product/product_detail_page_model.dart';
@@ -57,37 +61,59 @@ class _EditProductPageState extends State<EditProductPage> {
       appBar: AppBar(
         title: const Text('Edit Page'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15),
-          child: Column(
-            children: [
-              const SizedBox(height: 15),
-              _buildPhotoViewer(context),
-              const SizedBox(height: 30),
-              _buildInputNamaProduk(),
-              const SizedBox(height: 15),
-              _buildCategoryProd(context),
-              const SizedBox(height: 15),
-              _buildInputDeskripsi(),
-              const SizedBox(height: 15),
-              _buildInputUnitJual(),
-              const SizedBox(height: 15),
-              _buildSatuanJual(),
-              const SizedBox(height: 15),
-              _buildInputHargaJual(),
-              const SizedBox(height: 30),
-              _buildSwitcherRecommended(),
-              const SizedBox(height: 30),
-              _buildSwitcherShown(),
-              const SizedBox(height: 30),
-              _buildSwitcherStock(),
-              const SizedBox(height: 50),
-              _buttonSave(),
-              const SizedBox(height: 50),
-            ],
-          ),
-        ),
+      body: Consumer<EditProductProvider>(
+        builder: (context, provider, child) {
+          // dalam loading
+          if (provider.state is OnLoadingState) {
+            return const LoadingIndicator();
+          }
+
+          // jika data error
+          if (provider.state is OnFailureState) {
+            return PageErrorMessage(
+              onFailureState: provider.state as OnFailureState,
+            );
+          }
+
+          // jika data success
+          if (provider.state is OnSuccessState) {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 15),
+                    _buildPhotoViewer(context),
+                    const SizedBox(height: 30),
+                    _buildInputNamaProduk(),
+                    const SizedBox(height: 15),
+                    _buildCategoryProd(context),
+                    const SizedBox(height: 15),
+                    _buildInputDeskripsi(),
+                    const SizedBox(height: 15),
+                    _buildInputUnitJual(),
+                    const SizedBox(height: 15),
+                    _buildSatuanJual(),
+                    const SizedBox(height: 15),
+                    _buildInputHargaJual(),
+                    const SizedBox(height: 30),
+                    _buildSwitcherRecommended(),
+                    const SizedBox(height: 30),
+                    _buildSwitcherShown(),
+                    const SizedBox(height: 30),
+                    _buildSwitcherStock(),
+                    const SizedBox(height: 50),
+                    _buttonSave(),
+                    const SizedBox(height: 50),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          // something wrong
+          return const SomethingWrong();
+        },
       ),
     );
   }

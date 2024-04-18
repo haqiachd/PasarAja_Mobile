@@ -89,16 +89,18 @@ class DetailListPageState extends State<DetailListPage> {
         }
 
         if (value.state is OnSuccessState) {
-          return Column(
-            children: [
-              if (value.reviews.isNotEmpty)
-                ...value.reviews.map(
-                  (e) => ItemUlasan(
-                    review: e,
-                    showProduct: false,
-                  ),
-                )
-            ],
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                if (value.reviews.isNotEmpty)
+                  ...value.reviews.map(
+                    (e) => ItemUlasan(
+                      review: e,
+                      showProduct: false,
+                    ),
+                  )
+              ],
+            ),
           );
         }
 
@@ -121,15 +123,17 @@ class DetailListPageState extends State<DetailListPage> {
         }
 
         if (value.state is OnSuccessState) {
-          return Column(
-            children: [
-              if (value.complains.isNotEmpty)
-                ...value.complains.map(
-                  (e) => ItemComplain(
-                    complain: e,
-                  ),
-                )
-            ],
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                if (value.complains.isNotEmpty)
+                  ...value.complains.map(
+                    (e) => ItemComplain(
+                      complain: e,
+                    ),
+                  )
+              ],
+            ),
           );
         }
 
@@ -152,15 +156,17 @@ class DetailListPageState extends State<DetailListPage> {
         }
 
         if (value.state is OnSuccessState) {
-          return Column(
-            children: [
-              if (value.history.isNotEmpty)
-                ...value.history.map(
-                  (e) => ItemHistory(
-                    history: e,
-                  ),
-                )
-            ],
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                if (value.history.isNotEmpty)
+                  ...value.history.map(
+                    (e) => ItemHistory(
+                      history: e,
+                    ),
+                  )
+              ],
+            ),
           );
         }
 
