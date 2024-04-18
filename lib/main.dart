@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ProductProvider()),
         ChangeNotifierProvider(create: (context) => AddProductProvider()),
         ChangeNotifierProvider(create: (context) => EditProductProvider()),
+        ChangeNotifierProvider(create: (context) => UpdatePhotoProvider()),
         ChangeNotifierProvider(create: (context) => BestSellingProvider()),
         ChangeNotifierProvider(create: (context) => ReviewProvider()),
         ChangeNotifierProvider(create: (context) => ComplainProvider()),

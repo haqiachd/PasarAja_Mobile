@@ -158,7 +158,7 @@ class ProductController {
         {
           "id_shop": idShop,
           "id_product": idProduct,
-          "photo": photo,
+          "photo": await MultipartFile.fromFile(photo.path, filename: 'product.png'),
         },
       );
 

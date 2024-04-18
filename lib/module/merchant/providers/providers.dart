@@ -9,6 +9,7 @@ export 'product/complain_provider.dart';
 export 'product/detail_list_provider.dart';
 export 'product/detail_product_provider.dart';
 export 'product/edit_product_provider.dart';
+export 'product/update_photo_provider.dart';
 export 'product/hidden_provider.dart';
 export 'product/product_provider.dart';
 export 'product/recommended_provider.dart';

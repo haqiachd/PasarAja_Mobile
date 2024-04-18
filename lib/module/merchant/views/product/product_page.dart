@@ -6,10 +6,12 @@ import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
 import 'package:pasaraja_mobile/config/widgets/app_bar.dart';
 import 'package:pasaraja_mobile/config/widgets/loading_indicator.dart';
+import 'package:pasaraja_mobile/config/widgets/merchant_sub_appbar.dart';
 import 'package:pasaraja_mobile/config/widgets/page_error_message.dart';
 import 'package:pasaraja_mobile/config/widgets/something_wrong.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/appbar.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product_category_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product_model.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/product_provider.dart';
@@ -58,52 +60,40 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: PasarAjaColor.white,
-      body: Stack(
-        children: [
-          const Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: PasarAjaAppbar(
-              title: 'Produk',
-            ),
-          ),
-          Positioned(
-            top: 97,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: RefreshIndicator(
-              onRefresh: () async {
-                await PasarAjaConstant.onRefreshDelay;
-                _fetchData();
-              },
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const ProductFeature(),
-                      const SizedBox(height: 10),
-                      Text(
-                        'Ketegori Produk',
-                        style: PasarAjaTypography.sfpdBold.copyWith(
-                          fontSize: 20,
-                        ),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(97 - MediaQuery.of(context).padding.top),
+        child: const PasarAjaAppbar(
+          title: 'Produk',
+        ),
+      ),
+      body: RefreshIndicator(
+            onRefresh: () async {
+              await PasarAjaConstant.onRefreshDelay;
+              _fetchData();
+            },
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const ProductFeature(),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Ketegori Produk',
+                      style: PasarAjaTypography.sfpdBold.copyWith(
+                        fontSize: 20,
                       ),
-                      const SizedBox(height: 10),
-                      _listCategory(),
-                      _listProduct(),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 10),
+                    _listCategory(),
+                    _listProduct(),
+                  ],
                 ),
               ),
             ),
           ),
-        ],
-      ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: FloatingActionButton(
