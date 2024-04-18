@@ -3,6 +3,7 @@ import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
 import 'package:pasaraja_mobile/config/widgets/action_button.dart';
@@ -14,11 +15,14 @@ import 'package:pasaraja_mobile/config/widgets/app_textarea.dart';
 import 'package:pasaraja_mobile/config/widgets/app_textfield.dart';
 import 'package:pasaraja_mobile/config/widgets/image_network_error.dart';
 import 'package:pasaraja_mobile/config/widgets/image_network_placeholder.dart';
+import 'package:pasaraja_mobile/core/entities/choose_photo.dart';
+import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product/choose_categories_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product/product_detail_page_model.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/edit_product_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/views/product/choose_photo_page.dart';
+import 'package:pasaraja_mobile/module/merchant/providers/product/update_photo_provider.dart';
+import 'package:pasaraja_mobile/module/merchant/views/product/update_photo_page.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/switcher_setting.dart';
 import 'package:provider/provider.dart';
 
@@ -159,12 +163,7 @@ class _EditProductPageState extends State<EditProductPage> {
             height: 130,
             child: InkWell(
               onTap: () {
-                Get.to(
-                  ChoosePhotoPage(
-                    idProduct: prov.idProductSelected,
-                  ),
-                  transition: Transition.cupertino,
-                );
+                _showSheet(context);
               },
               child: photoCont.text.isNotEmpty
                   ? ClipRRect(
@@ -193,6 +192,65 @@ class _EditProductPageState extends State<EditProductPage> {
                       ),
                     ),
             ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<dynamic> _showSheet(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 150,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildPickPhotoFromCamera(),
+              const SizedBox(width: 15),
+              _buildPickPhotoFromGalery(),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  _buildPickPhotoFromGalery() {
+    return Consumer<EditProductProvider>(
+      builder: (context, prov, child) {
+        return FloatingActionButton(
+          onPressed: () async {
+            Get.back();
+            await prov.photoPicker(ImageSource.gallery);
+          },
+          backgroundColor: Colors.purple,
+          heroTag: 'galery',
+          child: const Icon(
+            Icons.image_outlined,
+            color: Colors.white,
+          ),
+        );
+      },
+    );
+  }
+
+  _buildPickPhotoFromCamera() {
+    return Consumer<EditProductProvider>(
+      builder: (context, prov, child) {
+        return FloatingActionButton(
+          onPressed: () async {
+            Get.back();
+            await prov.photoPicker(ImageSource.camera);
+          },
+          backgroundColor: Colors.black,
+          heroTag: 'camera',
+          child: const Icon(
+            Icons.camera_alt_outlined,
+            color: Colors.white,
           ),
         );
       },

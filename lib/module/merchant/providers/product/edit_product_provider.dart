@@ -2,9 +2,11 @@ import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pasaraja_mobile/config/widgets/action_button.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/constants/local_data.dart';
+import 'package:pasaraja_mobile/core/entities/choose_photo.dart';
 import 'package:pasaraja_mobile/core/services/user_services.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/messages.dart';
@@ -14,6 +16,7 @@ import 'package:pasaraja_mobile/module/merchant/controllers/product_controller.d
 import 'package:pasaraja_mobile/module/merchant/models/product/choose_categories_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product/product_detail_page_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product_settings_model.dart';
+import 'package:pasaraja_mobile/module/merchant/views/product/update_photo_page.dart';
 
 class EditProductProvider extends ChangeNotifier {
   final _controller = ProductController();
@@ -29,19 +32,24 @@ class EditProductProvider extends ChangeNotifier {
   TextEditingController priceCont = TextEditingController();
 
   int _idProductSelected = 0;
+
   int get idProductSelected => _idProductSelected;
 
   // list unit
   List<String> _units = [];
+
   List<String> get units => _units;
 
   // list category
   List<ChooseCategoriesModel> _categories = [];
+
   List<ChooseCategoriesModel> get categories => _categories;
 
   // stok
   bool _isAvailable = false;
+
   bool get isAvailable => _isAvailable;
+
   set isAvailable(bool value) {
     _isAvailable = value;
     notifyListeners();
@@ -49,7 +57,9 @@ class EditProductProvider extends ChangeNotifier {
 
   // rekomendasi
   bool _isRecommended = false;
+
   bool get isRecommended => _isRecommended;
+
   set isRecommended(bool value) {
     _isRecommended = value;
     if (_isRecommended) {
@@ -60,7 +70,9 @@ class EditProductProvider extends ChangeNotifier {
 
   // visibilty
   bool _isShown = false;
+
   bool get isShown => _isShown;
+
   set isShown(bool value) {
     _isShown = value;
     if (!_isShown) {
@@ -71,9 +83,24 @@ class EditProductProvider extends ChangeNotifier {
 
   // button state status
   int _buttonState = ActionButton.stateDisabledButton;
+
   int get buttonState => _buttonState;
+
   set buttonState(int n) {
     _buttonState = n;
+    notifyListeners();
+  }
+
+  // file photo product
+  ChoosePhotoEntity _photo = const ChoosePhotoEntity(
+    image: null,
+    imageSelected: null,
+  );
+
+  ChoosePhotoEntity get photo => _photo;
+
+  set photo(ChoosePhotoEntity p) {
+    _photo = p;
     notifyListeners();
   }
 
@@ -239,6 +266,27 @@ class EditProductProvider extends ChangeNotifier {
       }
     } catch (ex) {
       Fluttertoast.showToast(msg: ex.toString());
+    }
+  }
+
+  Future<void> photoPicker(ImageSource imageSource) async {
+    // choose photo
+    _photo = await PasarAjaUtils.pickPhoto(imageSource) as ChoosePhotoEntity;
+
+    // jika user memilih foto
+    if (_photo.imageSelected != null) {
+      // crop foto
+      final crop = await PasarAjaUtils.cropImage(
+        _photo.imageSelected!,
+      );
+      // buka halaman update photo
+      Get.to(
+        UpdatePhotoPage(
+          idProduct: _idProductSelected,
+          imageFile: crop!,
+        ),
+        transition: Transition.cupertino,
+      );
     }
   }
 
