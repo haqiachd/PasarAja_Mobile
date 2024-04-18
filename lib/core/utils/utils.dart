@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:d_method/d_method.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,6 +13,7 @@ import 'package:pasaraja_mobile/core/entities/choose_photo.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 import 'package:vibration/vibration.dart';
+import 'package:image/image.dart' as img;
 
 class PasarAjaUtils {
   static final RegExp regexNum = RegExp(r'[0-9]');
@@ -165,5 +168,44 @@ class PasarAjaUtils {
       return File(croppedFile.path);
     }
     return null;
+  }
+
+  static Future<File?> compressImage(
+    File imageFile, {
+    int targetSizeKB = 512,
+  }) async {
+    try {
+      List<int> imageBytes = await imageFile.readAsBytes();
+      int fileSizeKB = imageBytes.length ~/ 1024;
+
+      // cek apakah gambar size nya < target size kb atau tidak
+      if (fileSizeKB <= targetSizeKB) {
+        return imageFile;
+      }
+
+      // kalkulasi ukuran compress
+      double quality = (targetSizeKB / fileSizeKB).clamp(0.1, 1.0);
+
+      // Convert imageBytes to Uint8List
+      Uint8List uint8list = Uint8List.fromList(imageBytes);
+
+      // compress gambar
+      List<int> compressedBytes = await FlutterImageCompress.compressWithList(
+        uint8list,
+        minHeight: 1920,
+        minWidth: 1080,
+        quality: (quality * 100).toInt(),
+      );
+
+      // simpan gambar hasil compress
+      String newPath = imageFile.path.replaceAll('.png', '_compressed.png');
+      File compressedImageFile = File(newPath);
+      await compressedImageFile.writeAsBytes(compressedBytes);
+
+      return compressedImageFile;
+    } catch (e) {
+      DMethod.log('Error compressing image: $e');
+      return null;
+    }
   }
 }
