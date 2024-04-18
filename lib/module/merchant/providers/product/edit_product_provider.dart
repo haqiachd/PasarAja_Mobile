@@ -16,7 +16,7 @@ import 'package:pasaraja_mobile/module/merchant/controllers/product_controller.d
 import 'package:pasaraja_mobile/module/merchant/models/product/choose_categories_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product/product_detail_page_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product_settings_model.dart';
-import 'package:pasaraja_mobile/module/merchant/views/product/update_photo_page.dart';
+import 'package:pasaraja_mobile/module/merchant/views/product/crop_photo_page.dart';
 
 class EditProductProvider extends ChangeNotifier {
   final _controller = ProductController();
@@ -281,7 +281,7 @@ class EditProductProvider extends ChangeNotifier {
       );
       // buka halaman update photo
       Get.to(
-        UpdatePhotoPage(
+        CropPhotoPage(
           idProduct: _idProductSelected,
           imageFile: crop!,
         ),

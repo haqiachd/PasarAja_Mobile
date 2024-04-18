@@ -15,14 +15,10 @@ import 'package:pasaraja_mobile/config/widgets/app_textarea.dart';
 import 'package:pasaraja_mobile/config/widgets/app_textfield.dart';
 import 'package:pasaraja_mobile/config/widgets/image_network_error.dart';
 import 'package:pasaraja_mobile/config/widgets/image_network_placeholder.dart';
-import 'package:pasaraja_mobile/core/entities/choose_photo.dart';
-import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product/choose_categories_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product/product_detail_page_model.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/edit_product_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/providers/product/update_photo_provider.dart';
-import 'package:pasaraja_mobile/module/merchant/views/product/update_photo_page.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/switcher_setting.dart';
 import 'package:provider/provider.dart';
 
