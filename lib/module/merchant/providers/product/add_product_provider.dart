@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/constants/local_data.dart';
 import 'package:pasaraja_mobile/core/entities/choose_photo.dart';
@@ -14,6 +15,7 @@ import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/merchant/controllers/product_controller.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product_settings_model.dart';
 import 'package:pasaraja_mobile/config/widgets/action_button.dart';
+import 'package:pasaraja_mobile/module/merchant/views/product/crop_photo_page.dart';
 
 class AddProductProvider extends ChangeNotifier {
   // controller, validation, state
@@ -30,6 +32,7 @@ class AddProductProvider extends ChangeNotifier {
 
   // list unit
   List<String> _units = [];
+
   List<String> get units => _units;
 
   // file photo product
@@ -37,7 +40,9 @@ class AddProductProvider extends ChangeNotifier {
     image: null,
     imageSelected: null,
   );
+
   ChoosePhotoEntity get photo => _photo;
+
   set photo(ChoosePhotoEntity p) {
     _photo = p;
     notifyListeners();
@@ -45,7 +50,9 @@ class AddProductProvider extends ChangeNotifier {
 
   // button state status
   int _buttonState = 0;
+
   int get buttonState => _buttonState;
+
   set buttonState(int n) {
     _buttonState = n;
     notifyListeners();
@@ -53,7 +60,9 @@ class AddProductProvider extends ChangeNotifier {
 
   // error message
   Object _message = '';
+
   Object get message => _message;
+
   set message(Object m) {
     _message = m;
     notifyListeners();
@@ -61,7 +70,9 @@ class AddProductProvider extends ChangeNotifier {
 
   // error message
   String _selectedUnit = '';
+
   String get selectedUnit => _selectedUnit;
+
   set selectedUnit(String m) {
     _selectedUnit = m;
     notifyListeners();
@@ -69,7 +80,9 @@ class AddProductProvider extends ChangeNotifier {
 
   // rekomendasi
   bool _isRecommended = false;
+
   bool get isRecommended => _isRecommended;
+
   set isRecommended(bool value) {
     _isRecommended = value;
     if (_isRecommended) {
@@ -80,7 +93,9 @@ class AddProductProvider extends ChangeNotifier {
 
   // visibilty
   bool _isShown = true;
+
   bool get isShown => _isShown;
+
   set isShown(bool value) {
     _isShown = value;
     if (!_isShown) {
@@ -158,6 +173,36 @@ class AddProductProvider extends ChangeNotifier {
       _buttonState = ActionButton.stateEnabledButton;
     }
     notifyListeners();
+  }
+
+  Future<void> photoPicker(
+    ImageSource imageSource,
+    int idCategory,
+    String categoryName,
+  ) async {
+    // choose photo
+    _photo = await PasarAjaUtils.pickPhoto(imageSource) as ChoosePhotoEntity;
+    notifyListeners();
+
+    // jika user memilih foto
+    if (_photo.imageSelected != null) {
+      // crop foto
+      final crop = await PasarAjaUtils.cropImage(
+        _photo.imageSelected!,
+      );
+
+      // buka halaman add photo
+      Get.off(
+        CropPhotoPage(
+          idProduct: 0,
+          imageFile: crop!,
+          type: CropPhotoPage.fromAddProduct,
+          idCategory: idCategory,
+          categoryName: categoryName,
+        ),
+        transition: Transition.cupertino,
+      );
+    }
   }
 
   Future<void> addProduct({

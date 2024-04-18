@@ -32,10 +32,12 @@ class AddProductPage extends StatefulWidget {
     super.key,
     required this.idCategory,
     required this.categoryName,
+    this.photoEntity,
   });
 
   final int idCategory;
   final String categoryName;
+  final ChoosePhotoEntity? photoEntity;
 
   @override
   State<AddProductPage> createState() => _DetailProductPageState();
@@ -50,13 +52,22 @@ class _DetailProductPageState extends State<AddProductPage> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<AddProductProvider>(
-        context,
-        listen: false,
-      ).resetData();
-    });
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        if (widget.photoEntity != null) {
+          Provider.of<AddProductProvider>(
+            context,
+            listen: false,
+          ).photo = widget.photoEntity!;
+        } else {
+          Provider.of<AddProductProvider>(
+            context,
+            listen: false,
+          ).resetData();
+        }
+      },
+    );
   }
 
   @override
@@ -157,10 +168,12 @@ class _DetailProductPageState extends State<AddProductPage> {
       builder: (context, prov, child) {
         return FloatingActionButton(
           onPressed: () async {
-            prov.photo = await PasarAjaUtils.pickPhoto(
-              ImageSource.gallery,
-            ) as ChoosePhotoEntity;
             Get.back();
+            await prov.photoPicker(
+              ImageSource.gallery,
+              widget.idCategory,
+              widget.categoryName,
+            );
           },
           backgroundColor: Colors.purple,
           heroTag: 'galery',
@@ -178,11 +191,12 @@ class _DetailProductPageState extends State<AddProductPage> {
       builder: (context, prov, child) {
         return FloatingActionButton(
           onPressed: () async {
-            prov.photo = await PasarAjaUtils.pickPhoto(
-              ImageSource.camera,
-            ) as ChoosePhotoEntity;
-
             Get.back();
+            await prov.photoPicker(
+              ImageSource.camera,
+              widget.idCategory,
+              widget.categoryName,
+            );
           },
           backgroundColor: Colors.black,
           heroTag: 'camera',

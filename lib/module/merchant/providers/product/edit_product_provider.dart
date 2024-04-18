@@ -284,6 +284,7 @@ class EditProductProvider extends ChangeNotifier {
         CropPhotoPage(
           idProduct: _idProductSelected,
           imageFile: crop!,
+          type: CropPhotoPage.fromEditProduct,
         ),
         transition: Transition.cupertino,
       );

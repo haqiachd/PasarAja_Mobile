@@ -13,6 +13,8 @@ import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/module/merchant/controllers/product_controller.dart';
+import 'package:pasaraja_mobile/module/merchant/providers/product/add_product_provider.dart';
+import 'package:pasaraja_mobile/module/merchant/views/product/add_product_page.dart';
 
 class CropPhotoProvider extends ChangeNotifier {
   final _controller = ProductController();
@@ -23,6 +25,24 @@ class CropPhotoProvider extends ChangeNotifier {
 
   set idProduct(int i) {
     _idProduct = i;
+    notifyListeners();
+  }
+
+  int _idCategory = 0;
+
+  int get idCategory => _idCategory;
+
+  set idCategory(int i) {
+    _idCategory = i;
+    notifyListeners();
+  }
+
+  String _categoryName = '';
+
+  String get categoryName => _categoryName;
+
+  set categoryName(String i) {
+    _categoryName = i;
     notifyListeners();
   }
 
@@ -101,6 +121,48 @@ class CropPhotoProvider extends ChangeNotifier {
           dataState.error?.error.toString() ?? PasarAjaConstant.unknownError,
         );
       }
+    } else {
+      Fluttertoast.showToast(msg: PasarAjaConstant.unknownError);
+    }
+  }
+
+  Future<void> justCropPhoto() async {
+    if (_imageFile.existsSync()) {
+      // cek jika ukuran gambar > 512
+      double fileSizeInBytes = _imageFile.lengthSync() / 1024;
+
+      if (fileSizeInBytes > 512) {
+        // compress gambar
+
+        final imgCompress = await PasarAjaUtils.compressImage(_imageFile);
+        // jika compress berhasil
+        if (imgCompress != null) {
+          _imageFile = imgCompress;
+          double afterCompress = _imageFile.lengthSync() / 1024;
+          // cek apakah file hasil compress sizenya masih > 512
+          if (afterCompress > 512) {
+            DMethod.log('compress ulang');
+            uploadProduct();
+          }
+        }
+      }
+
+      // save photo ke entity
+      final photoEntity = ChoosePhotoEntity(
+        image: _imageFile.readAsBytesSync(),
+        imageSelected: _imageFile,
+      );
+
+      Get.back();
+
+      // kembali ke add product
+      Get.to(
+        AddProductPage(
+          idCategory: _idCategory,
+          categoryName: _categoryName,
+          photoEntity: photoEntity,
+        ),
+      );
     } else {
       Fluttertoast.showToast(msg: PasarAjaConstant.unknownError);
     }

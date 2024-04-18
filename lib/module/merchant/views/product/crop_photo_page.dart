@@ -13,10 +13,19 @@ class CropPhotoPage extends StatefulWidget {
     Key? key,
     required this.idProduct,
     required this.imageFile,
+    required this.type,
+    this.idCategory = 0,
+    this.categoryName = '',
   }) : super(key: key);
 
   final int idProduct;
   final File imageFile;
+  final int type;
+  final int idCategory;
+  final String categoryName;
+
+  static int fromAddProduct = 1;
+  static int fromEditProduct = 2;
 
   @override
   State<CropPhotoPage> createState() => _CropPhotoPageState();
@@ -29,6 +38,8 @@ class _CropPhotoPageState extends State<CropPhotoPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context.read<CropPhotoProvider>().idProduct = widget.idProduct;
       context.read<CropPhotoProvider>().imageFile = widget.imageFile;
+      context.read<CropPhotoProvider>().idCategory = widget.idCategory;
+      context.read<CropPhotoProvider>().categoryName = widget.categoryName;
     });
   }
 
@@ -65,7 +76,7 @@ class _CropPhotoPageState extends State<CropPhotoPage> {
     return Consumer<CropPhotoProvider>(
       builder: (context, provider, child) {
         return ActionButton(
-          onPressed: () async{
+          onPressed: () async {
             await _showSheet(context);
           },
           title: 'Ganti Foto',
@@ -79,10 +90,14 @@ class _CropPhotoPageState extends State<CropPhotoPage> {
     return Consumer<CropPhotoProvider>(
       builder: (context, provider, child) {
         return ActionButton(
-          onPressed: () async{
-            await provider.uploadProduct();
+          onPressed: () async {
+            widget.type == CropPhotoPage.fromEditProduct
+                ? await provider.uploadProduct()
+                : await provider.justCropPhoto();
           },
-          title: 'Upload',
+          title: widget.type == CropPhotoPage.fromEditProduct
+              ? "Upload"
+              : "Simpan",
           state: ActionButton.stateEnabledButton,
         );
       },
@@ -175,5 +190,4 @@ class _CropPhotoPageState extends State<CropPhotoPage> {
       },
     );
   }
-
 }
