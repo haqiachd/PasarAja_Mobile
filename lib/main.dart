@@ -4,10 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/firebase_options.dart';
-import 'package:pasaraja_mobile/module/auth/providers/providers.dart';
 import 'package:pasaraja_mobile/core/services/google_signin_services.dart';
+import 'package:pasaraja_mobile/module/auth/providers/providers.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/providers.dart';
 import 'package:pasaraja_mobile/splash_screen.dart';
+import 'package:pasaraja_mobile/syam.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -47,6 +48,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => VerifyOtpProvider()),
         ChangeNotifierProvider(create: (context) => VerifyPinProvider()),
         // merchant
+        ChangeNotifierProvider(create: (context) => MyShopProvider()),
+        ChangeNotifierProvider(create: (context) => ProfileProvider()),
+        ChangeNotifierProvider(create: (context) => UpdatePhotoProfileProvider()),
         ChangeNotifierProvider(create: (context) => ProductProvider()),
         ChangeNotifierProvider(create: (context) => AddProductProvider()),
         ChangeNotifierProvider(create: (context) => EditProductProvider()),
@@ -84,6 +88,7 @@ class MyApp extends StatelessWidget {
       ],
       child: GetMaterialApp(
         title: 'PasarAja',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
@@ -116,7 +121,7 @@ class MyApp extends StatelessWidget {
             surfaceTintColor: Colors.white,
           ),
         ),
-        debugShowCheckedModeBanner: false,
+        // home: const listview_kategori(),
         home: const SplashScreen(),
       ),
     );
