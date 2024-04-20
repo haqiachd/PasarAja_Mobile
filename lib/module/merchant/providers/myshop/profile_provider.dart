@@ -1,5 +1,6 @@
 import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,6 +12,8 @@ import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/module/auth/controllers/auth_controller.dart';
+import 'package:pasaraja_mobile/module/auth/views/welcome_page.dart';
+import 'package:pasaraja_mobile/module/merchant/views/myshop/edit_account_page.dart';
 import 'package:pasaraja_mobile/module/merchant/views/myshop/update_pp_page.dart';
 
 class ProfileProvider extends ChangeNotifier {
@@ -85,6 +88,7 @@ class ProfileProvider extends ChangeNotifier {
     // konfirmasi hapus foto
     final confirm = await PasarAjaMessage.showConfirmation(
       "Apakah Anda Yakin Ingin Menghapus Foto Profile",
+      barrierDismissible: true,
     );
 
     if (!confirm) {
@@ -105,7 +109,6 @@ class ProfileProvider extends ChangeNotifier {
         'Foto Profile Berhasil Dihapus',
       );
 
-
       DMethod.log('save pref');
       // simpan default photo
       String photo = dataState.data as String;
@@ -120,11 +123,55 @@ class ProfileProvider extends ChangeNotifier {
     }
 
     if (dataState is DataFailed) {
-      DMethod.log('data failed : ${dataState.error?.error.toString() ?? PasarAjaConstant.unknownError}');
+      DMethod.log(
+          'data failed : ${dataState.error?.error.toString() ?? PasarAjaConstant.unknownError}');
       Get.back();
       await PasarAjaMessage.showSnackbarWarning(
         dataState.error?.error.toString() ?? PasarAjaConstant.unknownError,
       );
+    }
+  }
+
+  Future<void> onButtonEditPressed() async {
+    Get.to(
+      EditAccountPage(
+        email: _email,
+        fullName: _fullName,
+        phoneNumber: _phoneNumber,
+      ),
+      transition: Transition.cupertino,
+    );
+  }
+
+  Future<void> logout() async {
+    try {
+      // konfirmasi logout
+      final confirm = await PasarAjaMessage.showConfirmation(
+        'Apakah Anda Yakin Ingin Logout dari Aplikasi?',
+        barrierDismissible: true,
+      );
+
+      if (!confirm) {
+        return;
+      }
+
+      // hapus dari preferences
+      await PasarAjaUserService.logout();
+
+      PasarAjaMessage.showLoading();
+
+      // call controller
+      await _controller.logout(email: _email);
+
+      await PasarAjaMessage.showInformation('Logout Berhasil');
+
+      // Restart aplikasi Flutter
+      Get.offAll(
+        const WelcomePage(),
+        transition: Transition.downToUp,
+      );
+    } catch (ex) {
+      await PasarAjaMessage.showSnackbarWarning(ex.toString());
     }
   }
 }

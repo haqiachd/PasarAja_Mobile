@@ -92,9 +92,20 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     const SizedBox(height: 50),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 3,
-                      child: _buildButtonLogout(),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 3,
+                          child: _buildButtonEdit(),
+                        ),
+                        const SizedBox(width: 10),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 3,
+                          child: _buildButtonLogout(),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -241,11 +252,31 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  ActionButton _buildButtonLogout() {
-    return ActionButton(
-      onPressed: () {},
-      title: 'Logut',
-      state: ActionButton.stateEnabledButton,
+  _buildButtonEdit() {
+    return Consumer<ProfileProvider>(
+      builder: (context, provider, child) {
+        return ActionButton(
+          onPressed: ()  {
+            provider.onButtonEditPressed();
+          },
+          title: 'Edit Akun',
+          state: ActionButton.stateEnabledButton,
+        );
+      },
+    );
+  }
+
+  _buildButtonLogout() {
+    return Consumer<ProfileProvider>(
+      builder: (context, provider, child) {
+        return ActionButton(
+          onPressed: () async {
+            await provider.logout();
+          },
+          title: 'Logout',
+          state: ActionButton.stateEnabledButton,
+        );
+      },
     );
   }
 

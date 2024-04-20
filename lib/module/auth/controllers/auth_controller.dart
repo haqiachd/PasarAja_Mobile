@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
+import 'package:pasaraja_mobile/module/auth/models/user_model.dart';
 
 class AuthController {
   final Dio _dio = Dio();
@@ -119,6 +120,48 @@ class AuthController {
       // return response
       if (response.statusCode == HttpStatus.ok) {
         return DataSuccess(payload['data']['photo']);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<UserModel>> updateAccount({
+    required String email,
+    required String fullName,
+  }) async {
+    try {
+      // request api
+      final response = await _dio.put(
+        '$_authUrl/update/acc',
+        data: {
+          "email": email,
+          "full_name" : fullName,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.notFound;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+
+      // return response
+      if (response.statusCode == HttpStatus.ok) {
+        return DataSuccess(UserModel.fromJson(payload['data']));
       } else {
         return DataFailed(
           DioException(
