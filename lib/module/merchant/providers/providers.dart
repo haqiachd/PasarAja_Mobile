@@ -3,6 +3,7 @@ library pasaraja_mobile;
 export 'myshop/myshop_provider.dart';
 export 'myshop/profile_provider.dart';
 export 'myshop/update_pp_provider.dart';
+export 'myshop/edit_account_provider.dart';
 export 'order/order_provider.dart';
 export 'product/add_product_provider.dart';
 export 'product/best_selling_provider.dart';
