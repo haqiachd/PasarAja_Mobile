@@ -53,12 +53,13 @@ class SignInController {
           "expired in : ${await FlutterSessionJwt.getExpirationDateTime()}",
         );
 
+        DMethod.log('decoded jwt');
         // decode jwt
-        final decodedToken = JWT.verify(
+        final decodedToken = JWT.decode(
           jwtToken,
-          SecretKey(JWtServices.jwtSecretKey),
         );
 
+        DMethod.log('return');
         // return user model
         return DataSuccess(UserModel.fromJson(decodedToken.payload['data']));
       } else {
@@ -117,9 +118,8 @@ class SignInController {
         );
 
         // decode jwt
-        final decodedToken = JWT.verify(
+        final decodedToken = JWT.decode(
           jwtToken,
-          SecretKey(JWtServices.jwtSecretKey),
         );
 
         // return user model
@@ -180,9 +180,8 @@ class SignInController {
         );
 
         // decode jwt
-        final decodedToken = JWT.verify(
+        final decodedToken = JWT.decode(
           jwtToken,
-          SecretKey(JWtServices.jwtSecretKey),
         );
 
         // return user model
