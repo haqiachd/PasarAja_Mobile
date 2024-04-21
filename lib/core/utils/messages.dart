@@ -105,13 +105,16 @@ class PasarAjaMessage {
   }
 
   ///
-  static showLoading({bool canPop = false}) {
+  static showLoading({
+    bool canPop = false,
+    Color loadingColor = PasarAjaColor.green2,
+  }) {
     Get.dialog(
       PopScope(
         canPop: canPop,
-        child: const Center(
+        child: Center(
           child: CircularProgressIndicator(
-            color: PasarAjaColor.green2,
+            color: loadingColor,
           ),
         ),
       ),
