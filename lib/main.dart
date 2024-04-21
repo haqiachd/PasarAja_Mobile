@@ -6,6 +6,7 @@ import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/firebase_options.dart';
 import 'package:pasaraja_mobile/core/services/google_signin_services.dart';
 import 'package:pasaraja_mobile/module/auth/providers/providers.dart';
+import 'package:pasaraja_mobile/module/customer/provider/providers.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/providers.dart';
 import 'package:pasaraja_mobile/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -46,6 +47,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => SignUpFourthProvider()),
         ChangeNotifierProvider(create: (context) => VerifyOtpProvider()),
         ChangeNotifierProvider(create: (context) => VerifyPinProvider()),
+        // customer
+        ChangeNotifierProvider(create: (context) => HomeProvider()),
+        ChangeNotifierProvider(create: (context) => ProfileCustomerProvider()),
+        ChangeNotifierProvider(create: (context) => EditAccountCustomerProvider()),
+        ChangeNotifierProvider(create: (context) => UpdatePhotoProfileCustomerProvider()),
         // merchant
         ChangeNotifierProvider(create: (context) => MyShopProvider()),
         ChangeNotifierProvider(create: (context) => ProfileProvider()),
@@ -73,10 +79,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => PromoActiveProvider()),
         ChangeNotifierProvider(create: (context) => PromoSoonProvider()),
         ChangeNotifierProvider(create: (context) => PromoExpiredProvider()),
-        ChangeNotifierProvider(
-            create: (context) => OrderCancelCustomerProvider()),
-        ChangeNotifierProvider(
-            create: (context) => OrderCancelMerchantProvider()),
+        ChangeNotifierProvider(create: (context) => OrderCancelCustomerProvider()),
+        ChangeNotifierProvider(create: (context) => OrderCancelMerchantProvider()),
         ChangeNotifierProvider(create: (context) => OrderConfirmedProvider()),
         ChangeNotifierProvider(create: (context) => OrderExpiredProvider()),
         ChangeNotifierProvider(create: (context) => OrderFinishedProvider()),
