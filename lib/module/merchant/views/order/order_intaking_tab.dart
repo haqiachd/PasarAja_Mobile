@@ -131,7 +131,7 @@ class _OrderInTakingTabState extends State<OrderInTakingTab> {
                           style: PasarAjaTypography.sfpdRegular,
                         ),
                         Text(
-                          "Rp. ${PasarAjaUtils.formatPrice(prod.price ?? 0)}",
+                          "Rp. ${PasarAjaUtils.formatPrice(prod.subTotal ?? 0)}",
                           style: PasarAjaTypography.sfpdRegular,
                         ),
                       ],

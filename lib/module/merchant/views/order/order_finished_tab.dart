@@ -110,7 +110,7 @@ class _OrderFinishedState extends State<OrderFinished> {
               style: PasarAjaTypography.sfpdBold,
             ),
             Text(
-              "${order.details?.length ?? 0} x product",
+              "${order.details?.length ?? 0} x Produk",
               style: PasarAjaTypography.sfpdSemibold,
             ),
             const Text("_"),
@@ -128,7 +128,7 @@ class _OrderFinishedState extends State<OrderFinished> {
                           style: PasarAjaTypography.sfpdRegular,
                         ),
                         Text(
-                          "Rp. ${PasarAjaUtils.formatPrice(prod.price ?? 0)}",
+                          "Rp. ${PasarAjaUtils.formatPrice(prod.subTotal ?? 0)}",
                           style: PasarAjaTypography.sfpdRegular,
                         ),
                       ],

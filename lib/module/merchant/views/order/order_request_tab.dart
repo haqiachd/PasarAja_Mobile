@@ -111,7 +111,7 @@ class _OrderRequestTabState extends State<OrderRequestTab> {
               style: PasarAjaTypography.sfpdBold,
             ),
             Text(
-              "${order.details?.length ?? 0} x produk",
+              "${order.details?.length ?? 0} x Produk",
               style: PasarAjaTypography.sfpdSemibold,
             ),
             const Text("_"),
@@ -129,7 +129,7 @@ class _OrderRequestTabState extends State<OrderRequestTab> {
                           style: PasarAjaTypography.sfpdRegular,
                         ),
                         Text(
-                          "Rp. ${PasarAjaUtils.formatPrice(prod.price ?? 0)}",
+                          "Rp. ${PasarAjaUtils.formatPrice(prod.subTotal ?? 0)}",
                           style: PasarAjaTypography.sfpdRegular,
                         ),
                         Visibility(
