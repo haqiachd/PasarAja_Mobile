@@ -9,6 +9,7 @@ class TransactionDetailEntity extends Equatable {
   final int? sellingUnit;
   final int? price;
   final int? promoPrice;
+  final int? subTotal;
   final int? totalPrice;
   final String? notes;
 
@@ -21,6 +22,7 @@ class TransactionDetailEntity extends Equatable {
     this.sellingUnit,
     this.price,
     this.promoPrice,
+    this.subTotal,
     this.totalPrice,
     this.notes,
   });
@@ -36,6 +38,7 @@ class TransactionDetailEntity extends Equatable {
       sellingUnit,
       price,
       promoPrice,
+      subTotal,
       totalPrice,
       notes,
     ];

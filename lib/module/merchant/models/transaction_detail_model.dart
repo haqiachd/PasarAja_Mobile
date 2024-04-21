@@ -10,6 +10,7 @@ class TransactionDetailModel extends TransactionDetailEntity {
     final int? sellingUnit,
     final int? price,
     final int? promoPrice,
+    final int? subTotal,
     final int? totalPrice,
     final String? notes,
   }) : super(
@@ -21,6 +22,7 @@ class TransactionDetailModel extends TransactionDetailEntity {
           sellingUnit: sellingUnit,
           price: price,
           promoPrice: promoPrice,
+          subTotal: subTotal,
           totalPrice: totalPrice,
           notes: notes,
         );
@@ -33,9 +35,10 @@ class TransactionDetailModel extends TransactionDetailEntity {
         productPhoto: json["product_photo"] ?? '',
         unit: json["unit"] ?? '',
         sellingUnit: json["selling_unit"] ?? '',
-        price: json["price"] ?? '',
-        promoPrice: json["promo_price"] ?? '',
-        totalPrice: json['total_price'] ?? '',
+        price: json["price"] ?? 0,
+        promoPrice: json["promo_price"] ?? 0,
+        subTotal: json['sub_total'] ?? 0,
+        totalPrice: json['total_price'] ?? 0,
         notes: json['notes'] ?? '',
       );
 
