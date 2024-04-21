@@ -462,33 +462,98 @@ class OrderController {
       return DataFailed(ex);
     }
   }
+
+  Future<DataState<TransactionModel>> scanTrx({
+    required int idShop,
+    required String orderCode,
+  }) async {
+    try {
+      // call request
+      final response = await _dio.get(
+        '$_routeUrl/sctrx',
+        queryParameters: {
+          "id_shop": idShop,
+          "order_code": orderCode,
+          "user_data": true,
+          "shop_data": true,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.notFound;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+
+      // return response
+      if (response.statusCode == HttpStatus.ok) {
+        return DataSuccess(TransactionModel.fromJson(payload['data']));
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
 }
 
 void main(List<String> args) async {
   OrderController controller = OrderController();
 
-  final dataTrx = await controller.dataTrx(
+  final scanTrx = await controller.scanTrx(
     idShop: 1,
-    orderCode: "PasarAja-749a8261-696d-4739-8f53-f5d3f51a366a",
-    shopData: true,
-    userData: true,
+    orderCode: "PasarAja-6e5a6dbb-dcb3-4638-94e7-75bce32ccd3e",
   );
 
-  if (dataTrx is DataSuccess) {
-    TransactionModel trx = dataTrx.data as TransactionModel;
-    print('---> TRX DATA');
-    print('\nSHOP DATA');
-    print(trx.shopData?.shopName);
-    print(trx.shopData?.description);
+  if(scanTrx is DataSuccess){
+      TransactionModel trx = scanTrx.data as TransactionModel;
+      print('---> TRX DATA');
+      print('\nSHOP DATA');
+      print(trx.shopData?.shopName);
+      print(trx.shopData?.description);
 
-    print('\nUSER DATA');
-    print(trx.userData?.fullName);
-    print(trx.userData?.email);
+      print('\nUSER DATA');
+      print(trx.userData?.fullName);
+      print(trx.userData?.email);
   }
 
-  if (dataTrx is DataFailed) {
-    print('data failed : ${dataTrx.error?.error}');
+  if(scanTrx is DataFailed){
+    print('data failed');
   }
+
+  // final dataTrx = await controller.dataTrx(
+  //   idShop: 1,
+  //   orderCode: "PasarAja-749a8261-696d-4739-8f53-f5d3f51a366a",
+  //   shopData: true,
+  //   userData: true,
+  // );
+  //
+  // if (dataTrx is DataSuccess) {
+  //   TransactionModel trx = dataTrx.data as TransactionModel;
+  //   print('---> TRX DATA');
+  //   print('\nSHOP DATA');
+  //   print(trx.shopData?.shopName);
+  //   print(trx.shopData?.description);
+  //
+  //   print('\nUSER DATA');
+  //   print(trx.userData?.fullName);
+  //   print(trx.userData?.email);
+  // }
+  //
+  // if (dataTrx is DataFailed) {
+  //   print('data failed : ${dataTrx.error?.error}');
+  // }
 
   // final update = await controller.finishTrx(
   //   idShop: 1,

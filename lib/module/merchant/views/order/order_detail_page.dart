@@ -148,7 +148,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                   ),
                                 ),
                                 Text(
-                                  "Rp. ${PasarAjaUtils.formatPrice(prod.price ?? 0)}",
+                                  "Rp. ${PasarAjaUtils.formatPrice(prod.subTotal ?? 0)}",
                                   style:
                                       PasarAjaTypography.sfpdRegular.copyWith(
                                     fontSize: 16,
@@ -160,7 +160,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                 Visibility(
                                   visible: (prod.promoPrice ?? 0) > 0,
                                   child: Text(
-                                    "Rp. ${PasarAjaUtils.formatPrice(prod.promoPrice ?? 0)}",
+                                    "Rp. ${PasarAjaUtils.formatPrice(prod.totalPrice ?? 0)}",
                                     style:
                                         PasarAjaTypography.sfpdRegular.copyWith(
                                       fontSize: 16,
