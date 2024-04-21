@@ -22,7 +22,7 @@ class DetailListProvider extends ChangeNotifier {
   List<ProductHistoriesModel> _history = [];
   List<ProductHistoriesModel> get history => _history;
 
-  Future<void> fetchDataiReview({required int idProduct}) async {
+  Future<void> fetchDataReview({required int idProduct}) async {
     try {
       //
       state = const OnLoadingState();
@@ -61,9 +61,11 @@ class DetailListProvider extends ChangeNotifier {
       state = const OnLoadingState();
       notifyListeners();
 
+      final idShop = await PasarAjaUserService.getShopId();
+
       // call controller
       final dataState = await _controller.detailListComplainPage(
-        idShop: 1,
+        idShop: idShop,
         idProd: idProduct,
       );
 
@@ -85,15 +87,17 @@ class DetailListProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchDataiHistory({required int idProduct}) async {
+  Future<void> fetchDataHistory({required int idProduct}) async {
     try {
       //
       state = const OnLoadingState();
       notifyListeners();
 
+      final idShop = await PasarAjaUserService.getShopId();
+
       // call controller
       final dataState = await _controller.detailListHistoryPage(
-        idShop: 1,
+        idShop: idShop,
         idProd: idProduct,
       );
 

@@ -45,7 +45,7 @@ class DetailListPageState extends State<DetailListPage> {
     switch (widget.type) {
       case 1:
         Provider.of<DetailListProvider>(context, listen: false)
-            .fetchDataiReview(
+            .fetchDataReview(
           idProduct: widget.idProduct,
         );
       case 2:
@@ -55,7 +55,7 @@ class DetailListPageState extends State<DetailListPage> {
         );
       case 3:
         Provider.of<DetailListProvider>(context, listen: false)
-            .fetchDataiHistory(
+            .fetchDataHistory(
           idProduct: widget.idProduct,
         );
     }
