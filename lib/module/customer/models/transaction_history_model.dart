@@ -73,9 +73,7 @@ class TransactionHistoryModel extends TransactionHistoryEntity {
         shopData: json['shop_data'] == null
             ? const ShopDataModel()
             : ShopDataModel.fromJson(json['shop_data']),
-        details: json['details']
-            ? []
-            : TransactionDetailHistoryModel.toList(json['details']),
+        details: TransactionDetailHistoryModel.toList(json['details']),
       );
 
   static List<TransactionHistoryModel> toList(List<dynamic> json) =>

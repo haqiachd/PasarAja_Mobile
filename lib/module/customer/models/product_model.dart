@@ -45,7 +45,9 @@ class ProductModel extends ProductEntity {
       productName: map['product_name'] ?? '',
       description: map['description'] ?? '',
       sellingUnit: map['selling_unit'] ?? 0,
-      settings: ProductSettingsModel.fromJson(jsonDecode(map['settings'])),
+      settings: map['settings'] != null
+          ? ProductSettingsModel.fromJson(jsonDecode(map['settings']))
+          : const ProductSettingsModel(),
       unit: map['unit'] ?? '',
       price: map['price'] ?? 0,
       totalSold: map['total_sold'] ?? 0,

@@ -28,7 +28,7 @@ class TransactionDetailHistoryModel extends TransactionDetailHistoryEntity {
       TransactionDetailHistoryModel(
         unit: json["unit"] ?? '',
         product: json["product"] == null
-            ? null
+            ? const ProductModel()
             : ProductModel.fromJson(json["product"]),
         quantity: json["quantity"] ?? 0,
         notes: json["notes"] ?? '',
