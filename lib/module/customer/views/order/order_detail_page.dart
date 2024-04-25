@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class OrderDetailPage extends StatefulWidget {
-  const OrderDetailPage({Key? key}) : super(key: key);
+  const OrderDetailPage({
+    super.key,
+    required this.orderCode,
+    required this.provider,
+  });
+
+  final String orderCode;
+  final ChangeNotifier? provider;
 
   @override
   State<OrderDetailPage> createState() => _OrderDetailPageState();

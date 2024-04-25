@@ -3,6 +3,14 @@ import 'package:pasaraja_mobile/config/themes/Typography.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/widgets/app_bar.dart';
 import 'package:pasaraja_mobile/config/widgets/coming_soon.dart';
+import 'package:pasaraja_mobile/module/customer/views/order/order_cancel_merchant_tab.dart';
+import 'package:pasaraja_mobile/module/customer/views/order/order_confirmed_tab.dart';
+import 'package:pasaraja_mobile/module/customer/views/order/order_expired_tab.dart';
+import 'package:pasaraja_mobile/module/customer/views/order/order_intaking_tab.dart';
+import 'package:pasaraja_mobile/module/customer/views/order/order_request_tab.dart';
+import 'package:pasaraja_mobile/module/customer/views/order/order_submitted_tab.dart';
+import 'package:pasaraja_mobile/module/customer/views/order/order_cancel_customer_tab.dart';
+import 'package:pasaraja_mobile/module/customer/views/order/order_finished_tab.dart';
 
 class OrderPage extends StatefulWidget {
   const OrderPage({super.key});
@@ -57,7 +65,14 @@ class _OrderPageState extends State<OrderPage> {
                   child: const TabBarView(
                     physics: NeverScrollableScrollPhysics(),
                     children: [
-
+                      OrderRequestTab(),
+                      OrderConfirmedTab(),
+                      OrderInTakingTab(),
+                      OrderSubmittedTab(),
+                      OrderFinishedTab(),
+                      OrderCancelMerchantTab(),
+                      OrderCancelCustomerTab(),
+                      OrderExpiredTab(),
                     ],
                   ),
                 ),
