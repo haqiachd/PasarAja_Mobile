@@ -68,13 +68,13 @@ class OrderController {
     return await _listOfTrx(email: email, type: "InTaking");
   }
 
-  Future<DataState<List<TransactionHistoryModel>>> submitted({
+  Future<DataState<List<TransactionHistoryModel>>> tabSubmitted({
     required String email,
   }) async {
     return await _listOfTrx(email: email, type: "Submitted");
   }
 
-  Future<DataState<List<TransactionHistoryModel>>> finished({
+  Future<DataState<List<TransactionHistoryModel>>> tabFinished({
     required String email,
   }) async {
     return await _listOfTrx(email: email, type: "Finished");
