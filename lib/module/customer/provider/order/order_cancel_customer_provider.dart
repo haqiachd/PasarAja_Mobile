@@ -61,4 +61,11 @@ class CustomerOrderCancelCustomerProvider extends ChangeNotifier{
       notifyListeners();
     }
   }
+
+  void onRefresh() {
+    DMethod.log("OnRefresh (Cancel by Customer)");
+    _orders = [];
+    state = const OnLoadingState();
+    notifyListeners();
+  }
 }
