@@ -39,6 +39,15 @@ class PasarAjaUserService {
     }
   }
 
+  static Future<String> getEmailLogged() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey(email)) {
+      return prefs.getString(email) ?? '';
+    } else {
+      return '';
+    }
+  }
+
   static Future<int> getUserDataInt(String data) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey(data)) {
