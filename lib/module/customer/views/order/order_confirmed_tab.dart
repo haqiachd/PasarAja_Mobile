@@ -12,6 +12,8 @@ import 'package:pasaraja_mobile/module/customer/models/transaction_history_model
 import 'package:pasaraja_mobile/module/customer/views/order/order_detail_page.dart';
 import 'package:pasaraja_mobile/module/customer/provider/providers.dart';
 import 'package:pasaraja_mobile/module/customer/widgets/empty_order.dart';
+import 'package:pasaraja_mobile/module/customer/widgets/order_acc.dart';
+import 'package:pasaraja_mobile/module/customer/widgets/order_reject.dart';
 import 'package:provider/provider.dart';
 
 class OrderConfirmedTab extends StatefulWidget {
@@ -22,7 +24,6 @@ class OrderConfirmedTab extends StatefulWidget {
 }
 
 class _OrderConfirmedTabState extends State<OrderConfirmedTab> {
-
   @override
   void initState() {
     super.initState();
@@ -38,7 +39,7 @@ class _OrderConfirmedTabState extends State<OrderConfirmedTab> {
       Fluttertoast.showToast(msg: PasarAjaConstant.unknownError);
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -121,20 +122,20 @@ class _OrderConfirmedTabState extends State<OrderConfirmedTab> {
               children: order.details!
                   .map(
                     (detail) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${detail.quantity} x ${detail.product?.productName}",
-                      style: PasarAjaTypography.sfpdRegular,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${detail.quantity} x ${detail.product?.productName}",
+                          style: PasarAjaTypography.sfpdRegular,
+                        ),
+                        Text(
+                          "Rp. ${PasarAjaUtils.formatPrice(detail.subTotal ?? 0)}",
+                          style: PasarAjaTypography.sfpdRegular,
+                        ),
+                      ],
                     ),
-                    Text(
-                      "Rp. ${PasarAjaUtils.formatPrice(detail.subTotal ?? 0)}",
-                      style: PasarAjaTypography.sfpdRegular,
-                    ),
-                  ],
-                ),
-              )
+                  )
                   .toList(),
             ),
             const Text("_"),
@@ -146,12 +147,52 @@ class _OrderConfirmedTabState extends State<OrderConfirmedTab> {
               "Rp. ${PasarAjaUtils.formatPrice(order.subTotal ?? 0)}",
               style: PasarAjaTypography.sfpdBold,
             ),
-            const Text("_"),
-            const Divider(),
+            const SizedBox(height: 20),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                _buildButtonConfirm(order),
+                const SizedBox(width: 10),
+                _buildButtonCancel(order),
+              ],
+            ),
+            const Divider()
           ],
         ),
       ),
     );
   }
 
+  _buildButtonConfirm(TransactionHistoryModel data) {
+    return Consumer<CustomerOrderConfirmedProvider>(
+      builder: (context, order, child) {
+        return OrderAcc(
+          title: 'Ke Pasar',
+          onPressed: () {
+            order.onButtonTakingPressed(
+              idShop: data.shopData?.idShop ?? 0,
+              orderCode: data.orderCode ?? '',
+            );
+          },
+        );
+      },
+    );
+  }
+
+  _buildButtonCancel(TransactionHistoryModel data) {
+    return Consumer<CustomerOrderConfirmedProvider>(
+      builder: (context, order, child) {
+        return OrderReject(
+          title: 'Batalkan',
+          onPressed: () {
+            order.onButtonCancelPressed(
+              idShop: data.shopData?.idShop ?? 0,
+              orderCode: data.orderCode ?? '',
+            );
+          },
+        );
+      },
+    );
+  }
 }

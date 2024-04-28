@@ -12,6 +12,7 @@ import 'package:pasaraja_mobile/module/customer/models/transaction_history_model
 import 'package:pasaraja_mobile/module/customer/views/order/order_detail_page.dart';
 import 'package:pasaraja_mobile/module/customer/provider/providers.dart';
 import 'package:pasaraja_mobile/module/customer/widgets/empty_order.dart';
+import 'package:pasaraja_mobile/module/customer/widgets/order_acc.dart';
 import 'package:provider/provider.dart';
 
 class OrderSubmittedTab extends StatefulWidget {
@@ -146,10 +147,34 @@ class _OrderSubmittedTabState extends State<OrderSubmittedTab> {
               "Rp. ${PasarAjaUtils.formatPrice(order.subTotal ?? 0)}",
               style: PasarAjaTypography.sfpdBold,
             ),
-            const Divider(),
+            const SizedBox(height: 20),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                _buildButtonFinished(order),
+              ],
+            ),
+            const Divider()
           ],
         ),
       ),
+    );
+  }
+
+  _buildButtonFinished(TransactionHistoryModel data) {
+    return Consumer<CustomerOrderSubmittedProvider>(
+      builder: (context, order, child) {
+        return OrderAcc(
+          title: 'Pesanan Selesai',
+          onPressed: () {
+            order.onButtonFinishedPressed(
+              idShop: data.shopData?.idShop ?? 0,
+              orderCode: data.orderCode ?? '',
+            );
+          },
+        );
+      },
     );
   }
 }

@@ -12,6 +12,7 @@ import 'package:pasaraja_mobile/module/customer/models/transaction_history_model
 import 'package:pasaraja_mobile/module/customer/views/order/order_detail_page.dart';
 import 'package:pasaraja_mobile/module/customer/provider/providers.dart';
 import 'package:pasaraja_mobile/module/customer/widgets/empty_order.dart';
+import 'package:pasaraja_mobile/module/customer/widgets/order_reject.dart';
 import 'package:provider/provider.dart';
 
 class OrderRequestTab extends StatefulWidget {
@@ -152,11 +153,35 @@ class _OrderRequestTabState extends State<OrderRequestTab> {
               "Rp. ${PasarAjaUtils.formatPrice(order.subTotal ?? 0)}",
               style: PasarAjaTypography.sfpdBold,
             ),
-            const Text("_"),
-            const Divider(),
+            const SizedBox(height: 20),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                _buildButtonCancel(order),
+                const SizedBox(height: 10),
+              ],
+            ),
+            const Divider()
           ],
         ),
       ),
+    );
+  }
+
+  _buildButtonCancel(TransactionHistoryModel data) {
+    return Consumer<CustomerOrderRequestProvider>(
+      builder: (context, order, child) {
+        return OrderReject(
+          title: 'Batalkan',
+          onPressed: () {
+            order.onButtonCancelPressed(
+              idShop: data.shopData?.idShop ?? 0,
+              orderCode: data.orderCode ?? '',
+            );
+          },
+        );
+      },
     );
   }
 }
