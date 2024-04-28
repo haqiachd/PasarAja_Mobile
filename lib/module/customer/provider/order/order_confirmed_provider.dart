@@ -1,6 +1,7 @@
 import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/services/user_services.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
@@ -8,8 +9,9 @@ import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/module/customer/controllers/order_controller.dart';
 import 'package:pasaraja_mobile/module/customer/models/transaction_history_model.dart';
+import 'package:pasaraja_mobile/module/customer/views/order/order_cancel_page.dart';
 
-class CustomerOrderConfirmedProvider extends ChangeNotifier{
+class CustomerOrderConfirmedProvider extends ChangeNotifier {
   // controller
   final _controller = OrderController();
 
@@ -18,7 +20,9 @@ class CustomerOrderConfirmedProvider extends ChangeNotifier{
 
   // data
   List<TransactionHistoryModel> _orders = [];
+
   List<TransactionHistoryModel> get orders => _orders;
+
   set orders(List<TransactionHistoryModel> o) {
     _orders = o;
     notifyListeners();
@@ -62,6 +66,63 @@ class CustomerOrderConfirmedProvider extends ChangeNotifier{
     } catch (ex) {
       state = OnFailureState(message: ex.toString());
       notifyListeners();
+    }
+  }
+
+  Future<void> onButtonTakingPressed({
+    required int idShop,
+    required String orderCode,
+  }) async {
+    try {
+      final confirm = await PasarAjaMessage.showConfirmation(
+        'Apakah Anda ingin pergi ke pasar sekarang untuk mengambil pesanan ini?',
+        barrierDismissible: true,
+      );
+
+      if (!confirm) {
+        return;
+      }
+
+      PasarAjaMessage.showLoading();
+
+      final dataState = await _controller.inTakingTrx(
+        idShop: idShop,
+        orderCode: orderCode,
+      );
+
+      Get.back();
+      // jika response berhasil
+      if (dataState is DataSuccess) {
+        await PasarAjaMessage.showInformation('Pesanan Berhasil Diupdate');
+        _orders = [];
+
+        fetchData();
+      }
+
+      // jika response gagal
+      if (dataState is DataFailed) {
+
+        state = OnFailureState(dioException: dataState.error);
+      }
+
+      notifyListeners();
+    } catch (ex) {
+      Fluttertoast.showToast(msg: "Error : ${ex.toString()}");
+    }
+  }
+
+  Future<void> onButtonCancelPressed({
+    required int idShop,
+    required String orderCode,
+  }) async {
+    try {
+      Get.to(
+        OrderCancelPage(idShop: idShop, orderCode: orderCode),
+        transition: Transition.cupertino,
+        duration: PasarAjaConstant.transitionDuration,
+      );
+    } catch (ex) {
+      Fluttertoast.showToast(msg: "Error : ${ex.toString()}");
     }
   }
 

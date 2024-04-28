@@ -9,6 +9,7 @@ import 'package:pasaraja_mobile/module/auth/providers/providers.dart';
 import 'package:pasaraja_mobile/module/customer/provider/providers.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/providers.dart';
 import 'package:pasaraja_mobile/splash_screen.dart';
+import 'package:pasaraja_mobile/syam.dart';
 import 'package:provider/provider.dart';
 
 void main() async {

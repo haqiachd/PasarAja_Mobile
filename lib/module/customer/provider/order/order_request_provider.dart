@@ -1,10 +1,13 @@
 import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/services/user_services.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/module/customer/controllers/order_controller.dart';
 import 'package:pasaraja_mobile/module/customer/models/transaction_history_model.dart';
+import 'package:pasaraja_mobile/module/customer/views/order/order_cancel_page.dart';
 
 class CustomerOrderRequestProvider extends ChangeNotifier {
   // controller
@@ -15,7 +18,9 @@ class CustomerOrderRequestProvider extends ChangeNotifier {
 
   // data
   List<TransactionHistoryModel> _orders = [];
+
   List<TransactionHistoryModel> get orders => _orders;
+
   set orders(List<TransactionHistoryModel> o) {
     _orders = o;
     notifyListeners();
@@ -59,6 +64,21 @@ class CustomerOrderRequestProvider extends ChangeNotifier {
     } catch (ex) {
       state = OnFailureState(message: ex.toString());
       notifyListeners();
+    }
+  }
+
+  Future<void> onButtonCancelPressed({
+    required int idShop,
+    required String orderCode,
+  }) async {
+    try {
+      Get.to(
+        OrderCancelPage(idShop: idShop, orderCode: orderCode),
+        transition: Transition.cupertino,
+        duration: PasarAjaConstant.transitionDuration,
+      );
+    } catch (ex) {
+      //
     }
   }
 
