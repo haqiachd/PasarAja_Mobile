@@ -197,6 +197,7 @@ class OrderController {
     }
   }
 
+  @deprecated
   Future<DataState<bool>> cancelByCustomerTrx({
     required int idShop,
     required String orderCode,
@@ -334,49 +335,6 @@ class OrderController {
     }
   }
 
-  Future<DataState<bool>> inTakingTrx({
-    required int idShop,
-    required String orderCode,
-  }) async {
-    try {
-      // send request
-      final response = await _dio.put(
-        '$_routeUrl/ittrx',
-        data: {
-          "id_shop": idShop,
-          "order_code": orderCode,
-        },
-        options: Options(
-          validateStatus: (status) {
-            return status == HttpStatus.ok ||
-                status == HttpStatus.badRequest ||
-                status == HttpStatus.notFound ||
-                status == HttpStatus.internalServerError;
-          },
-        ),
-      );
-
-      // get payload
-      final Map<String, dynamic> payload = response.data;
-
-      // return response
-      if (response.statusCode == HttpStatus.ok) {
-        return const DataSuccess(true);
-      } else {
-        return DataFailed(
-          DioException(
-            requestOptions: response.requestOptions,
-            response: response,
-            type: DioExceptionType.badResponse,
-            error: payload['message'].toString(),
-          ),
-        );
-      }
-    } on DioException catch (ex) {
-      return DataFailed(ex);
-    }
-  }
-
   Future<DataState<bool>> submittedTrx({
     required int idShop,
     required String orderCode,
@@ -385,49 +343,6 @@ class OrderController {
       // send request
       final response = await _dio.put(
         '$_routeUrl/sbtTrx',
-        data: {
-          "id_shop": idShop,
-          "order_code": orderCode,
-        },
-        options: Options(
-          validateStatus: (status) {
-            return status == HttpStatus.ok ||
-                status == HttpStatus.badRequest ||
-                status == HttpStatus.notFound ||
-                status == HttpStatus.internalServerError;
-          },
-        ),
-      );
-
-      // get payload
-      final Map<String, dynamic> payload = response.data;
-
-      // return response
-      if (response.statusCode == HttpStatus.ok) {
-        return const DataSuccess(true);
-      } else {
-        return DataFailed(
-          DioException(
-            requestOptions: response.requestOptions,
-            response: response,
-            type: DioExceptionType.badResponse,
-            error: payload['message'].toString(),
-          ),
-        );
-      }
-    } on DioException catch (ex) {
-      return DataFailed(ex);
-    }
-  }
-
-  Future<DataState<bool>> finishTrx({
-    required int idShop,
-    required String orderCode,
-  }) async {
-    try {
-      // send request
-      final response = await _dio.put(
-        '$_routeUrl/fstrx',
         data: {
           "id_shop": idShop,
           "order_code": orderCode,
