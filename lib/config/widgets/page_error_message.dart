@@ -36,12 +36,16 @@ class PageErrorMessage extends StatelessWidget {
       if (onFailureState.dioException!.error != null) {
         String mesagge = onFailureState.dioException!.error.toString();
         if (mesagge.isNotEmpty && mesagge.trim().isNotEmpty) {
-          return Align(
-            alignment: Alignment.center,
-            child: Text(
-              mesagge,
-              style: PasarAjaTypography.sfpdBold.copyWith(
-                fontSize: 20,
+          return Padding(
+            padding: const EdgeInsets.only(left: 8, right: 8),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                mesagge,
+                textAlign: TextAlign.center,
+                style: PasarAjaTypography.sfpdBold.copyWith(
+                  fontSize: 18,
+                ),
               ),
             ),
           );

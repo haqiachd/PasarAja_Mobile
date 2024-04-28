@@ -25,17 +25,17 @@ PersistentBottomNavBarItem bottomNavItem({
 PersistentBottomNavBarItem bottomNavBarItemFloating({
   required String itemName,
   required dynamic Function(dynamic o)? onPressed,
-  Icon? activeIcon,
-  Icon? inactiveIcon,
+  IconData? activeIcon,
+  IconData? inactiveIcon,
 }) {
   return PersistentBottomNavBarItem(
     onPressed: onPressed,
-    icon: const Icon(
-      Icons.qr_code_2_outlined,
+    icon: Icon(
+      activeIcon ?? Icons.add,
       color: Colors.white,
     ),
-    inactiveIcon: const Icon(
-      Icons.qr_code_2_outlined,
+    inactiveIcon: Icon(
+      inactiveIcon,
       color: Colors.white,
     ),
     iconSize: 28,

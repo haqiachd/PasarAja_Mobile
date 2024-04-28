@@ -101,8 +101,8 @@ class _MerchantMainPageState extends State<MerchantMainPage> {
             transition: Transition.downToUp,
           );
         },
-        activeIcon: const Icon(Icons.qr_code_2_outlined),
-        inactiveIcon: const Icon(Icons.qr_code_2_outlined),
+        activeIcon: Icons.qr_code_2_outlined,
+        inactiveIcon: Icons.qr_code_2_outlined,
       ),
       bottomNavItem(
         itemName: "Promo",
