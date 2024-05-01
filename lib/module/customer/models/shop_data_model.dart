@@ -2,6 +2,10 @@ import 'package:pasaraja_mobile/core/entities/shop_entity.dart';
 import 'package:pasaraja_mobile/module/merchant/models/operational_model.dart';
 
 class ShopDataModel extends ShopEntity {
+  final String? ownerName;
+  final int? totalProduct;
+  final int? totalSold;
+
   const ShopDataModel({
     final int? idShop,
     final int? idUser,
@@ -13,9 +17,9 @@ class ShopDataModel extends ShopEntity {
     final String? photo,
     final DateTime? createdAt,
     final DateTime? updatedAt,
-    final String? ownerName,
-    final int? totalProduct,
-    final int? totalSold,
+    this.ownerName,
+    this.totalProduct,
+    this.totalSold,
   }) : super(
           idShop: idShop,
           idUser: idUser,

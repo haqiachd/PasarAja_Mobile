@@ -8,13 +8,49 @@ import 'package:pasaraja_mobile/module/customer/models/product_detail_model.dart
 
 class CustomerProductDetailProvider extends ChangeNotifier {
   final _controller = ShoppingController();
+  TextEditingController quantityCont = TextEditingController();
 
   ProviderState state = const OnInitState();
   ProductDetailModel _productDetail = const ProductDetailModel();
   ProductDetailModel get productDetail => _productDetail;
 
+  int _priceSelected = 0;
+  int get priceSelected => _priceSelected;
+  set priceSelected(int p){
+    _priceSelected = p;
+    notifyListeners();
+  }
+
+  int _price = 0;
+  int get price => _price;
+  set price(int p){
+    _price = p;
+    notifyListeners();
+  }
+
+  int _quantity = 1;
+  int get quantity => _quantity;
+  set quantity(int q){
+    _quantity = q;
+    if(_quantity <= 0){
+      _quantity = 0;
+      return;
+    }
+    if(_quantity >= 99){
+      _quantity = 99;
+      return;
+    }
+    _price = _priceSelected * _quantity;
+    quantityCont = TextEditingController(text: '$_quantity');
+    notifyListeners();
+  }
+
   Future<void> fetchData({required int idShop, required int idProduct}) async {
     try {
+      _quantity = 0;
+      _priceSelected = 0;
+      _price = 0;
+      quantityCont = TextEditingController(text: '$_quantity');
       state = const OnLoadingState();
       notifyListeners();
 
