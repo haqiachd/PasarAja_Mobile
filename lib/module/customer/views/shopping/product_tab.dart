@@ -1,11 +1,15 @@
+import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/widgets/loading_indicator.dart';
 import 'package:pasaraja_mobile/config/widgets/page_error_message.dart';
 import 'package:pasaraja_mobile/config/widgets/something_wrong.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/module/customer/provider/providers.dart';
+import 'package:pasaraja_mobile/module/customer/views/shopping/product_detail_page.dart';
+import 'package:pasaraja_mobile/module/customer/widgets/item_product.dart';
 import 'package:provider/provider.dart';
 
 class ProductTab extends StatefulWidget {
@@ -60,8 +64,17 @@ class _ProductTabState extends State<ProductTab> {
               itemCount: products.length,
               itemBuilder: (context, index) {
                 var product = products[index];
-                return ListTile(
-                  title: Text(product.productName ?? 'null'),
+                DMethod.log('id prod : ${product.id}');
+                return ItemProduct(
+                  product: product,
+                  onTap: () {
+                    Get.to(
+                      ProductDetailPage(
+                        idShop: product.idShop ?? 0,
+                        idProduct: product.id ?? 0,
+                      ),
+                    );
+                  },
                 );
               },
             );
