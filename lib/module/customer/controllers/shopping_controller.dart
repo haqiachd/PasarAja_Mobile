@@ -175,35 +175,35 @@ void main() async {
   //   print('error : ${dataState.error?.error}');
   // }
 
-  // final dataState = await controller.fetchProdDetail(idShop: 1, idProduct: 1);
-  //
-  // if(dataState is DataSuccess){
-  //   var prod = dataState.data as ProductDetailModel;
-  //   print('nama toko : ${prod.shopData?.shopName}');
-  //   print('rating : ${prod.reviews?.rating} (${prod.reviews?.totalReview} ulasan)');
-  //   var reviews = dataState.data?.reviews?.reviewers ?? [];
-  //   for(var rvw in reviews){
-  //     print('user : ${rvw.fullName}');
-  //     print('user : ${rvw.star}');
-  //     print('user : ${rvw.comment}');
-  //   }
-  // }
-  // if (dataState is DataFailed) {
-  //   print('error : ${dataState.error?.error}');
-  // }
-
-  final dataState = await controller.fetchCategoriesData();
+  final dataState = await controller.fetchProdDetail(idShop: 1, idProduct: 2);
 
   if(dataState is DataSuccess){
-    var ctgs = dataState.data as List<ProductCategoryModel>;
-
-    for(var ctg in ctgs){
-      print(ctg.categoryName);
+    var prod = dataState.data as ProductDetailModel;
+    print('nama toko : ${prod.shopData?.shopName}');
+    print('rating : ${prod.reviews?.rating} (${prod.reviews?.totalReview} ulasan)');
+    var reviews = dataState.data?.reviews?.reviewers ?? [];
+    for(var rvw in reviews){
+      print('user : ${rvw.fullName}');
+      print('user : ${rvw.star}');
+      print('user : ${rvw.comment}');
     }
   }
-
   if (dataState is DataFailed) {
     print('error : ${dataState.error?.error}');
   }
+
+  // final dataState = await controller.fetchCategoriesData();
+  //
+  // if(dataState is DataSuccess){
+  //   var ctgs = dataState.data as List<ProductCategoryModel>;
+  //
+  //   for(var ctg in ctgs){
+  //     print(ctg.categoryName);
+  //   }
+  // }
+  //
+  // if (dataState is DataFailed) {
+  //   print('error : ${dataState.error?.error}');
+  // }
 
 }
