@@ -36,7 +36,7 @@ class ShoppingController {
             requestOptions: response.requestOptions,
             response: response,
             type: DioExceptionType.badResponse,
-            error: payload['error'],
+            error: 'Server Not Found',
           ),
         );
       }
@@ -66,7 +66,7 @@ class ShoppingController {
             requestOptions: response.requestOptions,
             response: response,
             type: DioExceptionType.badResponse,
-            error: payload['error'],
+            error: 'Server Not Found',
           ),
         );
       }
