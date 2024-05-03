@@ -410,7 +410,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ],
                   ),
                   const SizedBox(height: 30),
-                  ActionButton(onPressed: (){}, title: 'Masukan Keranjang', state: ActionButton.stateEnabledButton,),
+                  ActionButton(onPressed: (){
+                    context.read<CustomerProductDetailProvider>().onButtonAddCartPressed();
+                  }, title: 'Masukan Keranjang', state: ActionButton.stateEnabledButton,),
                   const SizedBox(height: 20),
                 ],
               ),
