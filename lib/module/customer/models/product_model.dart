@@ -63,4 +63,22 @@ class ProductModel extends ProductEntity {
             (dynamic i) => ProductModel.fromJson(i as Map<String, dynamic>))
         .toList();
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id_product': id,
+      'id_shop': idShop,
+      'id_cp_prod': idCpProd,
+      'category_name': categoryName,
+      'product_name': productName,
+      'description': description,
+      'total_sold': totalSold,
+      'unit': unit,
+      'selling_unit': sellingUnit,
+      'price': price,
+      'photo': photo,
+      'rating': rating,
+      'total_review': totalReview,
+    };
+  }
 }
