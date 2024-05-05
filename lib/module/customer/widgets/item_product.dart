@@ -45,10 +45,27 @@ class ItemProduct extends StatelessWidget {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Rp. ${PasarAjaUtils.formatPrice(product.price ?? 0)}",
-                style: PasarAjaTypography.sfpdSemibold,
-              ),
+              PasarAjaUtils.isActivePromo(product.promo)
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Rp. ${PasarAjaUtils.formatPrice(product.price ?? 0)}",
+                          style: PasarAjaTypography.sfpdSemibold.copyWith(
+                            decoration: TextDecoration.lineThrough,
+                          ),
+                        ),
+                        Text(
+                          "Rp. ${PasarAjaUtils.formatPrice(product.promo?.promoPrice ?? 0)} (${product.promo?.percentage} %)",
+                          style: PasarAjaTypography.sfpdSemibold,
+                        ),
+                      ],
+                    )
+                  : Text(
+                      "Rp. ${PasarAjaUtils.formatPrice(product.price ?? 0)}",
+                      style: PasarAjaTypography.sfpdSemibold,
+                    ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
