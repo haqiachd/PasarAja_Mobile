@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
 import 'package:pasaraja_mobile/module/auth/models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,6 +9,7 @@ enum UserLevel {
 }
 
 class PasarAjaUserService {
+  static const userId = 'iduser';
   static const phone = 'phone';
   static const email = 'email';
   static const fullName = 'fullname';
@@ -57,6 +59,15 @@ class PasarAjaUserService {
     }
   }
 
+  static Future<int> getUserId() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey(userId)) {
+      return prefs.getInt(userId) ?? 0;
+    } else {
+      return 0;
+    }
+  }
+
     static Future<int> getShopId() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey(shopId)) {
@@ -79,6 +90,7 @@ class PasarAjaUserService {
 
   /// login
   static Future<void> login(UserModel user) async {
+    await setUserDataInt(userId, user.idUser);
     await setUserData(phone, user.phoneNumber);
     await setUserData(email, user.email);
     await setUserData(fullName, user.fullName);
@@ -95,6 +107,7 @@ class PasarAjaUserService {
   /// logout
   static Future<void> logout() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(userId);
     await prefs.remove(phone);
     await prefs.remove(email);
     await prefs.remove(fullName);
