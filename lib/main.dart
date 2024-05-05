@@ -64,6 +64,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CustomerOrderSubmittedProvider()),
         ChangeNotifierProvider(create: (context) => CustomerOrderDetailProvider()),
         ChangeNotifierProvider(create: (context) => CustomerOrderCancelProvider()),
+        ChangeNotifierProvider(create: (context) => CustomerOrderNewProvider()),
         ChangeNotifierProvider(create: (context) => CustomerShoppingProvider()),
         ChangeNotifierProvider(create: (context) => CustomerShopProvider()),
         ChangeNotifierProvider(create: (context) => CustomerProductProvider()),

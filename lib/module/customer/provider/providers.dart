@@ -18,3 +18,4 @@ export 'order/order_request_provider.dart';
 export 'order/order_submitted_provider.dart';
 export 'order/order_detail_provider.dart';
 export 'order/order_cancel_provider.dart';
+export 'order/order_new_provider.dart';
