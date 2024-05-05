@@ -63,6 +63,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: Size(0, -MediaQuery.of(context).padding.top),
@@ -124,7 +125,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               )
                             : null,
                         background: CachedNetworkImage(
-                          imageUrl: product.products?.photo ?? '',
+                          imageUrl: product.product?.photo ?? '',
                           width: double.infinity,
                           fit: BoxFit.cover,
                         ),
@@ -156,17 +157,89 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           return const SomethingWrong();
         },
       ),
-      floatingActionButton: Consumer<CustomerProductDetailProvider>(
+      bottomNavigationBar: Consumer<CustomerProductDetailProvider>(
         builder: (context, provider, child) {
-          return FloatingActionButton(
-            onPressed: () {
-              _showSheet(
-                  provider.productDetail.products ?? const ProductModel());
-            },
-            backgroundColor: PasarAjaColor.green1,
-            child: const Icon(
-              Icons.add_shopping_cart_outlined,
-              color: Colors.white,
+          return Visibility(
+            visible: provider.state is OnSuccessState,
+            child: Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 3,
+                    blurRadius: 2,
+                    offset: const Offset(0, -1),
+                  ),
+                ],
+              ),
+              child: Container(
+                height: 60,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5, right: 2.5),
+                        child: Material(
+                          color: PasarAjaColor.green1,
+                          child: Center(
+                            child: Text(
+                              'Chat',
+                              style: PasarAjaTypography.sfpdSemibold.copyWith(
+                                color: Colors.white,
+                                fontSize: 15.5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 2.5, right: 2.5),
+                        child: Material(
+                          color: PasarAjaColor.green1,
+                          child: Center(
+                            child: Text(
+                              'Beli Sekarang',
+                              style: PasarAjaTypography.sfpdSemibold.copyWith(
+                                color: Colors.white,
+                                fontSize: 15.5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 2.5, right: 5),
+                        child: InkWell(
+                          onTap: () {
+                            _showSheetCart(provider.productDetail.product!);
+                          },
+                          child: Material(
+                            color: PasarAjaColor.green1,
+                            child: Center(
+                              child: Text(
+                                '+ Keranjang',
+                                style: PasarAjaTypography.sfpdSemibold.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 15.5,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           );
         },
@@ -179,14 +252,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          product.products?.productName ?? 'Null',
+          product.product?.productName ?? 'Null',
           style: PasarAjaTypography.sfpdBold.copyWith(
             fontSize: 30,
           ),
         ),
         const SizedBox(height: 5),
         Text(
-          "${product.products?.categoryName}",
+          "${product.product?.categoryName}",
           style: PasarAjaTypography.sfpdSemibold.copyWith(
             fontSize: 16,
           ),
@@ -199,16 +272,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               color: Colors.orange,
             ),
             const SizedBox(width: 5),
-            if ((product.products?.totalReview! ?? 0) > 0)
+            if ((product.product?.totalReview! ?? 0) > 0)
               Row(
                 children: [
                   Text(
-                    '${product.products?.rating}',
+                    '${product.product?.rating}',
                     style: PasarAjaTypography.sfpdSemibold,
                   ),
                   const SizedBox(width: 2),
                   Text(
-                    "(${product.products?.totalReview})",
+                    "(${product.product?.totalReview})",
                     style: PasarAjaTypography.sfpdSemibold,
                   ),
                 ],
@@ -225,26 +298,50 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
             const SizedBox(width: 5),
             Text(
-              '${product.products?.totalSold} terjual',
+              '${product.product?.totalSold} terjual',
               style: PasarAjaTypography.sfpdSemibold,
             ),
           ],
         ),
         const SizedBox(height: 5),
         Text(
-          (product.products?.settings?.isAvailable ?? false)
+          (product.product?.settings?.isAvailable ?? false)
               ? 'Stok Tersedia'
               : 'Stok Tidak Tersedia',
           style: PasarAjaTypography.sfpdSemibold,
         ),
         const SizedBox(height: 5),
-        Text(
-          "${PasarAjaUtils.formatPrice(product.products?.price ?? 0)} / ${product.products?.sellingUnit} ${product.products?.unit}",
-          style: PasarAjaTypography.sfpdRegular.copyWith(fontSize: 25),
-        ),
+        PasarAjaUtils.isActivePromo(product.product?.promo)
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Rp. ${PasarAjaUtils.formatPrice(product.product?.price ?? 0)}",
+                    style: PasarAjaTypography.sfpdRegular.copyWith(
+                      fontSize: 20,
+                      decoration: TextDecoration.lineThrough,
+                    ),
+                  ),
+                  Text(
+                    "Rp. ${PasarAjaUtils.formatPrice(product.product?.promo?.promoPrice ?? 0)} / ${product.product?.sellingUnit} ${product.product?.unit}",
+                    style:
+                        PasarAjaTypography.sfpdRegular.copyWith(fontSize: 20),
+                  ),
+                  Text(
+                    "Dis : ${product.product?.promo?.percentage} %",
+                    style:
+                        PasarAjaTypography.sfpdRegular.copyWith(fontSize: 16),
+                  ),
+                ],
+              )
+            : Text(
+                "Rp. ${PasarAjaUtils.formatPrice(product.product?.price ?? 0)} / ${product.product?.sellingUnit} ${product.product?.unit}",
+                style: PasarAjaTypography.sfpdRegular.copyWith(fontSize: 25),
+              ),
         const SizedBox(height: 10),
         Text(
-          product.products?.description ?? '',
+          product.product?.description ?? '',
           style: PasarAjaTypography.sfpdRegular,
         ),
       ],
@@ -342,14 +439,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
-  _showSheet(ProductModel product) {
+  _showSheetCart(ProductModel product) {
     showModalBottomSheet(
       backgroundColor: Colors.white,
       context: context,
       builder: (BuildContext context) {
         return Consumer<CustomerProductDetailProvider>(
           builder: (context, provider, child) {
-            provider.priceSelected = product.price ?? 0;
+
             return Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20.0),
@@ -359,60 +456,91 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 children: [
                   Text(
                     product.productName ?? 'null',
-                    maxLines: 2,
                     style:
-                        PasarAjaTypography.sfpdSemibold.copyWith(fontSize: 20),
+                        PasarAjaTypography.sfpdRegular.copyWith(fontSize: 25),
                   ),
                   const SizedBox(height: 10),
-                  Column(
+                  PasarAjaUtils.isActivePromo(product.promo)
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Rp. ${PasarAjaUtils.formatPrice(product?.price ?? 0)}",
+                              style: PasarAjaTypography.sfpdRegular.copyWith(
+                                fontSize: 20,
+                                decoration: TextDecoration.lineThrough,
+                              ),
+                            ),
+                            Text(
+                              "Rp. ${PasarAjaUtils.formatPrice(product.promo?.promoPrice ?? 0)} / ${product.sellingUnit} ${product.unit}",
+                              style: PasarAjaTypography.sfpdRegular
+                                  .copyWith(fontSize: 20),
+                            ),
+                            Text(
+                              "Dis : ${product.promo?.percentage} %",
+                              style: PasarAjaTypography.sfpdRegular
+                                  .copyWith(fontSize: 16),
+                            ),
+                          ],
+                        )
+                      : Text(
+                          "Rp. ${PasarAjaUtils.formatPrice(product.price ?? 0)} / ${product.sellingUnit} ${product.unit}",
+                          style: PasarAjaTypography.sfpdRegular
+                              .copyWith(fontSize: 25),
+                        ),
+                  const SizedBox(height: 10),
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        "${PasarAjaUtils.formatPrice(product.price ?? 0)} / ${product.sellingUnit} ${product.unit}",
+                        'Jumlah : ',
                         style: PasarAjaTypography.sfpdRegular
                             .copyWith(fontSize: 25),
                       ),
-                      const SizedBox(height: 10),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const SizedBox(width: 10),
-                          IconButton(
-                              onPressed: () {
-                                provider.quantity = --provider.quantity;
-                              },
-                              icon: const Icon(Icons.exposure_minus_1)),
-                          // Add TextField here
-                          Expanded(
-                            child: TextField(
-                              controller: provider.quantityCont,
-                              readOnly: true,
-                              decoration: const InputDecoration(
-                                hintText: '0',
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
+                      IconButton(
+                          onPressed: () {
+                           provider.minusOne();
+                          },
+                          icon: const Icon(Icons.exposure_minus_1)),
+                      // Add TextField here
+                      SizedBox(
+                        width: Get.width / 6,
+                        height: 50,
+                        child: TextField(
+                          controller: provider.quantityCont,
+                          readOnly: true,
+                          decoration: const InputDecoration(
+                            hintText: '0',
+                            border: OutlineInputBorder(),
                           ),
-                          IconButton(
-                              onPressed: () {
-                                provider.quantity = ++provider.quantity;
-                              },
-                              icon: const Icon(Icons.exposure_plus_1_outlined)),
-                          Text(
-                            "(${PasarAjaUtils.formatPrice(provider.price ?? 0)})",
-                            style: PasarAjaTypography.sfpdRegular
-                                .copyWith(fontSize: 25),
-                          ),
-                        ],
+                        ),
                       ),
+                      IconButton(
+                          onPressed: () {
+                            provider.addOne();
+                          },
+                          icon: const Icon(Icons.exposure_plus_1_outlined)),
                     ],
                   ),
+                  const SizedBox(height: 10),
+                  Text(
+                    "Total Harga : Rp. ${PasarAjaUtils.formatPrice(provider.totalCartPrice)}",
+                    style:
+                        PasarAjaTypography.sfpdRegular.copyWith(fontSize: 18),
+                  ),
                   const SizedBox(height: 30),
-                  ActionButton(onPressed: (){
-                    context.read<CustomerProductDetailProvider>().onButtonAddCartPressed();
-                  }, title: 'Masukan Keranjang', state: ActionButton.stateEnabledButton,),
+                  ActionButton(
+                    onPressed: () {
+                      context
+                          .read<CustomerProductDetailProvider>()
+                          .onButtonAddCartPressed();
+                    },
+                    width: Get.width,
+                    title: 'Masukan Keranjang',
+                    state: ActionButton.stateEnabledButton,
+                  ),
                   const SizedBox(height: 20),
                 ],
               ),
