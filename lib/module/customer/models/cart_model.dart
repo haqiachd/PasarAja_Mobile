@@ -5,11 +5,13 @@ class CartModel {
   final int? idShop;
   final ShopDataModel? shopDataModel;
   final List<CartProductModel>? products;
+   bool checkedAll;
 
-  const CartModel({
+   CartModel({
     this.idShop,
     this.shopDataModel,
     this.products,
+    this.checkedAll = false,
   });
 
   factory CartModel.fromJson(Map<String, dynamic> json) {
