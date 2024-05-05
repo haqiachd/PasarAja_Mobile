@@ -36,7 +36,7 @@ class ShoppingController {
             requestOptions: response.requestOptions,
             response: response,
             type: DioExceptionType.badResponse,
-            error: 'Server Not Found',
+            error: payload['message'],
           ),
         );
       }
@@ -66,7 +66,7 @@ class ShoppingController {
             requestOptions: response.requestOptions,
             response: response,
             type: DioExceptionType.badResponse,
-            error: 'Server Not Found',
+            error: payload['message'],
           ),
         );
       }
@@ -105,7 +105,7 @@ class ShoppingController {
             requestOptions: response.requestOptions,
             response: response,
             type: DioExceptionType.badResponse,
-            error: payload['error'],
+            error: payload['message'],
           ),
         );
       }
@@ -135,7 +135,7 @@ class ShoppingController {
             requestOptions: response.requestOptions,
             response: response,
             type: DioExceptionType.badResponse,
-            error: payload['error'],
+            error: payload['message'],
           ),
         );
       }
@@ -167,7 +167,9 @@ void main() async {
   // if (dataState is DataSuccess) {
   //   var shops = dataState.data as List<ProductModel>;
   //   for (var shop in shops) {
-  //     print('data :  ${shop.productName}');
+  //     print('name :  ${shop.productName}');
+  //     print('promo_price : ${shop.promo?.promoPrice}');
+  //
   //   }
   // }
   //
@@ -175,23 +177,25 @@ void main() async {
   //   print('error : ${dataState.error?.error}');
   // }
 
-  final dataState = await controller.fetchProdDetail(idShop: 1, idProduct: 2);
-
-  if(dataState is DataSuccess){
-    var prod = dataState.data as ProductDetailModel;
-    print('nama toko : ${prod.shopData?.shopName}');
-    print('rating : ${prod.reviews?.rating} (${prod.reviews?.totalReview} ulasan)');
-    var reviews = dataState.data?.reviews?.reviewers ?? [];
-    for(var rvw in reviews){
-      print('user : ${rvw.fullName}');
-      print('user : ${rvw.star}');
-      print('user : ${rvw.comment}');
-    }
-  }
-  if (dataState is DataFailed) {
-    print('error : ${dataState.error?.error}');
-  }
-
+  // final dataState = await controller.fetchProdDetail(idShop: 1, idProduct: 2);
+  //
+  // if(dataState is DataSuccess){
+  //   var prod = dataState.data as ProductDetailModel;
+  //   print('nama toko : ${prod.shopData?.shopName}');
+  //   print('product name : ${prod.product?.productName}');
+  //   print('rating : ${prod.reviews?.rating} (${prod.reviews?.totalReview} ulasan)');
+  //   print('promo price : ${prod.product?.promo?.promoPrice}');
+  //   var reviews = dataState.data?.reviews?.reviewers ?? [];
+  //   for(var rvw in reviews){
+  //     print('user : ${rvw.fullName}');
+  //     print('user : ${rvw.star}');
+  //     print('user : ${rvw.comment}');
+  //   }
+  // }
+  // if (dataState is DataFailed) {
+  //   print('error : ${dataState.error?.error}');
+  // }
+  //
   // final dataState = await controller.fetchCategoriesData();
   //
   // if(dataState is DataSuccess){
