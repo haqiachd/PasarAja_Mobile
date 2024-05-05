@@ -7,9 +7,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pasaraja_mobile/core/entities/choose_photo.dart';
+import 'package:pasaraja_mobile/core/entities/promo_entity.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 import 'package:vibration/vibration.dart';
@@ -211,5 +213,24 @@ class PasarAjaUtils {
       DMethod.log('Error compressing image: $e');
       return null;
     }
+  }
+
+  static bool isActivePromo(PromoEntity? promo) {
+    if (promo != null) {
+      // Check if promo has start and end dates
+      if (promo.startDate != null && promo.endDate != null) {
+        // Get the current date
+        DateTime now = DateTime.now();
+        DMethod.log('PROMO PRICE : ${promo.promoPrice}');
+
+        // Check if the current date is within the promo period
+        if (now.isAfter(promo.startDate!) && now.isBefore(promo.endDate!)) {
+          // Promo is active
+          return true;
+        }
+      }
+    }
+    // Promo is not active or promo data is null
+    return false;
   }
 }
