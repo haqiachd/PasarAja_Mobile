@@ -49,7 +49,9 @@ class ProductModel extends ProductEntity {
       description: map['description'] ?? '',
       sellingUnit: map['selling_unit'] ?? 0,
       settings: map['settings'] != null
-          ? ProductSettingsModel.fromJson(jsonDecode(map['settings']))
+          ? map['settings'] is Map<String, dynamic>
+              ? ProductSettingsModel.fromJson(map['settings'])
+              : ProductSettingsModel.fromJson(jsonDecode(map['settings']))
           : const ProductSettingsModel(),
       unit: map['unit'] ?? '',
       price: map['price'] ?? 0,
@@ -85,7 +87,7 @@ class ProductModel extends ProductEntity {
       'photo': photo,
       'rating': rating,
       'total_review': totalReview,
-      'promo' : {
+      'promo': {
         "promo_price": promo?.promoPrice ?? 0,
         "percentage": promo?.percentage ?? 0,
         "start_date": promo?.startDate?.toIso8601String(),
