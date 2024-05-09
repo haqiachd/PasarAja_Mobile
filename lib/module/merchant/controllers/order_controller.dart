@@ -148,55 +148,6 @@ class OrderController {
     return await _lisfOfTrx(idShop: idShop, status: "Expired");
   }
 
-  Future<DataState<bool>> createTrx({
-    required int idShop,
-    required int idUser,
-    required String email,
-    required DateTime takenDate,
-    required List<ProductTransactionModel> products,
-  }) async {
-    try {
-      // send request
-      final response = await _dio.post(
-        '$_routeUrl/crtrx',
-        data: {
-          "id_shop": idShop,
-          "id_user": idUser,
-          "email": email,
-          "taken_date": takenDate.toIso8601String().substring(0, 10),
-          "products": ProductTransactionModel.toJsonList(products)['products'],
-        },
-        options: Options(
-          validateStatus: (status) {
-            return status == HttpStatus.created ||
-                status == HttpStatus.badRequest ||
-                status == HttpStatus.notFound ||
-                status == HttpStatus.internalServerError;
-          },
-        ),
-      );
-
-      // get payload
-      final Map<String, dynamic> payload = response.data;
-
-      // return response
-      if (response.statusCode == HttpStatus.created) {
-        return const DataSuccess(true);
-      } else {
-        return DataFailed(
-          DioException(
-            requestOptions: response.requestOptions,
-            response: response,
-            type: DioExceptionType.badResponse,
-            error: payload['message'].toString(),
-          ),
-        );
-      }
-    } on DioException catch (ex) {
-      return DataFailed(ex);
-    }
-  }
-
   @deprecated
   Future<DataState<bool>> cancelByCustomerTrx({
     required int idShop,

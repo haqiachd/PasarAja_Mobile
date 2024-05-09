@@ -162,20 +162,22 @@ void main() async {
   //   print('error : ${dataState.error?.error}');
   // }
 
-  // final dataState = await controller.fetchProdData();
-  //
-  // if (dataState is DataSuccess) {
-  //   var shops = dataState.data as List<ProductModel>;
-  //   for (var shop in shops) {
-  //     print('name :  ${shop.productName}');
-  //     print('promo_price : ${shop.promo?.promoPrice}');
-  //
-  //   }
-  // }
-  //
-  // if (dataState is DataFailed) {
-  //   print('error : ${dataState.error?.error}');
-  // }
+  final dataState = await controller.fetchProdData();
+
+  if (dataState is DataSuccess) {
+    var prods = dataState.data as List<ProductModel>;
+    for (var prod in prods) {
+      print('id shop : ${prod.idShop}');
+      print('id product : ${prod.id}');
+      print('name :  ${prod.productName}');
+      print('promo_price : ${prod.promo?.promoPrice}');
+      print('--');
+    }
+  }
+
+  if (dataState is DataFailed) {
+    print('error : ${dataState.error?.error}');
+  }
 
   // final dataState = await controller.fetchProdDetail(idShop: 1, idProduct: 2);
   //
