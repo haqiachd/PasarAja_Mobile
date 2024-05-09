@@ -11,31 +11,40 @@ import 'package:pasaraja_mobile/core/utils/messages.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/module/customer/controllers/cart_controller.dart';
 import 'package:pasaraja_mobile/module/customer/controllers/shopping_controller.dart';
+import 'package:pasaraja_mobile/module/customer/models/cart_model.dart';
 import 'package:pasaraja_mobile/module/customer/models/product_detail_model.dart';
+import 'package:pasaraja_mobile/module/customer/views/order/order_new_page.dart';
 
 class CustomerProductDetailProvider extends ChangeNotifier {
   final _controller = ShoppingController();
   final _cartController = CartController();
   TextEditingController quantityCont = TextEditingController();
+  TextEditingController notesCont = TextEditingController();
 
   ProviderState state = const OnInitState();
 
   ProductDetailModel _productDetail = const ProductDetailModel();
+
   ProductDetailModel get productDetail => _productDetail;
 
   int _buttonState = ActionButton.stateEnabledButton;
+
   int get buttonState => _buttonState;
 
   // harga per satu unit produk di keranjang
   int _unitCartPrice = 0;
+
   int get unitCartPrice => _unitCartPrice;
 
   // total harga dari produk di keranjang
   int _totalCartPrice = 0;
+
   int get totalCartPrice => _totalCartPrice;
 
   int _quantity = 1;
+
   int get quantity => _quantity;
+
   set quantity(int q) {
     _quantity = q;
 
@@ -44,8 +53,25 @@ class CustomerProductDetailProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void resetQuantity(){
+  void resetQuantity() {
     _quantity = 1;
+  }
+
+  // only for buy now
+  void onChangeQuantity(int qty) {
+    if (qty <= 0) {
+      Fluttertoast.showToast(msg: 'jumlah produk minimal 1');
+      return;
+    }
+
+    if (qty >= 99) {
+      Fluttertoast.showToast(msg: 'jumlah produk maksimal 99');
+      return;
+    }
+
+    _quantity = qty;
+    quantityCont.text = '$qty';
+    notifyListeners();
   }
 
   void addOne() {
@@ -80,7 +106,8 @@ class CustomerProductDetailProvider extends ChangeNotifier {
       _quantity = 0;
       _unitCartPrice = 0;
       _totalCartPrice = 0;
-      quantityCont = TextEditingController(text: '$_quantity');
+      notesCont.text = '';
+      quantityCont.text = '$_quantity';
 
       // show loading
       state = const OnLoadingState();
@@ -146,6 +173,75 @@ class CustomerProductDetailProvider extends ChangeNotifier {
 
       if (dataState is DataFailed) {
         await PasarAjaMessage.showWarning("Produk Gagal Ditambahkan");
+      }
+    } catch (ex) {
+      Fluttertoast.showToast(msg: "error : ${ex.toString()}");
+    }
+  }
+
+  Future<void> onButtonBuyNowPressed() async {
+    try {
+      final idUser = await PasarAjaUserService.getUserId();
+
+      PasarAjaMessage.showLoading(loadingColor: Colors.white);
+
+      DMethod.log('id user : ${idUser}');
+      DMethod.log('is shop : ${_productDetail.product!.idShop!}');
+      DMethod.log('id product : ${_productDetail.product!.id!}');
+      DMethod.log('product : ${_productDetail.product!}');
+      DMethod.log('quantity : ${quantity}');
+      DMethod.log('notes : ${notesCont.text}');
+      DMethod.log('promo price : ${PasarAjaUtils.isActivePromo(_productDetail.product!.promo!)
+          ? _productDetail.product!.promo!.promoPrice!
+          : _productDetail.product!.price!}');
+
+      final dataState = await _cartController.addCart(
+        idUser: idUser,
+        idShop: _productDetail.product!.idShop!,
+        product: _productDetail.product!,
+        quantity: quantity,
+        notes: notesCont.text,
+        promoPrice: PasarAjaUtils.isActivePromo(_productDetail.product!.promo!)
+            ? _productDetail.product!.promo!.promoPrice!
+            : _productDetail.product!.price!,
+      );
+
+
+      if (dataState is DataSuccess) {
+        final cartState = await _cartController.fetchListCart(idUser: idUser);
+
+        if (cartState is DataSuccess) {
+          final cartsData = cartState.data;
+          CartModel? cartTemp = cartsData?.firstWhere(
+              (element) => element.idShop == _productDetail.product!.idShop!);
+
+          for(var prod in cartTemp!.products!){
+            DMethod.log('prod name : ${prod.productData?.productName}');
+            if(prod.idProduct == _productDetail.product?.id){
+              prod.checked = true;
+            }
+          }
+
+          Get.back();
+
+          Get.to(
+            OrderNewPage(
+              from: OrderNewPage.fromCart,
+              cart: cartTemp,
+            ),
+            transition: Transition.rightToLeft,
+          );
+        }
+
+        if (cartState is DataFailed) {
+          Get.back();
+          await PasarAjaMessage.showWarning("Gagal Memesan Produk");
+        }
+      }
+
+      if (dataState is DataFailed) {
+        Get.back();
+        await PasarAjaMessage.showWarning("Gagal Memesan Produk");
       }
     } catch (ex) {
       Fluttertoast.showToast(msg: "error : ${ex.toString()}");

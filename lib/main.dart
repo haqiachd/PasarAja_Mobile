@@ -10,11 +10,12 @@ import 'package:pasaraja_mobile/module/customer/provider/cart/cart_provider.dart
 import 'package:pasaraja_mobile/module/customer/provider/providers.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/providers.dart';
 import 'package:pasaraja_mobile/splash_screen.dart';
-import 'package:pasaraja_mobile/syam.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('id_ID', null);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -69,7 +70,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CustomerShopProvider()),
         ChangeNotifierProvider(create: (context) => CustomerProductProvider()),
         ChangeNotifierProvider(create: (context) => CustomerProductDetailProvider()),
+        ChangeNotifierProvider(create: (context) => CustomerShopDetailProvider()),
         ChangeNotifierProvider(create: (context) => CartProvider()),
+        ChangeNotifierProvider(create: (context) => CustomerPromoProvider()),
         // merchant
         ChangeNotifierProvider(create: (context) => MyShopProvider()),
         ChangeNotifierProvider(create: (context) => ProfileProvider()),

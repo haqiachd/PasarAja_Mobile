@@ -125,9 +125,9 @@ class AddPromoProvider extends ChangeNotifier {
       firstDate: today.add(const Duration(days: 1)),
       selectableDayPredicate: (DateTime date) {
         // Nonaktifkan hari Minggu
-        if (date.weekday == DateTime.sunday) {
-          return false;
-        }
+        // if (date.weekday == DateTime.sunday) {
+        //   return false;
+        // }
         // Nonaktifkan tanggal sebelum hari ini
         if (date.isBefore(today)) {
           return false;
@@ -160,9 +160,9 @@ class AddPromoProvider extends ChangeNotifier {
       firstDate: today.add(const Duration(days: 1)),
       selectableDayPredicate: (DateTime date) {
         // Nonaktifkan hari Minggu
-        if (date.weekday == DateTime.sunday) {
-          return false;
-        }
+        // if (date.weekday == DateTime.sunday) {
+        //   return false;
+        // }
         // Nonaktifkan tanggal sebelum hari ini
         if (date.isBefore(today)) {
           return false;

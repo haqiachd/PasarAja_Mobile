@@ -13,6 +13,7 @@ import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/module/customer/controllers/cart_controller.dart';
 import 'package:pasaraja_mobile/module/customer/models/cart_model.dart';
 import 'package:pasaraja_mobile/module/customer/models/cart_product_model.dart';
+import 'package:pasaraja_mobile/module/customer/views/order/order_new_page.dart';
 
 class CartProvider extends ChangeNotifier {
   final _cartController = CartController();
@@ -102,7 +103,7 @@ class CartProvider extends ChangeNotifier {
   void updateQuantity(BuildContext context, CartProductModel cartProd) async {
     final newQty = await showQtyDialog(context, cartProd, cartProd.quantity!);
 
-    if(newQty != -1){
+    if (newQty != -1) {
       _totalPriceSelected -= cartProd.totalPrice!;
       cartProd.quantity = newQty;
       cartProd.controller = TextEditingController(text: '$newQty');
@@ -200,11 +201,13 @@ class CartProvider extends ChangeNotifier {
 
   Future<void> addNotes(BuildContext context, CartProductModel cartProd) async {
     try {
-      final notes =
+      var notes =
           await showNotesDialog(context, cartProd, cartProd.notes ?? '');
 
       if ((notes ?? '') != '###') {
         final idUser = await PasarAjaUserService.getUserId();
+
+        notes = notes!.replaceAll('\n', ' ');
 
         PasarAjaMessage.showLoading();
 
@@ -289,6 +292,30 @@ class CartProvider extends ChangeNotifier {
         Get.back();
       }
       PasarAjaMessage.showSnackbarWarning(ex.toString());
+    }
+  }
+
+  void onButtonCreateOrder() {
+    if(_totalPriceSelected >= 1){
+      // mendapatkan data toko yang diselect
+      CartModel? cartSelected = carts.firstWhere(
+              (element) => element.idShop == _selectedShop);
+
+
+      DMethod.log('shop name : ${cartSelected.shopDataModel?.shopName}');
+      for(var prod in cartSelected.products!){
+        if(prod.checked){
+          DMethod.log('product name : ${prod.productData?.productName}');
+        }
+      }
+
+      Get.to(
+        OrderNewPage(from: OrderNewPage.fromCart,cart: cartSelected),
+        transition: Transition.rightToLeft,
+      );
+
+    }else{
+      Fluttertoast.showToast(msg: 'Tidak ada produk yang dipilih');
     }
   }
 
