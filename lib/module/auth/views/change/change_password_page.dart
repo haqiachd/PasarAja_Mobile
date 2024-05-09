@@ -65,7 +65,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               children: [
                 const AuthInit(
                   image: PasarAjaImage.ilCreate,
-                  title: 'Buat Kata Sandi <register>',
+                  title: 'Buat Kata Sandi',
                   description:
                       'Buatlah sebuah kata sandi yang rumit dan sulit ditebak oleh orang lain.',
                 ),
