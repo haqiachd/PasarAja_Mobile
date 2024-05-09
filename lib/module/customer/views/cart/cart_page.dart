@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pasaraja_mobile/config/themes/Typography.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/widgets/loading_indicator.dart';
@@ -134,8 +135,8 @@ class _CartPageState extends State<CartPage> {
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.1),
-                    spreadRadius: 3,
-                    blurRadius: 2,
+                    spreadRadius: 4,
+                    blurRadius: 3,
                     offset: const Offset(0, -1),
                   ),
                 ],
@@ -166,17 +167,22 @@ class _CartPageState extends State<CartPage> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 2.5,
-                      height: 60,
-                      child: Material(
-                        color: PasarAjaColor.green1,
-                        child: Center(
-                          child: Text(
-                            'Buat Pesanan',
-                            style: PasarAjaTypography.sfpdSemibold.copyWith(
-                              color: Colors.white,
-                              fontSize: 15.5,
+                    InkWell(
+                      onTap: (){
+                        provider.onButtonCreateOrder();
+                      },
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        height: 60,
+                        child: Material(
+                          color: PasarAjaColor.green1,
+                          child: Center(
+                            child: Text(
+                              'Checkout',
+                              style: PasarAjaTypography.sfpdSemibold.copyWith(
+                                color: Colors.white,
+                                fontSize: 15.5,
+                              ),
                             ),
                           ),
                         ),

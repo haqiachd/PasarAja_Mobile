@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/widgets/loading_indicator.dart';
 import 'package:pasaraja_mobile/config/widgets/page_error_message.dart';
 import 'package:pasaraja_mobile/config/widgets/something_wrong.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/module/customer/provider/providers.dart';
+import 'package:pasaraja_mobile/module/customer/views/shopping/shop_detail_page.dart';
 import 'package:pasaraja_mobile/module/customer/widgets/item_shop.dart';
 import 'package:provider/provider.dart';
 
@@ -63,7 +65,9 @@ class _ShopTabState extends State<ShopTab> {
                 var shop = shops[index];
                 return ItemShop(
                   shop: shop,
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(ShopDetailPage(shopdId: shop.idShop!));
+                  },
                 );
               },
             );

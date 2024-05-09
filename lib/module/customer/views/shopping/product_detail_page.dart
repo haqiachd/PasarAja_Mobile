@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/Typography.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/widgets/action_button.dart';
+import 'package:pasaraja_mobile/config/widgets/app_textfield.dart';
 import 'package:pasaraja_mobile/config/widgets/image_network_error.dart';
 import 'package:pasaraja_mobile/config/widgets/image_network_placeholder.dart';
 import 'package:pasaraja_mobile/config/widgets/loading_indicator.dart';
@@ -43,7 +44,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   @override
   void initState() {
     super.initState();
-    DMethod.log('SELECTED ID : ${widget.idProduct}');
+    DMethod.log('SELECTED ID SHOP : ${widget.idShop}');
+    DMethod.log('SELECTED ID PRODUCT : ${widget.idProduct}');
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await _fetchData();
     });
@@ -201,14 +203,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 2.5, right: 2.5),
-                        child: Material(
-                          color: PasarAjaColor.green1,
-                          child: Center(
-                            child: Text(
-                              'Beli Sekarang',
-                              style: PasarAjaTypography.sfpdSemibold.copyWith(
-                                color: Colors.white,
-                                fontSize: 15.5,
+                        child: InkWell(
+                          onTap: () {
+                            _showAlertDialog(provider.productDetail.product!);
+                          },
+                          child: Material(
+                            color: PasarAjaColor.green1,
+                            child: Center(
+                              child: Text(
+                                'Beli Sekarang',
+                                style: PasarAjaTypography.sfpdSemibold.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 15.5,
+                                ),
                               ),
                             ),
                           ),
@@ -371,6 +378,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   errorWidget: (context, str, obj) {
                     return const ImageErrorNetwork();
                   },
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -446,7 +454,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       builder: (BuildContext context) {
         return Consumer<CustomerProductDetailProvider>(
           builder: (context, provider, child) {
-
             return Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20.0),
@@ -466,7 +473,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              "Rp. ${PasarAjaUtils.formatPrice(product?.price ?? 0)}",
+                              "Rp. ${PasarAjaUtils.formatPrice(product.price ?? 0)}",
                               style: PasarAjaTypography.sfpdRegular.copyWith(
                                 fontSize: 20,
                                 decoration: TextDecoration.lineThrough,
@@ -501,7 +508,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                       IconButton(
                           onPressed: () {
-                           provider.minusOne();
+                            provider.minusOne();
                           },
                           icon: const Icon(Icons.exposure_minus_1)),
                       // Add TextField here
@@ -546,6 +553,126 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             );
           },
+        );
+      },
+    );
+  }
+
+  _showAlertDialog(ProductModel product) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text(
+            product.productName ?? 'null',
+            style: PasarAjaTypography.sfpdRegular.copyWith(fontSize: 25),
+          ),
+          content: Consumer<CustomerProductDetailProvider>(
+            builder: (context, provider, child) {
+              return Container(
+                width: Get.width,
+                padding: const EdgeInsets.all(1),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    PasarAjaUtils.isActivePromo(product.promo)
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Rp. ${PasarAjaUtils.formatPrice(product.price ?? 0)}",
+                                style: PasarAjaTypography.sfpdRegular.copyWith(
+                                  fontSize: 20,
+                                  decoration: TextDecoration.lineThrough,
+                                ),
+                              ),
+                              Text(
+                                "Rp. ${PasarAjaUtils.formatPrice(product.promo?.promoPrice ?? 0)} / ${product.sellingUnit} ${product.unit}",
+                                style: PasarAjaTypography.sfpdRegular
+                                    .copyWith(fontSize: 20),
+                              ),
+                              Text(
+                                "Dis : ${product.promo?.percentage} %",
+                                style: PasarAjaTypography.sfpdRegular
+                                    .copyWith(fontSize: 16),
+                              ),
+                            ],
+                          )
+                        : Text(
+                            "Rp. ${PasarAjaUtils.formatPrice(product.price ?? 0)} / ${product.sellingUnit} ${product.unit}",
+                            style: PasarAjaTypography.sfpdRegular
+                                .copyWith(fontSize: 25),
+                          ),
+                    const SizedBox(height: 10),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Jumlah : ',
+                          style: PasarAjaTypography.sfpdRegular
+                              .copyWith(fontSize: 25),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            provider.minusOne();
+                          },
+                          icon: const Icon(Icons.exposure_minus_1),
+                        ),
+                        SizedBox(
+                          width: Get.width / 8,
+                          height: 50,
+                          child: TextField(
+                            controller: provider.quantityCont,
+                            readOnly: false,
+                            onSubmitted: (str){
+                              provider.onChangeQuantity(int.parse(str));
+                            },
+                            keyboardType: TextInputType.number,
+                            inputFormatters: AppTextField.numberFormatter(),
+                            decoration: const InputDecoration(
+                              hintText: '0',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            provider.addOne();
+                          },
+                          icon: const Icon(Icons.exposure_plus_1_outlined),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      'Catatan : ',
+                      style: PasarAjaTypography.sfpdSemibold.copyWith(fontSize: 18),
+                    ),
+                    TextField(
+                      controller: provider.notesCont,
+                      maxLength: 100,
+                      style: PasarAjaTypography.sfpdRegular,
+                      decoration: const InputDecoration(hintText: "Masukkan catatan (optional) ..."),
+                      maxLines: 1,
+                    ),
+                    const SizedBox(height: 30),
+                    ActionButton(
+                      onPressed: () {
+                        provider.onButtonBuyNowPressed();
+                      },
+                      width: Get.width,
+                      title: 'Beli Sekarang',
+                      state: ActionButton.stateEnabledButton,
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              );
+            },
+          ),
         );
       },
     );

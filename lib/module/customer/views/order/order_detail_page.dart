@@ -16,6 +16,7 @@ import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/module/customer/models/transaction_history_model.dart';
 import 'package:pasaraja_mobile/module/customer/provider/order/order_confirmed_provider.dart';
 import 'package:pasaraja_mobile/module/customer/provider/order/order_detail_provider.dart';
+import 'package:pasaraja_mobile/module/customer/provider/order/order_intaking_provider.dart';
 import 'package:pasaraja_mobile/module/customer/provider/order/order_request_provider.dart';
 import 'package:pasaraja_mobile/module/customer/provider/order/order_submitted_provider.dart';
 import 'package:pasaraja_mobile/module/customer/views/order/order_cancel_page.dart';
@@ -23,6 +24,7 @@ import 'package:pasaraja_mobile/module/customer/widgets/customer_sub_appbar.dart
 import 'package:pasaraja_mobile/module/merchant/models/transaction_model.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/order/order_detail_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class OrderDetailPage extends StatefulWidget {
   const OrderDetailPage({
@@ -126,6 +128,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         children: [
                           SizedBox(
                             width: 100,
+                            height: 70,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: CachedNetworkImage(
@@ -136,6 +139,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                   return const ImageErrorNetwork();
                                 },
                                 imageUrl: prod.product?.photo ?? '',
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
@@ -285,7 +289,26 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           const SizedBox(height: 20),
           _buildInFinishedButton(order),
           _buildInTakingButton(order),
-          const SizedBox(height: 20),
+          Visibility(
+            visible: (widget.provider is CustomerOrderConfirmedProvider || widget.provider is CustomerOrderInTakingProvider),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                Center(
+                  child: QrImageView(
+                    data: order.orderCode ?? 'null',
+                    version: QrVersions.auto,
+                    eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.circle, color: Colors.black),
+                    dataModuleStyle: const QrDataModuleStyle(dataModuleShape: QrDataModuleShape.circle, color: Colors.black),
+                    size: 220.0,
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
           _buildRejectButton(order),
           const SizedBox(height: 40),
         ],
@@ -300,7 +323,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           return SizedBox(
             width: double.infinity,
             child: ActionButton(
-              onPressed: () async{
+              onPressed: () async {
                 await prov.onButtonTakingPressed(
                   idShop: order.shopData?.idShop ?? 0,
                   orderCode: order.orderCode ?? '',
@@ -361,7 +384,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           return SizedBox(
             width: double.infinity,
             child: ActionButton(
-              onPressed: () async{
+              onPressed: () async {
                 await prov.onButtonFinishedPressed(
                   idShop: order.shopData?.idShop ?? 0,
                   orderCode: order.orderCode ?? '',
