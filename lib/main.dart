@@ -9,7 +9,10 @@ import 'package:pasaraja_mobile/module/auth/providers/providers.dart';
 import 'package:pasaraja_mobile/module/customer/provider/cart/cart_provider.dart';
 import 'package:pasaraja_mobile/module/customer/provider/providers.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/providers.dart';
+import 'package:pasaraja_mobile/module/merchant/views/merchant_main_page.dart';
+import 'package:pasaraja_mobile/module/merchant/views/myshop/myshop_page.dart';
 import 'package:pasaraja_mobile/splash_screen.dart';
+import 'package:pasaraja_mobile/splash_screen_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -37,6 +40,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => SplashScreenProvider()),
         // auth
         ChangeNotifierProvider(create: (context) => GoogleSignService()),
         ChangeNotifierProvider(create: (context) => WelcomeProvider()),
@@ -53,30 +57,47 @@ class MyApp extends StatelessWidget {
         // customer
         ChangeNotifierProvider(create: (context) => HomeProvider()),
         ChangeNotifierProvider(create: (context) => ProfileCustomerProvider()),
-        ChangeNotifierProvider(create: (context) => EditAccountCustomerProvider()),
-        ChangeNotifierProvider(create: (context) => UpdatePhotoProfileCustomerProvider()),
-        ChangeNotifierProvider(create: (context) => CustomerOrderCancelCustomerProvider()),
-        ChangeNotifierProvider(create: (context) => CustomerOrderCancelMerchantProvider()),
-        ChangeNotifierProvider(create: (context) => CustomerOrderConfirmedProvider()),
-        ChangeNotifierProvider(create: (context) => CustomerOrderExpiredProvider()),
-        ChangeNotifierProvider(create: (context) => CustomerOrderFinishedProvider()),
-        ChangeNotifierProvider(create: (context) => CustomerOrderInTakingProvider()),
-        ChangeNotifierProvider(create: (context) => CustomerOrderRequestProvider()),
-        ChangeNotifierProvider(create: (context) => CustomerOrderSubmittedProvider()),
-        ChangeNotifierProvider(create: (context) => CustomerOrderDetailProvider()),
-        ChangeNotifierProvider(create: (context) => CustomerOrderCancelProvider()),
+        ChangeNotifierProvider(
+            create: (context) => EditAccountCustomerProvider()),
+        ChangeNotifierProvider(
+            create: (context) => UpdatePhotoProfileCustomerProvider()),
+        ChangeNotifierProvider(
+            create: (context) => CustomerOrderCancelCustomerProvider()),
+        ChangeNotifierProvider(
+            create: (context) => CustomerOrderCancelMerchantProvider()),
+        ChangeNotifierProvider(
+            create: (context) => CustomerOrderConfirmedProvider()),
+        ChangeNotifierProvider(
+            create: (context) => CustomerOrderExpiredProvider()),
+        ChangeNotifierProvider(
+            create: (context) => CustomerOrderFinishedProvider()),
+        ChangeNotifierProvider(
+            create: (context) => CustomerOrderInTakingProvider()),
+        ChangeNotifierProvider(
+            create: (context) => CustomerOrderRequestProvider()),
+        ChangeNotifierProvider(
+            create: (context) => CustomerOrderSubmittedProvider()),
+        ChangeNotifierProvider(
+            create: (context) => CustomerOrderDetailProvider()),
+        ChangeNotifierProvider(
+            create: (context) => CustomerOrderCancelProvider()),
+        ChangeNotifierProvider(create: (context) => OrderComplainProvider()),
+        ChangeNotifierProvider(create: (context) => OrderReviewProvider()),
         ChangeNotifierProvider(create: (context) => CustomerOrderNewProvider()),
         ChangeNotifierProvider(create: (context) => CustomerShoppingProvider()),
         ChangeNotifierProvider(create: (context) => CustomerShopProvider()),
         ChangeNotifierProvider(create: (context) => CustomerProductProvider()),
-        ChangeNotifierProvider(create: (context) => CustomerProductDetailProvider()),
-        ChangeNotifierProvider(create: (context) => CustomerShopDetailProvider()),
+        ChangeNotifierProvider(
+            create: (context) => CustomerProductDetailProvider()),
+        ChangeNotifierProvider(
+            create: (context) => CustomerShopDetailProvider()),
         ChangeNotifierProvider(create: (context) => CartProvider()),
         ChangeNotifierProvider(create: (context) => CustomerPromoProvider()),
         // merchant
         ChangeNotifierProvider(create: (context) => MyShopProvider()),
         ChangeNotifierProvider(create: (context) => ProfileProvider()),
-        ChangeNotifierProvider(create: (context) => UpdatePhotoProfileProvider()),
+        ChangeNotifierProvider(
+            create: (context) => UpdatePhotoProfileProvider()),
         ChangeNotifierProvider(create: (context) => EditAccountProvider()),
         ChangeNotifierProvider(create: (context) => ProductProvider()),
         ChangeNotifierProvider(create: (context) => AddProductProvider()),
@@ -101,7 +122,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => PromoSoonProvider()),
         ChangeNotifierProvider(create: (context) => PromoExpiredProvider()),
         ChangeNotifierProvider(create: (context) => OrderCancelCustomerProvider()),
-        ChangeNotifierProvider(create: (context) => OrderCancelMerchantProvider()),
+        ChangeNotifierProvider(
+            create: (context) => OrderCancelMerchantProvider()),
         ChangeNotifierProvider(create: (context) => OrderConfirmedProvider()),
         ChangeNotifierProvider(create: (context) => OrderExpiredProvider()),
         ChangeNotifierProvider(create: (context) => OrderFinishedProvider()),
@@ -146,7 +168,6 @@ class MyApp extends StatelessWidget {
             surfaceTintColor: Colors.white,
           ),
         ),
-        // home: const listview_kategori(),
         home: const SplashScreen(),
       ),
     );

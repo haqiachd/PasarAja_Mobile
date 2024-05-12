@@ -20,4 +20,6 @@ export 'order/order_submitted_provider.dart';
 export 'order/order_detail_provider.dart';
 export 'order/order_cancel_provider.dart';
 export 'order/order_new_provider.dart';
+export 'order/order_complain_provider.dart';
+export 'order/order_review_provider.dart';
 export 'promo/promo_provider.dart';
