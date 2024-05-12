@@ -1,3 +1,4 @@
+import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -175,6 +176,8 @@ class SignUpSecondProvider extends ChangeNotifier {
         email: email,
       );
 
+      DMethod.log('email : ${email}');
+
       // jika email sudah terdaftar
       if (dataState is DataSuccess) {
         PasarAjaMessage.showSnackbarWarning("Email tersebut sudah terdaftar");
@@ -183,7 +186,7 @@ class SignUpSecondProvider extends ChangeNotifier {
         emailCont.text = '';
         onValidateEmail('');
         // close loading button
-        buttonState = AuthFilledButton.stateEnabledButton;
+        buttonState = AuthFilledButton.stateDisabledButton;
       }
 
       // jika email belum terdaftar

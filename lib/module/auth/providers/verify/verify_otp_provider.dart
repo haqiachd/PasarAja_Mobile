@@ -213,15 +213,20 @@ class VerifyOtpProvider extends ChangeNotifier {
   void _calculateResendTime() {
     switch (_resent) {
       case 1:
-        _second = 20; // 2 menit
+        _second = 120; // 2 menit
+        break;
       case 2:
-        _second = 30; // 3 menit
+        _second = 180; // 3 menit
+        break;
       case 3:
-        _second = 50; // 5 menit
+        _second = 300; // 5 menit
+        break;
       case 4:
-        _second = 70; // 7 menit
-      case > 4:
-        _second = 60; // 11 menit
+        _second = 420; // 7 menit
+        break;
+      default:
+        _second = 660; // 11 menit
+        break;
     }
   }
 

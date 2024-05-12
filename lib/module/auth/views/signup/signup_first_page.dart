@@ -32,14 +32,17 @@ class _SignUpFirstPageState extends State<SignUpFirstPage> {
           padding: EdgeInsets.only(
               left: 19,
               right: 19,
-              top: 136 - MediaQuery.of(context).padding.top),
+              top: 136 - MediaQuery
+                  .of(context)
+                  .padding
+                  .top),
           child: Column(
             children: [
               const AuthInit(
                 image: PasarAjaImage.ilLoginPhone,
                 title: 'Daftar Akun',
                 description:
-                    'Silakan masukkan nomor HP Anda untuk mendaftar akun pada Aplikasi.',
+                'Silakan masukkan nomor HP Anda untuk mendaftar akun pada Aplikasi.',
               ),
               const SizedBox(height: 19),
               const Align(
@@ -137,14 +140,18 @@ class _SignUpFirstPageState extends State<SignUpFirstPage> {
 
   /// Button Berikutnya
   _buildButtonSkip() {
-    return AuthOutlinedButton(
-      onPressed: () async {
-        Provider.of<SignUpFirstProvider>(
-          context,
-          listen: false,
-        ).onPressedButtonSkip();
+    return Consumer<SignUpFirstProvider>(
+      builder: (context, provider, child) {
+        return Visibility(
+          visible: provider.buttonState != AuthFilledButton.stateLoadingButton,
+          child: AuthOutlinedButton(
+            onPressed: () async {
+              provider.onPressedButtonSkip();
+            },
+            title: 'Lewati Nomor HP',
+          ),
+        );
       },
-      title: 'Lewati Nomor HP',
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:d_method/d_method.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_session_jwt/flutter_session_jwt.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/services/jwt_services.dart';
+import 'package:pasaraja_mobile/core/services/user_services.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/dio_log.dart';
 import 'package:pasaraja_mobile/module/auth/models/shop_model.dart';
@@ -98,30 +100,38 @@ class SignInController {
         },
         options: Options(
           validateStatus: (status) {
-            return status == HttpStatus.ok || status == HttpStatus.badRequest;
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.internalServerError;
           },
         ),
       );
 
+      DMethod.log('controller : get payload');
+      DMethod.log('payload : ${response.data}');
       // get payload
       final Map<String, dynamic> payload = response.data;
 
       // jika login berhasil
       if (response.statusCode == HttpStatus.ok) {
+        DMethod.log('controller : get token');
         // get jwt token
         String jwtToken = payload['data'];
 
         // save token
+        DMethod.log('controller : save token');
         await FlutterSessionJwt.saveToken(jwtToken);
         DMethod.log(
           "expired in : ${await FlutterSessionJwt.getExpirationDateTime()}",
         );
 
+        DMethod.log('controller : decode token');
         // decode jwt
         final decodedToken = JWT.decode(
           jwtToken,
         );
 
+        DMethod.log('controller : return data model');
         // return user model
         return DataSuccess(UserModel.fromJson(decodedToken.payload['data']));
       } else {

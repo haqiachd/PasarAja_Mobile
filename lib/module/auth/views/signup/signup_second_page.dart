@@ -247,7 +247,7 @@ class _SignUpPageState extends State<SignUpSecondPage> {
     return Consumer2<SignUpSecondProvider, GoogleSignService>(
       builder: (context, signUpProvider, googleProvider, child) {
         return Visibility(
-          visible: !signUpProvider.isLoginGoogle,
+          visible: !signUpProvider.isLoginGoogle && signUpProvider.buttonState != AuthFilledButton.stateLoadingButton,
           child: InkWell(
             onTap: () async {
               // show google auth

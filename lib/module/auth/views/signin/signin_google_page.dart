@@ -157,17 +157,20 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
   _buildButtonLupaSandi(BuildContext context) {
     return Consumer<SignInGoogleProvider>(
       builder: (context, provider, child) {
-        return GestureDetector(
-          onTap: () {
-            provider.onValidateEmail(provider.emailCont.text);
-            provider.onTapButtonLupaSandi(
-              email: provider.emailCont.text,
-            );
-          },
-          child: Text(
-            'Lupa Kata Sandi',
-            style: PasarAjaTypography.sfpdSemibold.copyWith(
-              color: Colors.black,
+        return Visibility(
+          visible: provider.buttonState != AuthFilledButton.stateLoadingButton,
+          child: GestureDetector(
+            onTap: () {
+              provider.onValidateEmail(provider.emailCont.text);
+              provider.onTapButtonLupaSandi(
+                email: provider.emailCont.text,
+              );
+            },
+            child: Text(
+              'Lupa Kata Sandi',
+              style: PasarAjaTypography.sfpdSemibold.copyWith(
+                color: Colors.black,
+              ),
             ),
           ),
         );
@@ -178,22 +181,25 @@ class _SignInGooglePageState extends State<SignInGooglePage> {
   _buildButtonLoginGoogle(BuildContext context) {
     return Consumer2<SignInGoogleProvider, GoogleSignService>(
       builder: (context, signInProvider, googleProvider, child) {
-        return InkWell(
-          onTap: () async {
-            // show google auth
-            await googleProvider.googleLogin();
+        return Visibility(
+          visible: signInProvider.buttonState != AuthFilledButton.stateLoadingButton,
+          child: InkWell(
+            onTap: () async {
+              // show google auth
+              await googleProvider.googleLogin();
 
-            // login dengan google
-            signInProvider.onTapButtonLoginGoogle(
-              email: googleProvider.user.email,
-            );
+              // login dengan google
+              signInProvider.onTapButtonLoginGoogle(
+                email: googleProvider.user.email,
+              );
 
-            googleProvider.logout();
-          },
-          child: Image.asset(
-            PasarAjaImage.icGoogle,
-            width: 38,
-            height: 38,
+              googleProvider.logout();
+            },
+            child: Image.asset(
+              PasarAjaImage.icGoogle,
+              width: 38,
+              height: 38,
+            ),
           ),
         );
       },
