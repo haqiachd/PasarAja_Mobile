@@ -13,15 +13,17 @@ import 'package:pasaraja_mobile/config/widgets/something_wrong.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
+import 'package:pasaraja_mobile/module/customer/models/transaction_detail_history_model.dart';
 import 'package:pasaraja_mobile/module/customer/models/transaction_history_model.dart';
 import 'package:pasaraja_mobile/module/customer/provider/order/order_confirmed_provider.dart';
 import 'package:pasaraja_mobile/module/customer/provider/order/order_detail_provider.dart';
 import 'package:pasaraja_mobile/module/customer/provider/order/order_intaking_provider.dart';
 import 'package:pasaraja_mobile/module/customer/provider/order/order_request_provider.dart';
 import 'package:pasaraja_mobile/module/customer/provider/order/order_submitted_provider.dart';
+import 'package:pasaraja_mobile/module/customer/provider/providers.dart';
 import 'package:pasaraja_mobile/module/customer/views/order/order_cancel_page.dart';
 import 'package:pasaraja_mobile/module/customer/widgets/customer_sub_appbar.dart';
-import 'package:pasaraja_mobile/module/merchant/models/transaction_model.dart';
+import 'package:pasaraja_mobile/module/customer/widgets/item_detail_product.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/order/order_detail_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -106,11 +108,14 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             ),
           ),
           const SizedBox(height: 10),
-          Text(
-            "PIN Pesanan : ${order.orderPin}",
-            style: PasarAjaTypography.sfpdBold.copyWith(
-              color: Colors.red,
-              fontSize: 20,
+          Visibility(
+            visible: false,
+            child: Text(
+              "PIN Pesanan : ${order.orderPin}",
+              style: PasarAjaTypography.sfpdBold.copyWith(
+                color: Colors.red,
+                fontSize: 20,
+              ),
             ),
           ),
           const Text("_"),
@@ -119,85 +124,31 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: order.details!
                 .map(
-                  (prod) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 100,
-                            height: 70,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: CachedNetworkImage(
-                                placeholder: (context, url) {
-                                  return const ImageNetworkPlaceholder();
-                                },
-                                errorWidget: (context, url, error) {
-                                  return const ImageErrorNetwork();
-                                },
-                                imageUrl: prod.product?.photo ?? '',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${prod.quantity} x ${prod.product?.productName}",
-                                  style:
-                                      PasarAjaTypography.sfpdRegular.copyWith(
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                Text(
-                                  "Rp. ${PasarAjaUtils.formatPrice(prod.subTotal ?? 0)}",
-                                  style:
-                                      PasarAjaTypography.sfpdRegular.copyWith(
-                                    fontSize: 16,
-                                    decoration: (prod.promoPrice ?? 0) > 0
-                                        ? TextDecoration.lineThrough
-                                        : TextDecoration.none,
-                                  ),
-                                ),
-                                Visibility(
-                                  visible: (prod.promoPrice ?? 0) > 0,
-                                  child: Text(
-                                    "Rp. ${PasarAjaUtils.formatPrice(prod.totalPrice ?? 0)}",
-                                    style:
-                                        PasarAjaTypography.sfpdRegular.copyWith(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Visibility(
-                        visible:
-                            prod.notes != null && prod.notes!.trim().isNotEmpty,
-                        child: Text(
-                          "Notes : ${prod.notes ?? ''}",
-                          maxLines: 3,
-                          softWrap: true,
-                          style: PasarAjaTypography.sfpdRegular.copyWith(
-                            overflow: TextOverflow.ellipsis,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Divider(),
-                    ],
+                  (prod) => ItemDetailProduct(
+                    state: widget.provider!,
+                    prod: prod as TransactionDetailHistoryModel,
+                    orderCode: order.orderCode!,
+                    idTrx: order.idTrx!,
+                    onDeleteReview: () async {
+                      context.read<CustomerOrderDetailProvider>().deleteReview(
+                            orderCode: order.orderCode!,
+                            idTrx: order.idTrx!,
+                            idReview: prod.review!.idReview!,
+                            idShop: prod.product!.idShop!,
+                            idProduct: prod.product!.id!,
+                          );
+                    },
+                    onDeleteComplain: () async {
+                      context
+                          .read<CustomerOrderDetailProvider>()
+                          .deleteComplain(
+                            orderCode: order.orderCode!,
+                            idTrx: order.idTrx!,
+                            idComplain: prod.complain!.idComplain!,
+                            idShop: prod.product!.idShop!,
+                            idProduct: prod.product!.id!,
+                          );
+                    },
                   ),
                 )
                 .toList(),
@@ -290,7 +241,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           _buildInFinishedButton(order),
           _buildInTakingButton(order),
           Visibility(
-            visible: (widget.provider is CustomerOrderConfirmedProvider || widget.provider is CustomerOrderInTakingProvider),
+            visible: (widget.provider is CustomerOrderConfirmedProvider ||
+                widget.provider is CustomerOrderInTakingProvider),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -300,8 +252,11 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   child: QrImageView(
                     data: order.orderCode ?? 'null',
                     version: QrVersions.auto,
-                    eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.circle, color: Colors.black),
-                    dataModuleStyle: const QrDataModuleStyle(dataModuleShape: QrDataModuleShape.circle, color: Colors.black),
+                    eyeStyle: const QrEyeStyle(
+                        eyeShape: QrEyeShape.circle, color: Colors.black),
+                    dataModuleStyle: const QrDataModuleStyle(
+                        dataModuleShape: QrDataModuleShape.circle,
+                        color: Colors.black),
                     size: 220.0,
                   ),
                 ),

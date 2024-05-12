@@ -146,4 +146,102 @@ class CustomerOrderDetailProvider extends ChangeNotifier {
       Fluttertoast.showToast(msg: "Error : ${ex.toString()}");
     }
   }
+
+  Future<void> deleteComplain({
+    required String orderCode,
+    required int idTrx,
+    required int idComplain,
+    required int idShop,
+    required int idProduct,
+  }) async {
+    try {
+      final confirm = await PasarAjaMessage.showConfirmation(
+        "Apakah Anda yakin ingin menghapus komplain?",
+        actionYes: 'Iya',
+        actionCancel: 'Batal',
+        barrierDismissible: true
+      );
+
+      if (!confirm) {
+        return;
+      }
+
+      PasarAjaMessage.showLoading();
+
+      final compTrx = await _controller.deleteComplain(
+        idTrx: idTrx,
+        idComplain: idComplain,
+        idShop: idShop,
+        idProduct: idProduct,
+      );
+
+      Get.back();
+
+      if (compTrx is DataSuccess) {
+        await PasarAjaMessage.showInformation('Komplain Berhasil Dihapus');
+        await fetchData(orderCode: orderCode);
+      }
+
+      if (compTrx is DataFailed) {
+        PasarAjaMessage.showSnackbarWarning(
+          compTrx.error?.error.toString() ?? PasarAjaConstant.unknownError,
+        );
+      }
+    } catch (ex) {
+      if (Get.isDialogOpen ?? false) {
+        Get.back();
+      }
+      DMethod.log('error : $ex');
+      PasarAjaMessage.showSnackbarWarning(ex.toString());
+    }
+  }
+
+  Future<void> deleteReview({
+    required String orderCode,
+    required int idTrx,
+    required int idReview,
+    required int idShop,
+    required int idProduct,
+  }) async {
+    try {
+      final confirm = await PasarAjaMessage.showConfirmation(
+          "Apakah Anda yakin ingin menghapus ulasan?",
+          actionYes: 'Iya',
+          actionCancel: 'Batal',
+          barrierDismissible: true
+      );
+
+      if (!confirm) {
+        return;
+      }
+
+      PasarAjaMessage.showLoading();
+
+      final compTrx = await _controller.deleteReview(
+        idTrx: idTrx,
+        idReview: idReview,
+        idShop: idShop,
+        idProduct: idProduct,
+      );
+
+      Get.back();
+
+      if (compTrx is DataSuccess) {
+        await PasarAjaMessage.showInformation('Komplain Berhasil Dihapus');
+        await fetchData(orderCode: orderCode);
+      }
+
+      if (compTrx is DataFailed) {
+        PasarAjaMessage.showSnackbarWarning(
+          compTrx.error?.error.toString() ?? PasarAjaConstant.unknownError,
+        );
+      }
+    } catch (ex) {
+      if (Get.isDialogOpen ?? false) {
+        Get.back();
+      }
+      DMethod.log('error : $ex');
+      PasarAjaMessage.showSnackbarWarning(ex.toString());
+    }
+  }
 }
