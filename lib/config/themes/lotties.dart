@@ -7,4 +7,6 @@ class PasarAjaLottie {
   static const String error = '${_dir}error.json';
   static const String somethingWrong = '${_dir}something_wrong.json';
   static const String orderSuccess = "${_dir}raw_order_success.json";
+  static const String maintenance = "${_dir}maintenance.json";
+  static const String sleep = "${_dir}turu.json";
 }
