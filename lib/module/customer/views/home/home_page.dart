@@ -95,8 +95,8 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 20),
                     GoFoodSecond(
                       eventTitle: EventTitleModel(
-                        title: 'Resto dengan rating jempolan',
-                        deskripsi: 'Ad',
+                        title: 'Rekomendasi Produk',
+                        deskripsi: 'Rekomendasi produk untuk Anda',
                         contentSpace: 19,
                       ),
                       models: PasarAjaUtils.shuffleList(provider.berandaModel.products!),
@@ -106,8 +106,8 @@ class _HomePageState extends State<HomePage> {
                       eventTitle: EventTitleModel(
                         icon: PasarAjaImage.gofood,
                         title: 'Pilihan Terlaris',
-                        deskripsi: '',
-                        haveButton: true,
+                        deskripsi: 'Produk paling laris di Pasar Wage',
+                        haveButton: false,
                         btnTitle: 'Lihat semua',
                         contentSpace: 10,
                       ),
@@ -117,9 +117,9 @@ class _HomePageState extends State<HomePage> {
                     GoFoodSecond(
                       eventTitle: EventTitleModel(
                         icon: PasarAjaImage.gofood,
-                        title: 'Pilihan Terlaris',
-                        deskripsi: '',
-                        haveButton: true,
+                        title: 'Rating Tinggi',
+                        deskripsi: 'Produk Rating yang Tinggi di Pasar Wage',
+                        haveButton: false,
                         btnTitle: 'Lihat semua',
                         contentSpace: 10,
                       ),

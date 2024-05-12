@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pasaraja_mobile/config/themes/Typography.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/widgets/app_bar.dart';
 import 'package:pasaraja_mobile/config/widgets/coming_soon.dart';
@@ -16,11 +17,10 @@ class MyShopPage extends StatefulWidget {
 }
 
 class _MyShopPageState extends State<MyShopPage> {
-
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async{
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await context.read<MyShopProvider>().fetchData();
     });
   }
@@ -47,23 +47,52 @@ class _MyShopPageState extends State<MyShopPage> {
           },
         ),
       ),
-      body: Stack(
-        children: [
-          // Positioned(
-          //   top: 0,
-          //   left: 0,
-          //   right: 0,
-          //   child: PasarAjaAppbar(
-          //     title: 'Toko Saya',
-          //     action: PhotoProfile(
-          //       onTap: () {
-          //         Get.to(const ProfilePage());
-          //       },
-          //     ),
-          //   ),
-          // ),
-          const ComingSoon(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 170,
+              width: 450,
+              color: Colors.grey[400],
+            ),
+            SizedBox(height: 20),
+            Container(
+              margin: EdgeInsets.only(left: 30),
+              child: Text(
+                "Nama Kios Mitra",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+            ),
+            SizedBox(height: 20),
+            Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: 60),
+                  height: 40,
+                  width: 100,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(7)),
+                ),
+
+                SizedBox(
+                  width: 70,
+                ),
+
+                Container(
+                  height: 40,
+                  width: 140,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(7)),
+                ),
+                
+              ],
+            ),
+            Text("data", style: PasarAjaTypography.sfpdBoldAuthInput,)
+          ],
+        ),
       ),
     );
   }
