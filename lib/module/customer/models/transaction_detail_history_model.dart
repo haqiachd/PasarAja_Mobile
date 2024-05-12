@@ -1,5 +1,7 @@
 import 'package:pasaraja_mobile/core/entities/transaction_detail_history_entity.dart';
 import 'package:pasaraja_mobile/module/customer/models/product_model.dart';
+import 'package:pasaraja_mobile/module/customer/models/review_model.dart';
+import 'package:pasaraja_mobile/module/customer/models/complain_model.dart';
 
 class TransactionDetailHistoryModel extends TransactionDetailHistoryEntity {
   const TransactionDetailHistoryModel({
@@ -12,6 +14,8 @@ class TransactionDetailHistoryModel extends TransactionDetailHistoryEntity {
     final String? unit,
     final int? sellingUnit,
     final ProductModel? product,
+    final ReviewModel? review,
+    final ComplainModel? complain,
   }) : super(
           price: price,
           quantity: quantity,
@@ -22,6 +26,8 @@ class TransactionDetailHistoryModel extends TransactionDetailHistoryEntity {
           unit: unit,
           sellingUnit: sellingUnit,
           product: product,
+          review: review,
+          complain: complain,
         );
 
   factory TransactionDetailHistoryModel.fromJson(Map<String, dynamic> json) =>
@@ -37,6 +43,12 @@ class TransactionDetailHistoryModel extends TransactionDetailHistoryEntity {
         promoPrice: json["promo_price"] ?? 0,
         subTotal: json["sub_total"] ?? 0,
         sellingUnit: json["selling_unit"] ?? 0,
+        review: json['product_review'] != null
+            ? ReviewModel.fromJson(json['product_review'])
+            : const ReviewModel(),
+        complain: json['product_complain'] != null
+            ? ComplainModel.fromJson(json['product_complain'])
+            : const ComplainModel(),
       );
 
   static List<TransactionDetailHistoryModel> toList(List<dynamic> json) =>

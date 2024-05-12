@@ -8,6 +8,7 @@ class ReviewModel extends ReviewEntity {
     final int? idProduct,
     final String? star,
     final DateTime? orderDate,
+    final DateTime? updatedAt,
     final String? comment,
     final String? productName,
     final String? fullName,
@@ -25,6 +26,7 @@ class ReviewModel extends ReviewEntity {
     fullName: fullName,
     email: email,
     photo: photo,
+    updatedAt: updatedAt,
   );
 
   factory ReviewModel.fromJson(Map<String, dynamic> json) => ReviewModel(
@@ -41,6 +43,9 @@ class ReviewModel extends ReviewEntity {
     fullName: json["full_name"] ?? '',
     email: json["email"] ?? '',
     photo: json["photo"] ?? '',
+    updatedAt: json["updated_at"] == null
+        ? null
+        : DateTime.parse(json["updated_at"]),
   );
 
   static List<ReviewModel> fromList(List<dynamic> json) {

@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:pasaraja_mobile/core/entities/complain_entity.dart';
 import 'package:pasaraja_mobile/core/entities/product_entity.dart';
+import 'package:pasaraja_mobile/core/entities/review_entity.dart';
 
 class TransactionDetailHistoryEntity extends Equatable {
   final int? price;
@@ -11,6 +13,8 @@ class TransactionDetailHistoryEntity extends Equatable {
   final String? unit;
   final int? sellingUnit;
   final ProductEntity? product;
+  final ReviewEntity? review;
+  final ComplainEntity? complain;
 
   const TransactionDetailHistoryEntity({
     this.price,
@@ -22,6 +26,8 @@ class TransactionDetailHistoryEntity extends Equatable {
     this.unit,
     this.sellingUnit,
     this.product,
+    this.review,
+    this.complain,
   });
 
   @override
@@ -37,6 +43,8 @@ class TransactionDetailHistoryEntity extends Equatable {
       unit,
       sellingUnit,
       product,
+      review,
+      complain,
     ];
   }
 }
