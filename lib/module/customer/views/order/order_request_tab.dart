@@ -150,7 +150,7 @@ class _OrderRequestTabState extends State<OrderRequestTab> {
               style: PasarAjaTypography.sfpdBold,
             ),
             Text(
-              "Rp. ${PasarAjaUtils.formatPrice(order.subTotal ?? 0)}",
+              "Rp. ${PasarAjaUtils.formatPrice(order.totalPrice ?? 0)}",
               style: PasarAjaTypography.sfpdBold,
             ),
             const SizedBox(height: 20),

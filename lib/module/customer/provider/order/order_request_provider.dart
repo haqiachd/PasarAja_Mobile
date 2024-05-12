@@ -44,6 +44,8 @@ class CustomerOrderRequestProvider extends ChangeNotifier {
       // get email
       final email = await PasarAjaUserService.getEmailLogged();
 
+      DMethod.log('email : $email');
+
       // get data
       final dataState = await _controller.tabRequest(
         email: email,
