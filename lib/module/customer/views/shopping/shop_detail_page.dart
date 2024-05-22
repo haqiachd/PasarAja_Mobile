@@ -107,29 +107,35 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                   const SizedBox(height: 10),
                   const Divider(),
                   const SizedBox(height: 10),
-                  GoFoodSecond(
-                    eventTitle: EventTitleModel(
-                      icon: PasarAjaImage.gofood,
-                      title: 'Rekomenasi Produk',
-                      deskripsi: 'Produk yang direkomendasikan oleh Penjual.',
-                      haveButton: false,
-                      btnTitle: 'Lihat semua',
-                      contentSpace: 10,
+                  Visibility(
+                    visible: provider.products.length >= 7,
+                    child: GoFoodSecond(
+                      eventTitle: EventTitleModel(
+                        icon: PasarAjaImage.gofood,
+                        title: 'Rekomenasi Produk',
+                        deskripsi: 'Produk yang direkomendasikan oleh Penjual.',
+                        haveButton: false,
+                        btnTitle: 'Lihat semua',
+                        contentSpace: 10,
+                      ),
+                      models: PasarAjaUtils.shuffleList(provider.products),
                     ),
-                    models: PasarAjaUtils.shuffleList(provider.products),
                   ),
                   const SizedBox(height: 20),
-                  GoFoodSecond(
-                    eventTitle: EventTitleModel(
-                      icon: PasarAjaImage.gofood,
-                      title: 'Produk Terlaris',
-                      deskripsi:
-                          'Produk yang Paling Laris di Toko ${shopDtl.shop?.shopName ?? 'null'}',
-                      haveButton: false,
-                      btnTitle: 'Lihat semua',
-                      contentSpace: 10,
+                  Visibility(
+                    visible: provider.products.length >= 7,
+                    child: GoFoodSecond(
+                      eventTitle: EventTitleModel(
+                        icon: PasarAjaImage.gofood,
+                        title: 'Produk Terlaris',
+                        deskripsi:
+                            'Produk yang Paling Laris di Toko ${shopDtl.shop?.shopName ?? 'null'}',
+                        haveButton: false,
+                        btnTitle: 'Lihat semua',
+                        contentSpace: 10,
+                      ),
+                      models: PasarAjaUtils.shuffleList(provider.products),
                     ),
-                    models: PasarAjaUtils.shuffleList(provider.products),
                   ),
                   const SizedBox(height: 20),
                   Padding(
