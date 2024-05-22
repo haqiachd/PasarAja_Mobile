@@ -1,5 +1,3 @@
-// ignore_for_file: unused_import
-
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -79,10 +77,15 @@ class _DetailProductPageState extends State<AddProductPage> {
         padding: const EdgeInsets.only(left: 15, right: 15),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(height: 15),
-              _buildPhotoViewer(context),
+              const AuthInputTitle(
+                  title: 'Tap Foto Untuk Menambahkan/Mengedit'),
               const SizedBox(height: 15),
+              _buildPhotoViewer(context),
+              const SizedBox(height: 30),
               _buildInputNamaProduk(),
               const SizedBox(height: 10),
               _buildInputCategory(),
@@ -111,34 +114,83 @@ class _DetailProductPageState extends State<AddProductPage> {
   _buildPhotoViewer(BuildContext context) {
     return Consumer<AddProductProvider>(
       builder: (context, prov, child) {
-        return SizedBox(
-          width: 150,
-          height: 150,
-          child: InkWell(
-            onTap: () {
-              _showSheet(context);
-            },
-            child: prov.photo.image != null
-                ? CircleAvatar(
-                    backgroundImage: MemoryImage(prov.photo.image!),
-                  )
-                : const Material(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(12.0),
+        return Align(
+          alignment: Alignment.center,
+          child: SizedBox(
+            width: 150,
+            height: 150,
+            child: InkWell(
+              onTap: () {
+                _showSheet(context);
+              },
+              child: prov.photo.image != null
+                  ? Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12.0),
+                        border: Border.all(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        image: DecorationImage(
+                          image: MemoryImage(prov.photo.image!),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    )
+                  : const Material(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(12.0),
+                        ),
+                        side: BorderSide(
+                          width: 1,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.photo_camera_back_rounded,
+                        color: Colors.black,
+                        size: 50,
                       ),
                     ),
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.black,
-                      size: 50,
-                    ),
-                  ),
+            ),
           ),
         );
       },
     );
   }
+
+  // _buildPhotoViewer(BuildContext context) {
+  //   return Consumer<AddProductProvider>(
+  //     builder: (context, prov, child) {
+  //       return SizedBox(
+  //         width: 150,
+  //         height: 150,
+  //         child: InkWell(
+  //           onTap: () {
+  //             _showSheet(context);
+  //           },
+  //           child: prov.photo.image != null
+  //               ? CircleAvatar(
+  //                   backgroundImage: MemoryImage(prov.photo.image!),
+  //                 )
+  //               : const Material(
+  //                   shape: RoundedRectangleBorder(
+  //                     borderRadius: BorderRadius.all(
+  //                       Radius.circular(12.0),
+  //                     ),
+  //                   ),
+  //                   child: Icon(
+  //                     Icons.person,
+  //                     color: Colors.black,
+  //                     size: 50,
+  //                   ),
+  //                 ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   Future<dynamic> _showSheet(BuildContext context) {
     return showModalBottomSheet(
@@ -291,7 +343,7 @@ class _DetailProductPageState extends State<AddProductPage> {
           textArea: AppTextArea(
             controller: descCont,
             fontSize: 15,
-            maxLength: 250,
+            maxLength: 500,
             showCounter: true,
             hintText: 'Lorem ipsum dolor sit amet',
             onChanged: (value) {
