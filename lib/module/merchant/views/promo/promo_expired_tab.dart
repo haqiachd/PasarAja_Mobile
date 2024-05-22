@@ -71,12 +71,12 @@ class _PromoExpiredTabState extends State<PromoExpiredTab> {
                   final promo = data[index];
                   return InkWell(
                     onTap: () {
-                      Get.to(
-                        DetailPromoPage(
-                          idPromo: promo.idPromo,
-                        ),
-                        transition: Transition.cupertino,
-                      );
+                      // Get.to(
+                      //   DetailPromoPage(
+                      //     idPromo: promo.idPromo,
+                      //   ),
+                      //   transition: Transition.cupertino,
+                      // );
                     },
                     child: ItemPromo(
                       promo: promo,

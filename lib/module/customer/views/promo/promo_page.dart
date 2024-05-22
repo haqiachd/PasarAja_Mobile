@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/widgets/app_bar.dart';
 import 'package:pasaraja_mobile/config/widgets/coming_soon.dart';
+import 'package:pasaraja_mobile/module/customer/views/shopping/product_detail_page.dart';
 import 'package:pasaraja_mobile/config/widgets/loading_indicator.dart';
 import 'package:pasaraja_mobile/config/widgets/page_error_message.dart';
 import 'package:pasaraja_mobile/config/widgets/something_wrong.dart';
@@ -74,7 +75,17 @@ class _PromoPageState extends State<PromoPage> {
                       itemCount: provider.products.length,
                       itemBuilder: (context, index) {
                         var prod = provider.products[index];
-                        return ItemProduct(product: prod, onTap: () {});
+                        return ItemProduct(
+                          product: prod,
+                          onTap: () {
+                            Get.to(
+                              ProductDetailPage(
+                                idShop: prod.idShop!,
+                                idProduct: prod.id!,
+                              ),
+                            );
+                          },
+                        );
                       },
                     ),
                   ],
