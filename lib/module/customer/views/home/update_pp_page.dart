@@ -40,7 +40,7 @@ class _UpdatePhotoProfilePageState extends State<UpdatePhotoProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: customerSubAppbar('Pilih Foto Produk'),
+      appBar: customerSubAppbar('Pilih Foto Profile'),
       body: Column(
         children: [
           const SizedBox(height: 30),
