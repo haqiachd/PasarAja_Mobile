@@ -29,6 +29,8 @@ class CartController {
 
       Map<String, dynamic> payload = response.data;
 
+      // DMethod.log('payload : $payload');
+
       if (response.statusCode == HttpStatus.ok) {
         return DataSuccess(CartModel.fromList(payload['data']));
       } else {

@@ -109,40 +109,50 @@ class _OrderFinishedState extends State<OrderFinished> {
               order.fullName ?? '',
               style: PasarAjaTypography.sfpdBold,
             ),
+            const SizedBox(height: 10),
             Text(
-              "${order.details?.length ?? 0} x Produk",
+              "Rician Produk",
               style: PasarAjaTypography.sfpdSemibold,
             ),
-            const Text("_"),
+            const SizedBox(height: 2),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: order.details!
                   .map(
                     (prod) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${prod.quantity} x ${prod.productName}",
-                          style: PasarAjaTypography.sfpdRegular,
-                        ),
-                        Text(
-                          "Rp. ${PasarAjaUtils.formatPrice(prod.subTotal ?? 0)}",
-                          style: PasarAjaTypography.sfpdRegular,
-                        ),
-                      ],
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${prod.quantity} x ${prod.productName}",
+                      style: PasarAjaTypography.sfpdRegular,
                     ),
-                  )
+                    Text(
+                      "Rp. ${PasarAjaUtils.formatPrice(prod.totalPrice ?? 0)}",
+                      style: PasarAjaTypography.sfpdRegular,
+                    ),
+                    Visibility(
+                      visible: prod.notes != null &&
+                          prod.notes!.trim().isNotEmpty,
+                      child: Text(
+                        "Catatan : ${prod.notes ?? ''}",
+                        style: PasarAjaTypography.sfpdRegular,
+                      ),
+                    ),
+                    const Text("_"),
+                  ],
+                ),
+              )
                   .toList(),
             ),
-            const Text("_"),
+            const SizedBox(height: 5),
             Text(
-              "${order.totalQuantity} Produk",
+              "${order.totalQuantity} x Produk",
               style: PasarAjaTypography.sfpdBold,
             ),
             Text(
-              "Rp. ${PasarAjaUtils.formatPrice(order.subTotal ?? 0)}",
+              "Rp. ${PasarAjaUtils.formatPrice(order.totalPrice ?? 0)}",
               style: PasarAjaTypography.sfpdBold,
             ),
             const Divider(),

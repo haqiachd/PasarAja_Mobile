@@ -13,6 +13,7 @@ import 'package:pasaraja_mobile/config/widgets/something_wrong.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
+import 'package:pasaraja_mobile/module/customer/widgets/item_rician_pembayaran.dart';
 import 'package:pasaraja_mobile/module/merchant/models/transaction_model.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/providers.dart';
 import 'package:pasaraja_mobile/module/merchant/views/order/order_cancel_page.dart';
@@ -99,14 +100,22 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             ),
           ),
           const SizedBox(height: 10),
-          Text(
-            "PIN Pesanan : ${order.orderPin}",
-            style: PasarAjaTypography.sfpdBold.copyWith(
-              color: Colors.red,
-              fontSize: 20,
+          Visibility(
+            visible: false,
+            child: Text(
+              "PIN Pesanan : ${order.orderPin}",
+              style: PasarAjaTypography.sfpdBold.copyWith(
+                color: Colors.red,
+                fontSize: 20,
+              ),
             ),
           ),
-          const Text("_"),
+          const SizedBox(height: 2),
+          Text(
+            'Rician Produk',
+            style: PasarAjaTypography.sfpdSemibold.copyWith(fontSize: 20),
+          ),
+          const SizedBox(height: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -121,6 +130,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         children: [
                           SizedBox(
                             width: 100,
+                            height: 100,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: CachedNetworkImage(
@@ -131,6 +141,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                   return const ImageErrorNetwork();
                                 },
                                 imageUrl: prod.productPhoto ?? '',
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
@@ -176,14 +187,29 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       Visibility(
                         visible:
                             prod.notes != null && prod.notes!.trim().isNotEmpty,
-                        child: Text(
-                          "Notes : ${prod.notes ?? ''}",
-                          maxLines: 3,
-                          softWrap: true,
-                          style: PasarAjaTypography.sfpdRegular.copyWith(
-                            overflow: TextOverflow.ellipsis,
-                            fontSize: 20,
-                          ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Catatan : ",
+                              maxLines: 3,
+                              softWrap: true,
+                              style: PasarAjaTypography.sfpdSemibold.copyWith(
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              prod.notes ?? 'null',
+                              maxLines: 3,
+                              softWrap: true,
+                              style: PasarAjaTypography.sfpdRegular.copyWith(
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -244,45 +270,54 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           ),
           const SizedBox(height: 10),
           const Divider(),
-          Text(
-            "Sub Total : Rp. ${PasarAjaUtils.formatPrice(order.subTotal ?? 0)}",
-            style: PasarAjaTypography.sfpdSemibold.copyWith(
-              fontSize: 14,
-            ),
+          const SizedBox(height: 10),
+          ItemRicianPembayaran(
+            leftText: 'Sub Total',
+            rightText: 'Rp. ${PasarAjaUtils.formatPrice(order.subTotal ?? 0)}',
           ),
-          Text(
-            "Total Promo : Rp. ${PasarAjaUtils.formatPrice(order.totalPromo ?? 0)}",
-            style: PasarAjaTypography.sfpdSemibold.copyWith(
-              fontSize: 14,
-            ),
+          ItemRicianPembayaran(
+            leftText: 'Total Promo',
+            rightText:
+                'Rp. ${PasarAjaUtils.formatPrice(order.totalPromo ?? 0)}',
           ),
-          Text(
-            "Total Produk : ${order.totalProduct ?? 0}",
-            style: PasarAjaTypography.sfpdSemibold.copyWith(
-              fontSize: 14,
-            ),
+          ItemRicianPembayaran(
+            leftText: 'Total Produk',
+            rightText: '${order.totalProduct} Produk',
           ),
-          Text(
-            "Total Quantity : ${order.totalQuantity ?? 0}",
-            style: PasarAjaTypography.sfpdSemibold.copyWith(
-              fontSize: 14,
-            ),
+          ItemRicianPembayaran(
+            leftText: 'Total Quantity',
+            rightText: '${order.totalQuantity}',
           ),
-          Text(
-            "Total Harga : Rp. ${PasarAjaUtils.formatPrice(order.totalPrice ?? 0)}",
-            style: PasarAjaTypography.sfpdSemibold.copyWith(
-              fontSize: 14,
-            ),
+          ItemRicianPembayaran(
+            leftText: 'Total Harga',
+            rightText:
+                'Rp. ${PasarAjaUtils.formatPrice(order.totalPrice ?? 0)}',
           ),
-          Text(
-            "Tanggal Pesan : ${order.createdAt?.toIso8601String().substring(0, 10)}",
-            style: PasarAjaTypography.sfpdSemibold.copyWith(
-              fontSize: 14,
-            ),
+          ItemRicianPembayaran(
+            leftText: 'Tanggal Pesan',
+            rightText: '${order.createdAt?.toIso8601String().substring(0, 10)}',
           ),
-          const Text("_"),
+          const SizedBox(height: 10),
           const Divider(),
           const SizedBox(height: 20),
+          Visibility(
+            visible: widget.provider is OrderCancelCustomerProvider ||
+                widget.provider is OrderCancelMerchantProvider,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Alasan Pembatalan : ',
+                  style: PasarAjaTypography.sfpdSemibold.copyWith(fontSize: 20),
+                ),
+                Text(
+                  order.canceledMessage ?? 'null',
+                  style: PasarAjaTypography.sfpdRegular.copyWith(fontSize: 16),
+                ),
+              ],
+            ),
+          ),
           _buildSubmittedButton(order),
           _buildConfirmButton(order),
           const SizedBox(height: 10),
