@@ -191,9 +191,8 @@ class CustomerProductDetailProvider extends ChangeNotifier {
       DMethod.log('product : ${_productDetail.product!}');
       DMethod.log('quantity : ${quantity}');
       DMethod.log('notes : ${notesCont.text}');
-      DMethod.log('promo price : ${PasarAjaUtils.isActivePromo(_productDetail.product!.promo!)
-          ? _productDetail.product!.promo!.promoPrice!
-          : _productDetail.product!.price!}');
+      DMethod.log(
+          'promo price : ${PasarAjaUtils.isActivePromo(_productDetail.product!.promo!) ? _productDetail.product!.promo!.promoPrice! : _productDetail.product!.price!}');
 
       final dataState = await _cartController.addCart(
         idUser: idUser,
@@ -206,7 +205,6 @@ class CustomerProductDetailProvider extends ChangeNotifier {
             : _productDetail.product!.price!,
       );
 
-
       if (dataState is DataSuccess) {
         final cartState = await _cartController.fetchListCart(idUser: idUser);
 
@@ -215,9 +213,9 @@ class CustomerProductDetailProvider extends ChangeNotifier {
           CartModel? cartTemp = cartsData?.firstWhere(
               (element) => element.idShop == _productDetail.product!.idShop!);
 
-          for(var prod in cartTemp!.products!){
+          for (var prod in cartTemp!.products!) {
             DMethod.log('prod name : ${prod.productData?.productName}');
-            if(prod.idProduct == _productDetail.product?.id){
+            if (prod.idProduct == _productDetail.product?.id) {
               prod.checked = true;
             }
           }
@@ -246,5 +244,21 @@ class CustomerProductDetailProvider extends ChangeNotifier {
     } catch (ex) {
       Fluttertoast.showToast(msg: "error : ${ex.toString()}");
     }
+  }
+
+  Future<void> chat() async {
+    var phone = _productDetail.shopData!.phoneNumber;
+    DMethod.log('chat to : $phone');
+    bool confirm = await PasarAjaMessage.showConfirmation(
+      'Anda akan diarahkan ke aplikasi WhatsApp',
+      actionCancel: 'Batal',
+      actionYes: 'Buka',
+    );
+
+    if(!confirm){
+      return;
+    }
+
+    await PasarAjaUtils.launchURL('https://wa.me/$phone');
   }
 }

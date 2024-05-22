@@ -186,14 +186,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 5, right: 2.5),
-                        child: Material(
-                          color: PasarAjaColor.green1,
-                          child: Center(
-                            child: Text(
-                              'Chat',
-                              style: PasarAjaTypography.sfpdSemibold.copyWith(
-                                color: Colors.white,
-                                fontSize: 15.5,
+                        child: InkWell(
+                          onTap: () async{
+                            await provider.chat();
+                          },
+                          child: Material(
+                            color: PasarAjaColor.green1,
+                            child: Center(
+                              child: Text(
+                                'Chat',
+                                style: PasarAjaTypography.sfpdSemibold.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 15.5,
+                                ),
                               ),
                             ),
                           ),
@@ -628,7 +633,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           child: TextField(
                             controller: provider.quantityCont,
                             readOnly: false,
-                            onSubmitted: (str){
+                            onSubmitted: (str) {
                               provider.onChangeQuantity(int.parse(str));
                             },
                             keyboardType: TextInputType.number,
@@ -649,13 +654,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ),
                     Text(
                       'Catatan : ',
-                      style: PasarAjaTypography.sfpdSemibold.copyWith(fontSize: 18),
+                      style: PasarAjaTypography.sfpdSemibold
+                          .copyWith(fontSize: 18),
                     ),
                     TextField(
                       controller: provider.notesCont,
                       maxLength: 100,
                       style: PasarAjaTypography.sfpdRegular,
-                      decoration: const InputDecoration(hintText: "Masukkan catatan (optional) ..."),
+                      decoration: const InputDecoration(
+                          hintText: "Masukkan catatan (optional) ..."),
                       maxLines: 1,
                     ),
                     const SizedBox(height: 30),

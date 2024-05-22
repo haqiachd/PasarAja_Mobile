@@ -107,6 +107,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ],
                     ),
+                    // DropdownWithCheckbox()
                   ],
                 ),
               ),
@@ -135,6 +136,8 @@ class _ProfilePageState extends State<ProfilePage> {
               _buildPickPhotoFromGalery(),
               const SizedBox(width: 15),
               _buildDeletePhoto(),
+              const SizedBox(width: 15),
+              const SizedBox(width: 15),
             ],
           ),
         );
@@ -281,4 +284,65 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
 //
+}
+
+class DropdownWithCheckbox extends StatefulWidget {
+  @override
+  _DropdownWithCheckboxState createState() => _DropdownWithCheckboxState();
+}
+
+class _DropdownWithCheckboxState extends State<DropdownWithCheckbox> {
+  List<String> items = ["Item 1", "Item 2", "Item 3", "Item 4"];
+  List<String> selectedItems = [];
+
+  void _showDropdownMenu(BuildContext context) {
+    final RenderBox button = context.findRenderObject() as RenderBox;
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final RelativeRect position = RelativeRect.fromRect(
+      Rect.fromPoints(
+        button.localToGlobal(Offset.zero, ancestor: overlay),
+        button.localToGlobal(button.size.bottomRight(Offset.zero), ancestor: overlay),
+      ),
+      Offset.zero & overlay.size,
+    );
+
+    showMenu<String>(
+      context: context,
+      position: position,
+      items: items.map((String item) {
+        return PopupMenuItem<String>(
+          value: item,
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              final bool isSelected = selectedItems.contains(item);
+              return CheckboxListTile(
+                title: Text(item),
+                value: isSelected,
+                onChanged: (bool? checked) {
+                  setState(() {
+                    if (checked == true) {
+                      selectedItems.add(item);
+                    } else {
+                      selectedItems.remove(item);
+                    }
+                  });
+                  setState(() {}); // Update the outer widget
+                },
+              );
+            },
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        _showDropdownMenu(context);
+      },
+      child: Text("Select Items"),
+    );
+  }
 }
