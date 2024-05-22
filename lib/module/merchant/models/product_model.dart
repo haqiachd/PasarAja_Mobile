@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:pasaraja_mobile/core/entities/product_entity.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product_settings_model.dart';
+import 'package:pasaraja_mobile/module/merchant/models/promo_model.dart';
 
 class ProductModel extends ProductEntity {
   const ProductModel({
@@ -13,6 +14,7 @@ class ProductModel extends ProductEntity {
     final String? description,
     final int? sellingUnit,
     final ProductSettingsModel? settings,
+    final PromoModel? promo,
     final String? unit,
     final int? price,
     final int? totalSold,
@@ -36,6 +38,7 @@ class ProductModel extends ProductEntity {
           totalSold: totalSold,
           photo: photo,
           updatedAt: updatedAt,
+          promo: promo,
         );
 
   factory ProductModel.fromJson(Map<String, dynamic> map) {
@@ -54,8 +57,14 @@ class ProductModel extends ProductEntity {
       photo: map['photo'] ?? '',
       rating: map['rating'] ?? 0.0,
       totalReview: map['total_review'] ?? 0,
-      updatedAt:
-          map["updated_at"] == null ? null : DateTime.parse(map["updated_at"],),
+      updatedAt: map["updated_at"] == null
+          ? null
+          : DateTime.parse(
+              map["updated_at"],
+            ),
+      promo: map['promo'] != null
+          ? PromoModel.fromJson(map['promo'])
+          : const PromoModel(),
     );
   }
 
