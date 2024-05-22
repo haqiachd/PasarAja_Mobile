@@ -154,7 +154,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
         final nameCont = prov.nameCont;
 
         return AppInputText(
-          title: "Nama Produk",
+          title: "Nama Lengkap",
           textField: AppTextField(
             fontSize: 20,
             maxLength: 50,

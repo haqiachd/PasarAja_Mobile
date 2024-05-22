@@ -79,7 +79,7 @@ class _CropPhotoPageState extends State<CropPhotoPage> {
           onPressed: () async {
             await _showSheet(context);
           },
-          title: 'Ganti Foto',
+          title: 'Ganti Foto Produk',
           state: ActionButton.stateEnabledButton,
         );
       },
@@ -96,8 +96,8 @@ class _CropPhotoPageState extends State<CropPhotoPage> {
                 : await provider.justCropPhoto();
           },
           title: widget.type == CropPhotoPage.fromEditProduct
-              ? "Upload"
-              : "Simpan",
+              ? "Upload Foto"
+              : "Simpan Foto",
           state: ActionButton.stateEnabledButton,
         );
       },
