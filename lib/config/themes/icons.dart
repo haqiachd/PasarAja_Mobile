@@ -18,4 +18,7 @@ class PasarAjaIcon {
   static final String rating = '${_dir}ic-rating.svg';
   static final String search = '${_dir}ic-search.svg';
   static final String tokopedia = '${_dir}ic-tokopedia.svg';
+  static const String dani2 = '${_dir}dani2.png';
+  static const String dani3 = '${_dir}dani3.png';
+  static const String dani4 = '${_dir}dani4.png';
 }
