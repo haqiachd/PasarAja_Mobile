@@ -238,6 +238,25 @@ class PasarAjaUtils {
     return false;
   }
 
+  static bool isSoonAndActivePromo(PromoEntity? promo) {
+    if (promo != null) {
+      // Check if promo has start and end dates
+      if (promo.startDate != null && promo.endDate != null) {
+        // Get the current date
+        DateTime now = DateTime.now();
+        // DMethod.log('PROMO PRICE : ${promo.promoPrice}');
+
+        // Check if the current date is within the promo period
+        if (now.isBefore(promo.endDate!)) {
+          // Promo is active
+          return true;
+        }
+      }
+    }
+    // Promo is not active or promo data is null
+    return false;
+  }
+
   static String formatDateString(String dateString) {
     // Parse tanggal dari string ke dalam objek DateTime
     DateTime parsedDate = DateTime.parse(dateString);

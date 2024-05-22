@@ -381,12 +381,12 @@ class PasarAjaValidation {
     final DateTime fiveMonthsFromNow = today.add(const Duration(days: 5 * 30));
 
     // tanggal harus 1 hari dari sekarang atau setelahnya
-    if (selectedDate.isBefore(today)) {
-      return const ValidationModel(
-        message: 'Tanggal harus satu hari atau setelahnya dari sekarang.',
-        status: false,
-      );
-    }
+    // if (selectedDate.isBefore(today)) {
+    //   return const ValidationModel(
+    //     message: 'Tanggal harus satu hari atau setelahnya dari sekarang.',
+    //     status: false,
+    //   );
+    // }
 
     // tanggal awal maksimal 5 bulan dari sekarang
     if (selectedDate.isAfter(fiveMonthsFromNow)) {
@@ -422,12 +422,12 @@ class PasarAjaValidation {
     final DateTime sixMonthsFromNow = today.add(const Duration(days: 6 * 30));
 
     // tanggal harus 1 hari dari sekarang atau setelahnya
-    if (selectedDate.isBefore(today.add(const Duration(days: 1)))) {
-      return const ValidationModel(
-        message: 'Tanggal harus dua hari dari sekarang.',
-        status: false,
-      );
-    }
+    // if (selectedDate.isBefore(today.add(const Duration(days: 1)))) {
+    //   return const ValidationModel(
+    //     message: 'Tanggal harus dua hari dari sekarang.',
+    //     status: false,
+    //   );
+    // }
 
     // tanggal awal maksimal 5 bulan dari sekarang
     if (selectedDate.isAfter(sixMonthsFromNow)) {
