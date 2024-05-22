@@ -35,7 +35,7 @@ class _ChooseCategoriesPageState extends State<ChooseCategoriesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: merchantSubAppbar('Pilih Kategory'),
+      appBar: merchantSubAppbar('Pilih Kategori'),
       body: Consumer<ChooseCategoriesProvider>(
         builder: (context, value, child) {
           if (value.state is OnLoadingState) {

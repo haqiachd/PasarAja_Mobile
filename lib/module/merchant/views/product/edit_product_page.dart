@@ -16,10 +16,13 @@ import 'package:pasaraja_mobile/config/widgets/app_textfield.dart';
 import 'package:pasaraja_mobile/config/widgets/image_network_error.dart';
 import 'package:pasaraja_mobile/config/widgets/image_network_placeholder.dart';
 import 'package:pasaraja_mobile/config/widgets/loading_indicator.dart';
+import 'package:pasaraja_mobile/config/widgets/merchant_sub_appbar.dart';
 import 'package:pasaraja_mobile/config/widgets/page_error_message.dart';
 import 'package:pasaraja_mobile/config/widgets/something_wrong.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/core/utils/validations.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/auth_title.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/input_title.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product/choose_categories_model.dart';
 import 'package:pasaraja_mobile/module/merchant/models/product/product_detail_page_model.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/product/edit_product_provider.dart';
@@ -58,9 +61,7 @@ class _EditProductPageState extends State<EditProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Edit Page'),
-      ),
+      appBar: merchantSubAppbar('Edit Produk'),
       body: Consumer<EditProductProvider>(
         builder: (context, provider, child) {
           // dalam loading
@@ -81,7 +82,11 @@ class _EditProductPageState extends State<EditProductPage> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 15),
+                    const AuthInputTitle(title: 'Tap Foto Untuk Mengedit'),
                     const SizedBox(height: 15),
                     _buildPhotoViewer(context),
                     const SizedBox(height: 30),
@@ -348,7 +353,7 @@ class _EditProductPageState extends State<EditProductPage> {
           textArea: AppTextArea(
             controller: descCont,
             fontSize: 17,
-            maxLength: 250,
+            maxLength: 500,
             showCounter: true,
             hintText: 'Lorem ipsum dolor sit amet',
             onChanged: (value) {
