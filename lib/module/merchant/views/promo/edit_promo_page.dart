@@ -32,8 +32,8 @@ class _EditPromoPageState extends State<EditPromoPage> {
     hrgProd = TextEditingController(
       text: "Rp. ${PasarAjaUtils.formatPrice(widget.promo.price ?? 0)}",
     );
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<EditPromoProvider>().setData(promo: widget.promo);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async{
+      await context.read<EditPromoProvider>().setData(promo: widget.promo);
     });
   }
 

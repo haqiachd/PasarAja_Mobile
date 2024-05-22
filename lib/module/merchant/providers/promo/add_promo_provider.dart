@@ -121,17 +121,17 @@ class AddPromoProvider extends ChangeNotifier {
     // show date picker
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: today.add(const Duration(days: 1)),
-      firstDate: today.add(const Duration(days: 1)),
+      initialDate: today,
+      firstDate: today,
       selectableDayPredicate: (DateTime date) {
         // Nonaktifkan hari Minggu
         // if (date.weekday == DateTime.sunday) {
         //   return false;
         // }
         // Nonaktifkan tanggal sebelum hari ini
-        if (date.isBefore(today)) {
-          return false;
-        }
+        // if (date.isBefore(today)) {
+        //   return false;
+        // }
         return true;
       },
       lastDate: fiveMonthsFromNow,

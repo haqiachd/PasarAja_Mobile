@@ -127,13 +127,13 @@ class EditPromoProvider extends ChangeNotifier {
       firstDate: today.add(const Duration(days: 1)),
       selectableDayPredicate: (DateTime date) {
         // Nonaktifkan hari Minggu
-        if (date.weekday == DateTime.sunday) {
-          return false;
-        }
+        // if (date.weekday == DateTime.sunday) {
+        //   return false;
+        // }
         // Nonaktifkan tanggal sebelum hari ini
-        if (date.isBefore(today)) {
-          return false;
-        }
+        // if (date.isBefore(today)) {
+        //   return false;
+        // }
         return true;
       },
       lastDate: fiveMonthsFromNow,
@@ -161,10 +161,10 @@ class EditPromoProvider extends ChangeNotifier {
       initialDate: today.add(const Duration(days: 1)),
       firstDate: today.add(const Duration(days: 1)),
       selectableDayPredicate: (DateTime date) {
-        // Nonaktifkan hari Minggu
-        if (date.weekday == DateTime.sunday) {
-          return false;
-        }
+        // // Nonaktifkan hari Minggu
+        // if (date.weekday == DateTime.sunday) {
+        //   return false;
+        // }
         // Nonaktifkan tanggal sebelum hari ini
         if (date.isBefore(today)) {
           return false;
@@ -244,9 +244,9 @@ class EditPromoProvider extends ChangeNotifier {
     }
   }
 
-  void setData({
+  Future<void> setData({
     required PromoModel promo,
-  }) {
+  }) async{
     hrgPromoCont.text = promo.promoPrice.toString();
     startDateCont.text =
         promo.startDate?.toIso8601String().substring(0, 10) ?? '';
