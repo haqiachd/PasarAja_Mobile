@@ -21,7 +21,8 @@ class EditPromoProvider extends ChangeNotifier {
   TextEditingController endDateCont = TextEditingController();
   ValidationModel vPromo = PasarAjaValidation.promoPrice(null, null);
   ValidationModel vStartDate = PasarAjaValidation.startDate(null);
-  ValidationModel vEndDate = PasarAjaValidation.endDate(null);
+  ValidationModel vEndDate = PasarAjaValidation.endDate(null, null);
+  DateTime _startDate = DateTime.now();
 
   // button state status
   int _buttonState = ActionButton.stateDisabledButton;
@@ -82,9 +83,9 @@ class EditPromoProvider extends ChangeNotifier {
 
   /// Untuk mengecek apakah enddate yang diinputkan valid atau tidak
   ///
-  void onValidateEndDate(String startDate) {
+  void onValidateEndDate(String endDate) {
     // mengecek apakah end date valid atau tidak
-    vEndDate = PasarAjaValidation.endDate(startDate);
+    vEndDate = PasarAjaValidation.endDate(startDateCont.text, endDate);
 
     // jika end date valid
     if (vEndDate.status == true) {
@@ -119,13 +120,27 @@ class EditPromoProvider extends ChangeNotifier {
   Future<void> selectStartDate(BuildContext context) async {
     final DateTime today = DateTime.now();
     final DateTime fiveMonthsFromNow = today.add(const Duration(days: 5 * 30));
+    DateTime initDate = DateTime.now();
+
+    // inisilisasi init date
+    try {
+      initDate = DateTime.parse(startDateCont.text);
+    } catch (ex) {
+      initDate = DateTime.now();
+    }
 
     // show date picker
     final DateTime? pickedDate = await showDatePicker(
+      helpText: 'Pilih Tanggal Mulai Promo',
       context: context,
-      initialDate: today.add(const Duration(days: 1)),
-      firstDate: today.add(const Duration(days: 1)),
+      initialDate: initDate,
+      firstDate: _startDate,
+      lastDate: fiveMonthsFromNow,
       selectableDayPredicate: (DateTime date) {
+        if ((date.month == _startDate.month &&
+            (date.day > _startDate.day && date.day < DateTime.now().day))) {
+          return false;
+        }
         // Nonaktifkan hari Minggu
         // if (date.weekday == DateTime.sunday) {
         //   return false;
@@ -136,7 +151,6 @@ class EditPromoProvider extends ChangeNotifier {
         // }
         return true;
       },
-      lastDate: fiveMonthsFromNow,
       confirmText: "Pilih",
       cancelText: "Batal",
     );
@@ -147,31 +161,67 @@ class EditPromoProvider extends ChangeNotifier {
       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
       startDateCont.text = formattedDate;
       _isSelectedStart = true;
-      notifyListeners();
+
+      try {
+        // inisialisasi date untuk validasi data tanggal
+        DateTime startDate =
+            DateTime.parse(startDateCont.text).add(const Duration(days: 1));
+        DateTime endDate = DateTime.parse(endDateCont.text);
+        DateTime sixMonthsFromNow = startDate.add(const Duration(days: 6 * 30));
+
+        // handler jika tanggal akhir dari batas tanggal akhir promo (6 bulan)
+        if (endDate.isAfter(sixMonthsFromNow)) {
+          endDate = sixMonthsFromNow;
+          endDateCont.text = DateFormat('yyyy-MM-dd').format(endDate);
+        }
+
+        // handler jika tanggal akhir kurang dari tanggal awal
+        if (endDate.isBefore(startDate)) {
+          endDate = startDate;
+          endDateCont.text = DateFormat('yyyy-MM-dd').format(endDate);
+        }
+      } catch (ex) {
+        notifyListeners();
+      }
     }
   }
 
   Future<void> selectEndDate(BuildContext context) async {
-    final DateTime today = DateTime.parse(startDateCont.text);
-    final DateTime sixMonthsFromNow = today.add(const Duration(days: 6 * 30));
+    final DateTime firstDate =
+        DateTime.parse(startDateCont.text).add(const Duration(days: 1));
+    final DateTime sixMonthsFromNow =
+        firstDate.add(const Duration(days: 6 * 30));
+
+    DateTime initDate = firstDate;
+
+    try {
+      initDate = DateTime.parse(endDateCont.text);
+    } catch (ex) {
+      initDate = firstDate;
+    }
 
     // show date picker
     final DateTime? pickedDate = await showDatePicker(
+      helpText: 'Pilih Tanggal Akhir Promo',
       context: context,
-      initialDate: today.add(const Duration(days: 1)),
-      firstDate: today.add(const Duration(days: 1)),
+      initialDate: initDate,
+      firstDate: firstDate,
+      lastDate: sixMonthsFromNow,
       selectableDayPredicate: (DateTime date) {
+        if ((date.month == _startDate.month &&
+            (date.day > _startDate.day && date.day < DateTime.now().day))) {
+          return false;
+        }
         // // Nonaktifkan hari Minggu
         // if (date.weekday == DateTime.sunday) {
         //   return false;
         // }
         // Nonaktifkan tanggal sebelum hari ini
-        if (date.isBefore(today)) {
-          return false;
-        }
+        // if (date.isBefore(today)) {
+        //   return false;
+        // }
         return true;
       },
-      lastDate: sixMonthsFromNow,
       confirmText: "Pilih",
       cancelText: "Batal",
     );
@@ -179,8 +229,7 @@ class EditPromoProvider extends ChangeNotifier {
     // jika user memilih tanggal
     if (pickedDate != null) {
       // Format tanggal sesuai dengan kebutuhan (yyyy-MM-dd)
-      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-      endDateCont.text = formattedDate;
+      endDateCont.text = DateFormat('yyyy-MM-dd').format(pickedDate);
       notifyListeners();
     }
   }
@@ -246,16 +295,20 @@ class EditPromoProvider extends ChangeNotifier {
 
   Future<void> setData({
     required PromoModel promo,
-  }) async{
-    hrgPromoCont.text = promo.promoPrice.toString();
-    startDateCont.text =
-        promo.startDate?.toIso8601String().substring(0, 10) ?? '';
+  }) async {
+    startDateCont.text = promo.startDate?.toIso8601String().substring(0, 10) ??
+        DateFormat('yyyy-MM-dd').format(DateTime.now());
+    _startDate = DateTime.parse(startDateCont.text);
     endDateCont.text = promo.endDate?.toIso8601String().substring(0, 10) ?? '';
-    _isSelectedStart = true;    vPromo = PasarAjaValidation.promoPrice(promo.price.toString(), hrgPromoCont.text);
+    hrgPromoCont.text = promo.promoPrice.toString();
+    _isSelectedStart = true;
+    vPromo = PasarAjaValidation.promoPrice(
+        promo.price.toString(), hrgPromoCont.text);
     vStartDate = PasarAjaValidation.startDate(startDateCont.text);
-    vEndDate = PasarAjaValidation.endDate(endDateCont.text);
+    vEndDate = PasarAjaValidation.endDate(startDateCont.text, endDateCont.text);
     buttonState = ActionButton.stateEnabledButton;
     notifyListeners();
+    DMethod.log('start date : ${startDateCont.text}');
+    DMethod.log('end date : ${endDateCont.text}');
   }
-
 }

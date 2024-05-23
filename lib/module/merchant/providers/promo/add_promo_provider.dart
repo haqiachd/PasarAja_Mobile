@@ -1,3 +1,4 @@
+import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -19,7 +20,7 @@ class AddPromoProvider extends ChangeNotifier {
   TextEditingController endDateCont = TextEditingController();
   ValidationModel vPromo = PasarAjaValidation.promoPrice(null, null);
   ValidationModel vStartDate = PasarAjaValidation.startDate(null);
-  ValidationModel vEndDate = PasarAjaValidation.endDate(null);
+  ValidationModel vEndDate = PasarAjaValidation.endDate(null, null);
 
   // button state status
   int _buttonState = ActionButton.stateDisabledButton;
@@ -64,6 +65,8 @@ class AddPromoProvider extends ChangeNotifier {
   /// Untuk mengecek apakah startdate yang diinputkan valid atau tidak
   ///
   void onValidateStartDate(String startDate) {
+    DMethod.log('on validate start date');
+    DMethod.log(startDate);
     // mengecek apakah start date valid atau tidak
     vStartDate = PasarAjaValidation.startDate(startDate);
 
@@ -80,9 +83,9 @@ class AddPromoProvider extends ChangeNotifier {
 
   /// Untuk mengecek apakah enddate yang diinputkan valid atau tidak
   ///
-  void onValidateEndDate(String startDate) {
+  void onValidateEndDate(String endDate) {
     // mengecek apakah end date valid atau tidak
-    vEndDate = PasarAjaValidation.endDate(startDate);
+    vEndDate = PasarAjaValidation.endDate(startDateCont.text, endDate);
 
     // jika end date valid
     if (vEndDate.status == true) {
@@ -113,16 +116,26 @@ class AddPromoProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  //
   Future<void> selectStartDate(BuildContext context) async {
+    // mendapatkan tanggal saat ini dan batas penetapan tanggal awal (5 bulan dari sekarang)
     final DateTime today = DateTime.now();
     final DateTime fiveMonthsFromNow = today.add(const Duration(days: 5 * 30));
+    DateTime initDate = DateTime.now();
 
-    // show date picker
+    // inisilisasi init date
+    try {
+      initDate = DateTime.parse(startDateCont.text);
+    } catch (ex) {
+      initDate = DateTime.now();
+    }
+
+    // menampilkan dialog tanggal
     final DateTime? pickedDate = await showDatePicker(
+      helpText: 'Pilih Tanggal Mulai Promo',
       context: context,
-      initialDate: today,
+      initialDate: initDate,
       firstDate: today,
+      lastDate: fiveMonthsFromNow,
       selectableDayPredicate: (DateTime date) {
         // Nonaktifkan hari Minggu
         // if (date.weekday == DateTime.sunday) {
@@ -134,7 +147,6 @@ class AddPromoProvider extends ChangeNotifier {
         // }
         return true;
       },
-      lastDate: fiveMonthsFromNow,
       confirmText: "Pilih",
       cancelText: "Batal",
     );
@@ -142,34 +154,64 @@ class AddPromoProvider extends ChangeNotifier {
     // jika user memilih tanggal
     if (pickedDate != null) {
       // Format tanggal sesuai dengan kebutuhan (yyyy-MM-dd)
-      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-      startDateCont.text = formattedDate;
+      startDateCont.text = DateFormat('yyyy-MM-dd').format(pickedDate);
       _isSelectedStart = true;
+
+      try {
+        // inisialisasi date untuk validasi data tanggal
+        DateTime startDate = DateTime.parse(startDateCont.text).add(const Duration(days: 1));
+        DateTime endDate = DateTime.parse(endDateCont.text);
+        DateTime sixMonthsFromNow = startDate.add(const Duration(days: 6 * 30));
+
+        // handler jika tanggal akhir dari batas tanggal akhir promo (6 bulan)
+        if (endDate.isAfter(sixMonthsFromNow)) {
+          endDate = sixMonthsFromNow;
+          endDateCont.text = DateFormat('yyyy-MM-dd').format(endDate);
+        }
+
+        // handler jika tanggal akhir kurang dari tanggal awal
+        if (endDate.isBefore(startDate)) {
+          endDate = startDate;
+          endDateCont.text = DateFormat('yyyy-MM-dd').format(endDate);
+        }
+      } catch (ex) {
+        notifyListeners();
+      }
+
       notifyListeners();
     }
   }
 
   Future<void> selectEndDate(BuildContext context) async {
-    final DateTime today = DateTime.parse(startDateCont.text);
-    final DateTime sixMonthsFromNow = today.add(const Duration(days: 6 * 30));
+    final DateTime firstDate = DateTime.parse(startDateCont.text).add(const Duration(days: 1));
+    final DateTime sixMonthsFromNow = firstDate.add(const Duration(days: 6 * 30));
+
+    DateTime initDate = firstDate;
+
+    try {
+      initDate = DateTime.parse(endDateCont.text);
+    } catch (ex) {
+      initDate = firstDate;
+    }
 
     // show date picker
     final DateTime? pickedDate = await showDatePicker(
+      helpText: 'Pilih Tanggal Akhir Promo',
       context: context,
-      initialDate: today.add(const Duration(days: 1)),
-      firstDate: today.add(const Duration(days: 1)),
+      initialDate: initDate,
+      firstDate: firstDate,
+      lastDate: sixMonthsFromNow,
       selectableDayPredicate: (DateTime date) {
         // Nonaktifkan hari Minggu
         // if (date.weekday == DateTime.sunday) {
         //   return false;
         // }
         // Nonaktifkan tanggal sebelum hari ini
-        if (date.isBefore(today)) {
-          return false;
-        }
+        // if (date.isBefore(firstDate)) {
+        //   return false;
+        // }
         return true;
       },
-      lastDate: sixMonthsFromNow,
       confirmText: "Pilih",
       cancelText: "Batal",
     );
@@ -177,8 +219,7 @@ class AddPromoProvider extends ChangeNotifier {
     // jika user memilih tanggal
     if (pickedDate != null) {
       // Format tanggal sesuai dengan kebutuhan (yyyy-MM-dd)
-      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-      endDateCont.text = formattedDate;
+      endDateCont.text = DateFormat('yyyy-MM-dd').format(pickedDate);
       notifyListeners();
     }
   }
@@ -189,6 +230,9 @@ class AddPromoProvider extends ChangeNotifier {
     try {
       // show loading button
       buttonState = ActionButton.stateLoadingButton;
+
+      DMethod.log('start date : ${startDateCont.text}');
+      DMethod.log('end date : ${endDateCont.text}');
 
       // get id shop
       final idShop = await PasarAjaUserService.getShopId();
@@ -239,11 +283,11 @@ class AddPromoProvider extends ChangeNotifier {
   void resetData() {
     _isSelectedStart = false;
     hrgPromoCont.text = '';
-    startDateCont.text = '';
     endDateCont.text = '';
+    startDateCont.text = '';
     vPromo = PasarAjaValidation.promoPrice(null, null);
     vStartDate = PasarAjaValidation.startDate(null);
-    vEndDate = PasarAjaValidation.endDate(null);
+    vEndDate = PasarAjaValidation.endDate(null, null);
     buttonState = ActionButton.stateDisabledButton;
   }
 }

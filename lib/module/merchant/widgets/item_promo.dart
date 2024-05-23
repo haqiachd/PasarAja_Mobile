@@ -22,97 +22,106 @@ class ItemPromo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: SizedBox(
-        width: 100,
-        height: 80,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: CachedNetworkImage(
-            imageUrl: promo.photo ?? '',
-            placeholder: (context, url) {
-              return const ImageNetworkPlaceholder();
-            },
-            errorWidget: (context, url, error) {
-              return const ImageErrorNetwork();
-            },
+    return Column(
+      children: [
+        ListTile(
+          leading: SizedBox(
+            width: 100,
+            height: 80,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: CachedNetworkImage(
+                imageUrl: promo.photo ?? '',
+                placeholder: (context, url) {
+                  return const ImageNetworkPlaceholder();
+                },
+                errorWidget: (context, url, error) {
+                  return const ImageErrorNetwork();
+                },
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                promo.productName ?? '',
+                style: PasarAjaTypography.sfpdBold.copyWith(
+                  fontSize: 19,
+                ),
+              ),
+              Text(
+                promo.categoryProd ?? '',
+                style: PasarAjaTypography.sfpdSemibold.copyWith(
+                  fontSize: 14,
+                ),
+              ),
+              Text(
+                "Rp.${PasarAjaUtils.formatPrice(promo.price ?? 0)}",
+                style: PasarAjaTypography.sfProDisplay.copyWith(
+                  decoration: TextDecoration.lineThrough,
+                  fontSize: 14,
+                ),
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Rp.${PasarAjaUtils.formatPrice(promo.promoPrice ?? 0)}",
+                    style: PasarAjaTypography.sfProDisplay.copyWith(
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    "(${promo.percentage})%",
+                    style: PasarAjaTypography.sfProDisplay.copyWith(
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    promo.startDate!.toIso8601String().substring(0, 10),
+                    style: PasarAjaTypography.sfpdSemibold.copyWith(
+                      fontSize: 13,
+                    ),
+                  ),
+                  const Text(" - "),
+                  Text(
+                    promo.endDate!.toIso8601String().substring(0, 10),
+                    style: PasarAjaTypography.sfpdSemibold.copyWith(
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 5),
+              Material(
+                color: _statusColor(status),
+                borderRadius: BorderRadius.circular(50),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
+                  child: Text(
+                    _statusText(status),
+                    style: PasarAjaTypography.sfpdSemibold.copyWith(
+                      fontSize: 12,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-      ),
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            promo.productName ?? '',
-            style: PasarAjaTypography.sfpdBold.copyWith(
-              fontSize: 19,
-            ),
-          ),
-          Text(
-            promo.categoryProd ?? '',
-            style: PasarAjaTypography.sfpdSemibold.copyWith(
-              fontSize: 14,
-            ),
-          ),
-          Text(
-            "Rp.${PasarAjaUtils.formatPrice(promo.price ?? 0)}",
-            style: PasarAjaTypography.sfProDisplay.copyWith(
-              decoration: TextDecoration.lineThrough,
-              fontSize: 14,
-            ),
-          ),
-          Row(
-            children: [
-              Text(
-                "Rp.${PasarAjaUtils.formatPrice(promo.promoPrice ?? 0)}",
-                style: PasarAjaTypography.sfProDisplay.copyWith(
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Text(
-                "(${promo.percentage})%",
-                style: PasarAjaTypography.sfProDisplay.copyWith(
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Text(
-                promo.startDate!.toIso8601String().substring(0, 10),
-                style: PasarAjaTypography.sfpdSemibold.copyWith(
-                  fontSize: 13,
-                ),
-              ),
-              const Text(" - "),
-              Text(
-                promo.endDate!.toIso8601String().substring(0, 10),
-                style: PasarAjaTypography.sfpdSemibold.copyWith(
-                  fontSize: 13,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 5),
-          Material(
-            color: _statusColor(status),
-            borderRadius: BorderRadius.circular(50),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-              child: Text(
-                _statusText(status),
-                style: PasarAjaTypography.sfpdSemibold.copyWith(
-                  fontSize: 12,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+        const Padding(
+          padding: EdgeInsets.only(left:  15, right: 15),
+          child: Divider(),
+        ),
+      ],
     );
   }
 }

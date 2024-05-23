@@ -1,3 +1,4 @@
+import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -126,6 +127,7 @@ class _AddPromoPageState extends State<AddPromoPage> {
   }
 
   _buildStartDate(BuildContext context) {
+    final hintText = DateFormat('yyyy-MM-dd').format(DateTime.now());
     return Consumer<AddPromoProvider>(
       builder: (context, provider, child) {
         // cont
@@ -135,17 +137,21 @@ class _AddPromoPageState extends State<AddPromoPage> {
               EdgeInsets.only(right: MediaQuery.of(context).size.width / 2.5),
           child: InkWell(
             onTap: () async {
+              DMethod.log('choose date');
               await provider.selectStartDate(context);
               provider.onValidateStartDate(startDateCont.text);
             },
             child: AbsorbPointer(
-              child: AppTextField(
-                hintText: 'Tanggal Awal',
-                fontSize: 21,
-                controller: startDateCont,
-                errorText: provider.vStartDate.message,
-                suffixIcon: const Icon(Icons.calendar_today),
-                readOnly: true,
+              child: AppInputText(
+                title: 'Tanggal Awal Promo',
+                textField: AppTextField(
+                  hintText: hintText,
+                  fontSize: 21,
+                  controller: startDateCont,
+                  errorText: provider.vStartDate.message,
+                  suffixIcon: const Icon(Icons.calendar_today),
+                  readOnly: true,
+                ),
               ),
             ),
           ),
@@ -155,6 +161,7 @@ class _AddPromoPageState extends State<AddPromoPage> {
   }
 
   _buildEndDate(BuildContext context) {
+    final hintText = DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(days: 1)));
     return Consumer<AddPromoProvider>(
       builder: (context, provider, child) {
         final endDateCont = provider.endDateCont;
@@ -162,7 +169,7 @@ class _AddPromoPageState extends State<AddPromoPage> {
           padding:
               EdgeInsets.only(right: MediaQuery.of(context).size.width / 2.5),
           child: InkWell(
-            onTap: () async{
+            onTap: () async {
               if (provider.isSelectedStart) {
                 await provider.selectEndDate(context);
                 provider.onValidateEndDate(endDateCont.text);
@@ -172,13 +179,16 @@ class _AddPromoPageState extends State<AddPromoPage> {
               }
             },
             child: AbsorbPointer(
-              child: AppTextField(
-                hintText: 'Tanggal Akhir',
-                controller: endDateCont,
-                errorText: provider.vEndDate.message,
-                fontSize: 21,
-                suffixIcon: const Icon(Icons.calendar_today),
-                readOnly: true,
+              child: AppInputText(
+                title: 'Tanggal Akhir Promo',
+                textField: AppTextField(
+                  hintText: hintText,
+                  controller: endDateCont,
+                  errorText: provider.vEndDate.message,
+                  fontSize: 21,
+                  suffixIcon: const Icon(Icons.calendar_today),
+                  readOnly: true,
+                ),
               ),
             ),
           ),

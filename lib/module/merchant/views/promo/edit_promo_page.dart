@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pasaraja_mobile/config/widgets/action_button.dart';
 import 'package:pasaraja_mobile/config/widgets/app_input_text.dart';
+import 'package:pasaraja_mobile/config/widgets/app_input_title.dart';
 import 'package:pasaraja_mobile/config/widgets/app_textfield.dart';
 import 'package:pasaraja_mobile/config/widgets/merchant_sub_appbar.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
@@ -32,7 +33,7 @@ class _EditPromoPageState extends State<EditPromoPage> {
     hrgProd = TextEditingController(
       text: "Rp. ${PasarAjaUtils.formatPrice(widget.promo.price ?? 0)}",
     );
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async{
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await context.read<EditPromoProvider>().setData(promo: widget.promo);
     });
   }
@@ -128,20 +129,23 @@ class _EditPromoPageState extends State<EditPromoPage> {
         final startDateCont = provider.startDateCont;
         return Padding(
           padding:
-          EdgeInsets.only(right: MediaQuery.of(context).size.width / 2.5),
+              EdgeInsets.only(right: MediaQuery.of(context).size.width / 2.5),
           child: InkWell(
             onTap: () async {
               await provider.selectStartDate(context);
               provider.onValidateStartDate(startDateCont.text);
             },
             child: AbsorbPointer(
-              child: AppTextField(
-                hintText: 'Tanggal Awal',
-                fontSize: 21,
-                controller: startDateCont,
-                errorText: provider.vStartDate.message,
-                suffixIcon: const Icon(Icons.calendar_today),
-                readOnly: true,
+              child: AppInputText(
+                title: 'Tanggal Awal Promo',
+                textField: AppTextField(
+                  hintText: 'Tanggal Awal',
+                  fontSize: 21,
+                  controller: startDateCont,
+                  errorText: provider.vStartDate.message,
+                  suffixIcon: const Icon(Icons.calendar_today),
+                  readOnly: true,
+                ),
               ),
             ),
           ),
@@ -156,9 +160,9 @@ class _EditPromoPageState extends State<EditPromoPage> {
         final endDateCont = provider.endDateCont;
         return Padding(
           padding:
-          EdgeInsets.only(right: MediaQuery.of(context).size.width / 2.5),
+              EdgeInsets.only(right: MediaQuery.of(context).size.width / 2.5),
           child: InkWell(
-            onTap: () async{
+            onTap: () async {
               if (provider.isSelectedStart) {
                 await provider.selectEndDate(context);
                 provider.onValidateEndDate(endDateCont.text);
@@ -168,13 +172,16 @@ class _EditPromoPageState extends State<EditPromoPage> {
               }
             },
             child: AbsorbPointer(
-              child: AppTextField(
-                hintText: 'Tanggal Akhir',
-                controller: endDateCont,
-                errorText: provider.vEndDate.message,
-                fontSize: 21,
-                suffixIcon: const Icon(Icons.calendar_today),
-                readOnly: true,
+              child: AppInputText(
+                title: 'Tanggal Akhir Promo',
+                textField: AppTextField(
+                  hintText: 'Tanggal Akhir',
+                  controller: endDateCont,
+                  errorText: provider.vEndDate.message,
+                  fontSize: 21,
+                  suffixIcon: const Icon(Icons.calendar_today),
+                  readOnly: true,
+                ),
               ),
             ),
           ),
@@ -196,5 +203,4 @@ class _EditPromoPageState extends State<EditPromoPage> {
       },
     );
   }
-
 }

@@ -2,7 +2,9 @@
 
 import 'dart:io';
 
+import 'package:d_method/d_method.dart';
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/module/merchant/models/promo_model.dart';
@@ -32,6 +34,8 @@ class PromoController {
       // get payload
       final Map<String, dynamic> payload = response.data;
 
+      DMethod.log('payload : $payload');
+
       // return response
       if (response.statusCode == HttpStatus.ok) {
         return DataSuccess(PromoModel.fromList(payload['data']));
@@ -46,6 +50,7 @@ class PromoController {
         );
       }
     } on DioException catch (ex) {
+      DMethod.log('on promo error : $ex');
       return DataFailed(ex);
     }
   }
