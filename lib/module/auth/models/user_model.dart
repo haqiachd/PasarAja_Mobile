@@ -31,7 +31,7 @@ class UserModel extends UserEntity {
       email: map['email'] ?? '',
       fullName: map['full_name'] ?? '',
       level: map['level'] ?? '',
-      isVerified: map['is_verified'] ?? 0,
+      // isVerified: map['is_verified'] ?? 0,
       photo: map['photo'] ?? '',
       shopData: map.containsKey('shop_data')
           ? ShopModel.fromJson(map['shop_data'])

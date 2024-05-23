@@ -92,16 +92,6 @@ class ProductController {
     required int price,
     required ProductSettingsModel settings,
   }) async {
-    DMethod.log("\n\n");
-    DMethod.log("ID Shop : $idShop");
-    DMethod.log("ID Product : $idProduct");
-    DMethod.log('Product Name : $productName');
-    DMethod.log("Category Prod : $idCategory");
-    DMethod.log("Description : $description");
-    DMethod.log("Unit Jual : $unit");
-    DMethod.log("Satuan Jual : $sellingUnit");
-    DMethod.log("Harga Jual : $price");
-    DMethod.log("Settings : ${settings.toJson()}");
 
     try {
       final response = await _dio.post(

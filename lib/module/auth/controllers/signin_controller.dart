@@ -6,8 +6,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter_session_jwt/flutter_session_jwt.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
-import 'package:pasaraja_mobile/core/services/jwt_services.dart';
-import 'package:pasaraja_mobile/core/services/user_services.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/utils/dio_log.dart';
 import 'package:pasaraja_mobile/module/auth/models/shop_model.dart';

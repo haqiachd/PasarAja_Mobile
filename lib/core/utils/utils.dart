@@ -247,7 +247,7 @@ class PasarAjaUtils {
         // DMethod.log('PROMO PRICE : ${promo.promoPrice}');
 
         // Check if the current date is within the promo period
-        if (now.isBefore(promo.endDate!)) {
+        if (now.isBefore(promo.endDate!.add(const Duration(days: 1)))) {
           // Promo is active
           return true;
         }

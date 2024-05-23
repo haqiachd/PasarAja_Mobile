@@ -179,20 +179,6 @@ class SignInGoogleProvider extends ChangeNotifier {
         PasarAjaUtils.triggerVibration();
         PasarAjaMessage.showSnackbarWarning(dataState.error?.error.toString() ?? PasarAjaConstant.unknownError);
       }
-      //
-      // UserModel userData = UserModel(
-      //   phoneNumber: '6285655864625',
-      //   email: 'e41222905@student.polije.ac.id',
-      //   fullName: 'Achmad Baihaqi',
-      //   photo: 'http://192.168.170.152:8000/users/1713714242.png',
-      //   level: 'Pembeli',
-      // );
-      // await FlutterSessionJwt.saveToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJkYXRhIjp7ImlkX3VzZXIiOjMsInBob25lX251bWJlciI6IjYyMTIzNDU2NzgwOTIiLCJlbWFpbCI6ImU0MTIyMjkwNUBzdHVkZW50LnBvbGlqZS5hYy5pZCIsImZ1bGxfbmFtZSI6IkFjaG1hZCBCYWloYXFpIFBvbGlqZSIsInBhc3N3b3JkIjoiJDJ5JDEyJEJIM2pEajVpZXEyT2ZaQjV6YU1sYXVVZHREem9pd0pQRjZFcS9jNXBqZEh1MEwuQkVQbGZHIiwicGluIjoiJDJ5JDEyJHIzejVDMElDUFJJNU5sbllaWEg4OU9LUC83cDJGUDNoN2puVXowQjBnTW9GTVlURjZIMnpHIiwibGV2ZWwiOiJQZW1iZWxpIiwiaXNfdmVyaWZpZWQiOjAsInBob3RvIjoiaHR0cDovLzE5Mi4xNjguMTcwLjE1Mjo4MDAwL3VzZXJzLzE3MTM3MTQyNDIucG5nIiwiY3JlYXRlZF9hdCI6IjIwMjQtMDQtMDZUMDM6NTI6MTguMDAwMDAwWiIsInVwZGF0ZWRfYXQiOiIyMDI0LTA0LTI4VDE5OjUzOjM4LjAwMDAwMFoifSwiZXhwIjoxNzE1NjMxNjE2fQ.JbF6txpB9xeXGxickuF9XZ5gV24wXGnf5Cd3NjkKBEGuN5fHqdXulNZJXNC0iQe3qAkWbtbuKBbBPl-mQ4JrCw");
-      // // menyimpan session login
-      // DMethod.log('save session');
-      // await PasarAjaUserService.login(userData);
-      //
-      // Get.to(const CustomerMainPage());
 
       // close loading button
       buttonState = AuthFilledButton.stateEnabledButton;
