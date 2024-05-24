@@ -34,10 +34,10 @@ class PromoModel extends PromoEntity {
         );
 
   factory PromoModel.fromJson(Map<String, dynamic> json) => PromoModel(
-        idPromo: json["id_promo"] as int,
-        idProduct: json["id_product"] as int,
-        promoPrice: json["promo_price"] as int,
-        percentage: json["percentage"] as double,
+        idPromo: json["id_promo"] ?? 0,
+        idProduct: json["id_product"] ?? 0,
+        promoPrice: json["promo_price"] ?? 0,
+        percentage: json["percentage"] ?? 0.0,
         startDate: json["start_date"] == null
             ? null
             : DateTime.parse(json["start_date"]),
@@ -49,11 +49,11 @@ class PromoModel extends PromoEntity {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
-        idShop: json["id_shop"] as int,
+        idShop: json["id_shop"] ?? 0,
         productName: json["product_name"] ?? '',
         categoryProd: json['category_name'] ?? '',
-        idCpProd: json["id_cp_prod"] as int,
-        price: json["price"]  as int,
+        idCpProd: json["id_cp_prod"] ?? 0,
+        price: json["price"] ?? 0,
         photo: json["photo"] ?? '',
       );
 

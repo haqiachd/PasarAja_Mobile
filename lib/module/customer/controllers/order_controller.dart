@@ -466,7 +466,7 @@ class OrderController {
           "id_user": idUser,
           "id_shop": idShop,
           "id_product": idProduct,
-          "star" : star,
+          "star": star,
           "comment": comment,
         },
         options: Options(
@@ -512,7 +512,7 @@ class OrderController {
           "id_trx": idTrx,
           "id_review": idReview,
           "id_shop": idShop,
-          "star" : star,
+          "star": star,
           "id_product": idProduct,
           "comment": comment,
         },
@@ -587,43 +587,95 @@ class OrderController {
     }
   }
 
+  Future<DataState<bool>> verifyPinTrx({
+    required int idUser,
+    required String pin,
+  }) async {
+    try {
+      final response = await _dio.get(
+        "$_apiShopTrx/vrwtrx",
+        queryParameters: {
+          "id_user": idUser,
+          "pin": pin,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.notFound ||
+                status == HttpStatus.badRequest;
+          },
+        ),
+      );
+
+      final Map<String, dynamic> payload = response.data;
+
+      if (response.statusCode == HttpStatus.ok) {
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
 }
 
 void main() async {
   OrderController _controller = OrderController();
 
-  final dataState = await _controller.tabRequest(
-      email: "pkmki2023.thegsteam@gmail.com");
+  final dataState = await _controller.verifyPinTrx(
+    idUser: 3,
+    pin: '123456',
+  );
 
   if (dataState is DataSuccess) {
-    print('DATA SUCCESS');
-    List<TransactionHistoryModel> orders =
-        dataState.data as List<TransactionHistoryModel>;
-
-    for (var order in orders) {
-      print('ORDER CODE : ${order.orderCode}');
-      print("NAMA TOKO : ${order.shopData?.shopName}");
-      print("TANGGAL PESAN : ${order.createdAt}");
-      print("DETAIL -->");
-      List<TransactionDetailHistoryModel> details =
-          order.details as List<TransactionDetailHistoryModel>;
-      for (var detail in details) {
-        print("\tNAMA PRODUCT : ${detail.product?.productName}");
-        print("\tHARGA : ${detail.price}");
-        print("\tRATING : ${detail.product?.rating}");
-        print("\tTOTAL REVIEW : ${detail.product?.totalReview}");
-        // print("\tQUANTITY : ${detail.quantity}");
-        // print("\tTOTAL PROMO : ${detail.promoPrice}");
-        print("\tTOTAL HARGA : ${detail.totalPrice}");
-        print('\t-');
-      }
-      print('-------------------');
-    }
+    print('pin cocok');
   }
 
   if (dataState is DataFailed) {
     print('ERROR : ${dataState.error?.error}');
   }
+
+  //
+  // final dataState =
+  //     await _controller.tabRequest(email: "pkmki2023.thegsteam@gmail.com");
+  //
+  // if (dataState is DataSuccess) {
+  //   print('DATA SUCCESS');
+  //   List<TransactionHistoryModel> orders =
+  //       dataState.data as List<TransactionHistoryModel>;
+  //
+  //   for (var order in orders) {
+  //     print('ORDER CODE : ${order.orderCode}');
+  //     print("NAMA TOKO : ${order.shopData?.shopName}");
+  //     print("TANGGAL PESAN : ${order.createdAt}");
+  //     print("DETAIL -->");
+  //     List<TransactionDetailHistoryModel> details =
+  //         order.details as List<TransactionDetailHistoryModel>;
+  //     for (var detail in details) {
+  //       print("\tNAMA PRODUCT : ${detail.product?.productName}");
+  //       print("\tHARGA : ${detail.price}");
+  //       print("\tRATING : ${detail.product?.rating}");
+  //       print("\tTOTAL REVIEW : ${detail.product?.totalReview}");
+  //       // print("\tQUANTITY : ${detail.quantity}");
+  //       // print("\tTOTAL PROMO : ${detail.promoPrice}");
+  //       print("\tTOTAL HARGA : ${detail.totalPrice}");
+  //       print('\t-');
+  //     }
+  //     print('-------------------');
+  //   }
+  // }
+  //
+  // if (dataState is DataFailed) {
+  //   print('ERROR : ${dataState.error?.error}');
+  // }
 
   // final dataTrx = await _controller.dataTrx(
   //   email: "pkmki2023.thegsteam@gmail.com",
@@ -704,22 +756,22 @@ void main() async {
   //   print('Comp failed : ${compTrx.error?.error}');
   // }
 
-  final rvwTrx = await _controller.writeReview(
-    orderCode: 'PasarAja-be4e36ef-03ea-456f-aa55-f8dae76155b1',
-    idUser: 25,
-    idShop: 1,
-    idProduct: 3,
-    star: '5',
-    comment: 'lorem ipsum dolor sit amet',
-  );
-
-  if (rvwTrx is DataSuccess) {
-    print('Comp Success');
-  }
-
-  if (rvwTrx is DataFailed) {
-    print('Comp failed : ${rvwTrx.error?.error}');
-  }
+  // final rvwTrx = await _controller.writeReview(
+  //   orderCode: 'PasarAja-be4e36ef-03ea-456f-aa55-f8dae76155b1',
+  //   idUser: 25,
+  //   idShop: 1,
+  //   idProduct: 3,
+  //   star: '5',
+  //   comment: 'lorem ipsum dolor sit amet',
+  // );
+  //
+  // if (rvwTrx is DataSuccess) {
+  //   print('Comp Success');
+  // }
+  //
+  // if (rvwTrx is DataFailed) {
+  //   print('Comp failed : ${rvwTrx.error?.error}');
+  // }
 
   // final rvwTrx = await _controller.updateReview(
   //   idTrx: 86,

@@ -1,7 +1,10 @@
 import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:pasaraja_mobile/config/themes/Typography.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/services/user_services.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
@@ -10,40 +13,55 @@ import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/module/customer/controllers/order_controller.dart';
 import 'package:pasaraja_mobile/module/customer/models/cart_model.dart';
 import 'package:pasaraja_mobile/module/customer/models/create_transaction_model.dart';
+import 'package:pasaraja_mobile/module/customer/views/order/order_pin_verify_page.dart';
 
 class CustomerOrderNewProvider extends ChangeNotifier {
   final _orderController = OrderController();
   TextEditingController takenDateCont = TextEditingController();
 
   int _from = 0;
+
   int get from => _from;
-  set from(int i){
+
+  set from(int i) {
     _from = i;
     notifyListeners();
   }
 
   int _totalProduct = 0;
+
   int get totalProduct => _totalProduct;
 
   int _subTotal = 0;
+
   int get subTotal => _subTotal;
 
   int _totalPromo = 0;
+
   int get totalPromo => _totalPromo;
 
   int _totalPrice = 0;
+
   int get totalPrice => _totalPrice;
 
   String _selectedDate = '';
+
   String get selectedDate => _selectedDate;
 
   CartModel _cartModel = CartModel();
+
   CartModel get cartModel => _cartModel;
 
   set cartModel(CartModel c) {
     _cartModel = c;
     notifyListeners();
   }
+
+  LocalAuthentication? _auth;
+
+  bool _supportState = false;
+
+  bool get supportState => _supportState;
 
   void init() {
     // reset data
@@ -67,6 +85,12 @@ class CustomerOrderNewProvider extends ChangeNotifier {
       }
     }
     _totalPrice = (_subTotal - _totalPromo);
+
+    _auth = LocalAuthentication();
+    _auth!.isDeviceSupported().then((value) {
+      _supportState = value;
+      notifyListeners();
+    });
 
     notifyListeners();
   }
@@ -94,6 +118,106 @@ class CustomerOrderNewProvider extends ChangeNotifier {
     }
   }
 
+  Future<dynamic> _showSheet(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return SizedBox(
+          width: Get.width,
+          height: 200,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 10),
+                Text(
+                  'Pilih Mode Verifikasi',
+                  style: PasarAjaTypography.bold16,
+                ),
+                const SizedBox(height: 20),
+                Visibility(
+                  visible: _supportState,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: Get.width,
+                        child: OutlinedButton(
+                          onPressed: () async {
+                            await verifyBiometrics();
+                          },
+                          child: Text(
+                            'Sidik Jari',
+                            style: PasarAjaTypography.bold14,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: Get.width,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      Get.back();
+                      Get.to(
+                        OrderPinVerifyPage(
+                          from: _from,
+                          selectedDate: _selectedDate,
+                          cartModel: _cartModel,
+                        ),
+                        transition: Transition.rightToLeft,
+                      );
+                    },
+                    child: Text(
+                      'PIN PasarAja',
+                      style: PasarAjaTypography.bold14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> verifyBiometrics() async {
+    try {
+      await getAvailableBiometrics();
+      bool authenticated = await _auth!.authenticate(
+        localizedReason:
+            'Silakan verifikasi sidik jari Anda untuk memastikan identitas Anda.',
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: false,
+        ),
+      );
+
+      if (authenticated) {
+        await _createOrder();
+      }
+    } on PlatformException catch (e) {
+      DMethod.log('exception on biometric : $e');
+    }
+  }
+
+  Future<void> getAvailableBiometrics() async {
+    List<BiometricType> availableBiometrics =
+        await _auth!.getAvailableBiometrics();
+
+    DMethod.log('list of bio : $availableBiometrics');
+  }
+
   Future<void> onCreateOrderButtonPressed() async {
     try {
       final confirm = await PasarAjaMessage.showConfirmation(
@@ -104,8 +228,17 @@ class CustomerOrderNewProvider extends ChangeNotifier {
         return;
       }
 
-      // menampilkan loading
-      PasarAjaMessage.showLoading();
+      // tampilkan bottom sheet dengan get x untuk memilih inputan sidik jari atau pin
+      _showSheet(Get.context!);
+    } catch (ex) {
+      PasarAjaUtils.triggerVibration();
+      PasarAjaMessage.showSnackbarWarning(ex.toString());
+    }
+  }
+
+  Future<void> _createOrder() async {
+    try {
+      PasarAjaMessage.showLoading(loadingColor: Colors.white);
 
       // get id user, email & inisialisasi id shop
       final idUser = await PasarAjaUserService.getUserId();
@@ -125,14 +258,14 @@ class CustomerOrderNewProvider extends ChangeNotifier {
         DMethod.log('notes : ${prod.notes}');
         DMethod.log('-' * 10);
 
-        if(prod.checked){
+        if (prod.checked) {
           // menyimpan data prouduk yang dibeli
           var prodTrx = ProductTransactionModel(
             idProduct: prod.idProduct,
             quantity: prod.quantity,
             promoPrice: PasarAjaUtils.isActivePromo(prod.productData!.promo!)
                 ? (prod.productData!.price! -
-                prod.productData!.promo!.promoPrice!)
+                    prod.productData!.promo!.promoPrice!)
                 : 0,
             notes: prod.notes,
           );
