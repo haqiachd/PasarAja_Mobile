@@ -4,11 +4,12 @@ import 'dart:convert';
 import 'dart:io';
 
 // import 'package:d_method/d_method.dart';
-import 'package:d_method/d_method.dart';
+// import 'package:d_method/d_method.dart';
 import 'package:dio/dio.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/module/merchant/models/operational_model.dart';
+import 'package:pasaraja_mobile/module/merchant/models/order/shop_data_model.dart';
 
 class MyShopController {
   final Dio _dio = Dio();
@@ -135,20 +136,68 @@ class MyShopController {
       }
 
       if(opr is DataFailed){
-        DMethod.log('data failed : ${opr.error!.error}');
+        // DMethod.log('data failed : ${opr.error!.error}');
       }
     }catch(ex){
-      DMethod.log('error : $ex');
+      // DMethod.log('error : $ex');
     }
     return close;
+  }
+
+  Future<DataState<ShopDataModel>> getShopData({
+    required int idShop,
+  }) async {
+    try {
+      // send request
+      final response = await _dio.get(
+        '${_routeUrl}shop/data',
+        queryParameters: {
+          "id_shop": idShop,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.notFound;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+      // print(payload);
+
+      // return response
+      if (response.statusCode == HttpStatus.ok) {
+        return DataSuccess(ShopDataModel.fromJson(payload['data']));
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
   }
 
 }
 
 void main() async {
-   var close = await new MyShopController().getCloseDays(1);
+   var kont = MyShopController();
 
-  for(var c in close){
-    print('${c}');
-  }
+   final dataState = await kont.getShopData(idShop: 1);
+
+   if(dataState is DataSuccess){
+     var toko = dataState.data as ShopDataModel;
+     print('total rating : ${toko.totalRating}');
+   }
+
+   if(dataState is DataFailed){
+     print('error : ${dataState.error?.error}');
+   }
 }

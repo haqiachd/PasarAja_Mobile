@@ -12,6 +12,14 @@ class ShopEntity extends Equatable {
   final String? photo;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final String? ownerName;
+  final int? totalProduct;
+  final int? totalSold;
+  final int? totalPromo;
+  final int? totalTransaction;
+  final int? totalReview;
+  final num? totalRating;
+  final int? totalComplain;
 
   const ShopEntity({
     this.idShop,
@@ -24,6 +32,14 @@ class ShopEntity extends Equatable {
     this.photo,
     this.createdAt,
     this.updatedAt,
+    this.ownerName,
+    this.totalProduct,
+    this.totalSold,
+    this.totalPromo,
+    this.totalTransaction,
+    this.totalRating,
+    this.totalReview,
+    this.totalComplain,
   });
 
   @override
@@ -39,6 +55,14 @@ class ShopEntity extends Equatable {
       photo,
       createdAt,
       updatedAt,
+      ownerName,
+      totalProduct,
+      totalSold,
+      totalPromo,
+      totalTransaction,
+      totalRating,
+      totalReview,
+      totalComplain,
     ];
   }
 }
