@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 
 class OperationalEntity extends Equatable {
-  final String? senin;
-  final String? selasa;
-  final String? rabu;
-  final String? kamis;
-  final String? jumat;
-  final String? sabtu;
-  final String? minggu;
+  final bool? senin;
+  final bool? selasa;
+  final bool? rabu;
+  final bool? kamis;
+  final bool? jumat;
+  final bool? sabtu;
+  final bool? minggu;
 
   const OperationalEntity({
     this.senin,
