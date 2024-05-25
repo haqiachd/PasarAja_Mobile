@@ -8,10 +8,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pasaraja_mobile/core/entities/choose_photo.dart';
 import 'package:pasaraja_mobile/core/entities/promo_entity.dart';
 import 'package:pasaraja_mobile/core/utils/messages.dart';
@@ -19,7 +19,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vibration/vibration.dart';
-import 'package:image/image.dart' as img;
 
 class PasarAjaUtils {
   static final RegExp regexNum = RegExp(r'[0-9]');
@@ -285,5 +284,11 @@ class PasarAjaUtils {
     if (!await launchUrl(Uri.parse(url))) {
       PasarAjaMessage.showSnackbarError('Gagal Membuka Link Update');
     }
+  }
+
+  static Future<double> getAppVersion() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    DMethod.log('from sys : ${packageInfo.version}');
+      return double.tryParse(packageInfo.version.substring(0,3)) ?? 1.0;
   }
 }

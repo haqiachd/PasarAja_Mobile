@@ -18,24 +18,27 @@ import 'package:pasaraja_mobile/module/merchant/views/merchant_main_page.dart';
 import 'package:pasaraja_mobile/redirect_page.dart';
 
 class ServerStatusModel {
-  final String? isUpdate;
   final String? updateLink;
   final String? updateDesc;
   final String? isActive;
+  final double? newVersion;
+  final double? requiredUpdate;
 
   const ServerStatusModel({
-    this.isUpdate,
     this.updateLink,
     this.updateDesc,
     this.isActive,
+    this.newVersion,
+    this.requiredUpdate,
   });
 
   factory ServerStatusModel.fromJson(Map<String, dynamic> json) {
     return ServerStatusModel(
-      isUpdate: json['is_update'] ?? '',
       isActive: json['is_active'] ?? '',
       updateLink: json['update_link'] ?? '',
       updateDesc: json['update_desc'] ?? '',
+      newVersion: double.tryParse(json['new_version']) ?? 1.0,
+      requiredUpdate: double.tryParse(json['required_update']) ?? 1.0,
     );
   }
 }
@@ -90,51 +93,24 @@ class SplashScreenProvider extends ChangeNotifier {
       if (dataState is DataSuccess) {
         final status = dataState.data as ServerStatusModel;
 
+        double yourAppVersion = await PasarAjaUtils.getAppVersion();
+
         switch (status.isActive) {
           case "active":
             {
+              DMethod.log('your app version : $yourAppVersion');
+              DMethod.log('current version : ${status.newVersion}');
+              DMethod.log('required to update version : ${status.requiredUpdate}');
+
               // cek update
-              switch (status.isUpdate) {
-                case "update":
-                  {
-                    _visibleLoading = false;
-                    notifyListeners();
-                    final confirm = await PasarAjaMessage.showConfirmation(
-                      'Update aplikasi telah tersedia. Apakah Anda ingin mengupdate sekarang?\n\nApa yang baru? \n${status.updateDesc}',
-                      actionCancel: 'Nanti Saja',
-                      actionYes: 'Update',
-                    );
-
-                    _visibleLoading = true;
-                    notifyListeners();
-
-                    if (!confirm) {
-                      await _checkLoginStatus();
-                      return;
-                    }
-
-                    // open url
-                    await PasarAjaUtils.launchURL(status.updateLink ?? '');
-                    exit(0);
-                  }
-                case "force_update":
-                  {
-                    _visibleLoading = false;
-                    notifyListeners();
-                    await PasarAjaMessage.showInformation(
-                      'Versi aplikasi Anda sudah kedaluwarsa, harap perbarui aplikasi Anda.\n\nApa yang baru? \n${status.updateDesc}',
-                      actionYes: 'Update',
-                    );
-
-                    // open url
-                    await PasarAjaUtils.launchURL(status.updateLink ?? '');
-                    exit(0);
-                  }
-                default:
-                  {
-                    await _checkLoginStatus();
-                    break;
-                  }
+              if(yourAppVersion < status.newVersion!){
+                if(yourAppVersion <= status.requiredUpdate!){
+                  forceUpdateApp(status);
+                }else{
+                  updateApp(status);
+                }
+              }else{
+                _checkLoginStatus();
               }
               break;
             }
@@ -181,6 +157,41 @@ class SplashScreenProvider extends ChangeNotifier {
     } catch (ex) {
       PasarAjaMessage.showSnackbarError(ex.toString());
     }
+  }
+
+  Future<void> updateApp(ServerStatusModel status) async{
+    _visibleLoading = false;
+    notifyListeners();
+    final confirm = await PasarAjaMessage.showConfirmation(
+      'Update aplikasi telah tersedia. Apakah Anda ingin mengupdate sekarang?\n\nApa yang baru? \n${status.updateDesc}',
+      actionCancel: 'Nanti Saja',
+      actionYes: 'Update',
+    );
+
+    _visibleLoading = true;
+    notifyListeners();
+
+    if (!confirm) {
+      await _checkLoginStatus();
+      return;
+    }
+
+    // open url
+    await PasarAjaUtils.launchURL(status.updateLink ?? '');
+    exit(0);
+  }
+
+  Future<void> forceUpdateApp(ServerStatusModel status) async{
+    _visibleLoading = false;
+    notifyListeners();
+    await PasarAjaMessage.showInformation(
+      'Versi aplikasi Anda sudah kedaluwarsa, harap perbarui aplikasi Anda.\n\nApa yang baru? \n${status.updateDesc}',
+      actionYes: 'Update',
+    );
+
+    // open url
+    await PasarAjaUtils.launchURL(status.updateLink ?? '');
+    exit(0);
   }
 
   Future<void> _checkLoginStatus() async {
