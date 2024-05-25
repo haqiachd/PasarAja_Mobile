@@ -14,10 +14,13 @@ import 'package:pasaraja_mobile/module/customer/controllers/order_controller.dar
 import 'package:pasaraja_mobile/module/customer/models/cart_model.dart';
 import 'package:pasaraja_mobile/module/customer/models/create_transaction_model.dart';
 import 'package:pasaraja_mobile/module/customer/views/order/order_pin_verify_page.dart';
+import 'package:pasaraja_mobile/module/merchant/controllers/myshop_controller.dart';
 
 class CustomerOrderNewProvider extends ChangeNotifier {
   final _orderController = OrderController();
   TextEditingController takenDateCont = TextEditingController();
+
+  List<int> tutup = [];
 
   int _from = 0;
 
@@ -63,14 +66,24 @@ class CustomerOrderNewProvider extends ChangeNotifier {
 
   bool get supportState => _supportState;
 
-  void init() {
+  Future<void> init() async{
     // reset data
-    _selectedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    takenDateCont.text = PasarAjaUtils.formatDateString(_selectedDate);
+    _selectedDate = '';
+    takenDateCont.text = '';
     _totalProduct = 0;
     _subTotal = 0;
     _totalPromo = 0;
     _totalPrice = 0;
+
+    var shopCont = MyShopController();
+
+    PasarAjaMessage.showLoading();
+
+    // Mendapatkan hari toko tutup
+    tutup = await shopCont.getCloseDays(_cartModel.idShop!);
+
+    Get.back(); // Assuming Get is used for navigation and can be accessed globally
+
 
     // hitung rician pembayaran
     for (var prod in cartModel.products!) {
@@ -96,25 +109,39 @@ class CustomerOrderNewProvider extends ChangeNotifier {
   }
 
   Future<void> selectTakenDate(BuildContext context) async {
+
     final DateTime today = DateTime.now();
-    final DateTime oneWeek = today.add(const Duration(days: 7));
+    final DateTime oneWeek = today.add(Duration(days: (7 + tutup.length)));
 
-    // show date picker
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: today,
-      firstDate: today,
-      lastDate: oneWeek,
-      confirmText: "Pilih",
-      cancelText: "Batal",
-    );
+    // Find the next selectable date from today
+    DateTime nextSelectableDate = today;
+    while (tutup.contains(nextSelectableDate.weekday)) {
+      nextSelectableDate = nextSelectableDate.add(const Duration(days: 1));
+    }
 
-    // jika user memilih tanggal
-    if (pickedDate != null) {
-      // Format tanggal sesuai dengan kebutuhan (yyyy-MM-dd)
-      _selectedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-      takenDateCont.text = PasarAjaUtils.formatDateString(_selectedDate);
-      notifyListeners();
+    try {
+      final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: nextSelectableDate,
+        firstDate: today,
+        lastDate: oneWeek,
+        confirmText: "Pilih",
+        cancelText: "Batal",
+        selectableDayPredicate: (DateTime date) {
+          // Disable hari yang tutup DAN BERI WARNA MERAH PADA TANGGAL
+          return !tutup.contains(date.weekday);
+        },
+      );
+
+      // Jika user memilih tanggal
+      if (pickedDate != null) {
+        // Format tanggal sesuai dengan kebutuhan (yyyy-MM-dd)
+        _selectedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+        takenDateCont.text = PasarAjaUtils.formatDateString(_selectedDate);
+        notifyListeners();
+      }
+    } catch (ex) {
+      DMethod.log('exception : $ex');
     }
   }
 
@@ -220,6 +247,15 @@ class CustomerOrderNewProvider extends ChangeNotifier {
 
   Future<void> onCreateOrderButtonPressed() async {
     try {
+      if (_selectedDate.trim().isEmpty) {
+        await PasarAjaMessage.showWarning(
+          'Anda belum memilih tanggal pengambilan!',
+          actionYes: 'OK',
+          barrierDismissible: true,
+        );
+        return;
+      }
+
       final confirm = await PasarAjaMessage.showConfirmation(
         'Apakah Anda Yakin Ingin Membuat Pesanan?',
       );
