@@ -3,7 +3,7 @@ description: "e-commerce pasar wage"
 
 publish_to: 'none' 
 
-version: 1.0.0+1
+version: 1.1.0
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -44,6 +44,7 @@ dependencies:
   d_method: ^0.2.4
   talker_dio_logger: ^4.0.3
   device_info_plus: ^9.1.2
+  package_info_plus: ^5.0.1
   persistent_bottom_nav_bar: any
   qr_code_scanner: ^1.0.1
   pretty_qr_code: ^3.3.0
