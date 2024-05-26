@@ -7,6 +7,8 @@ import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/icons.dart';
 import 'package:pasaraja_mobile/config/themes/typography.dart';
 import 'package:pasaraja_mobile/config/widgets/even_title_model.dart';
+import 'package:pasaraja_mobile/config/widgets/image_network_error.dart';
+import 'package:pasaraja_mobile/config/widgets/image_network_placeholder.dart';
 import 'package:pasaraja_mobile/core/utils/utils.dart';
 import 'package:pasaraja_mobile/config/widgets/event_title.dart';
 import 'package:pasaraja_mobile/module/customer/models/product_model.dart';
@@ -81,6 +83,12 @@ class GoFoodSecond extends StatelessWidget {
                                 imageUrl: data.photo ?? '',
                                 height: 145,
                                 fit: BoxFit.cover,
+                                errorWidget: (context, s, d){
+                                  return const ImageErrorNetwork();
+                                },
+                                placeholder: (context, j){
+                                  return const ImageNetworkPlaceholder();
+                                },
                               ),
                             ),
                           ),
@@ -124,7 +132,7 @@ class GoFoodSecond extends StatelessWidget {
                                 SizedBox(
                                   height: 15,
                                   child: Text(
-                                    '${data.rating}',
+                                    '${(data.rating! > 0.0 ? data.rating : 'N/A' )}   (${data.totalSold}) terjual',
                                     style: PasarAjaTypography.semibold12_5
                                         .copyWith(
                                       color: PasarAjaColor.hex_666867,
