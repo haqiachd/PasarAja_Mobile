@@ -116,6 +116,56 @@ class PasarAjaValidation {
     );
   }
 
+  static ValidationModel shopName(String? name) {
+    if (name == null) {
+      return const ValidationModel(message: 'Name null');
+    }
+    // Nama tidak boleh kosong
+    if (name.isEmpty || name.trim().isEmpty) {
+      return const ValidationModel(
+        message: 'Nama toko tidak boleh kosong',
+      );
+    }
+
+    // Panjang dari nama harus diatara 5-50 karakter
+    if (name.length < 5 || name.length > 50) {
+      return const ValidationModel(
+        message: 'Panjang dari nama harus di antara 5-50 karakter',
+      );
+    }
+
+    // Nama valid
+    return const ValidationModel(
+      status: true,
+      message: 'Data valid',
+    );
+  }
+
+  static ValidationModel shopBenchmark(String? benchmark) {
+    if (benchmark == null) {
+      return const ValidationModel(message: 'Benchmark null');
+    }
+    // Nama tidak boleh kosong
+    if (benchmark.isEmpty || benchmark.trim().isEmpty) {
+      return const ValidationModel(
+        message: 'Titik Lokasi tidak boleh kosong',
+      );
+    }
+
+    // Panjang dari nama harus diatara 5-50 karakter
+    if (benchmark.length < 10 || benchmark.length > 50) {
+      return const ValidationModel(
+        message: 'Panjang dari nama harus di antara 10-50 karakter',
+      );
+    }
+
+    // Nama valid
+    return const ValidationModel(
+      status: true,
+      message: 'Data valid',
+    );
+  }
+
   static ValidationModel descriptionProduct(String? description) {
     if (description == null) {
       return const ValidationModel(message: 'Desc null');

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,13 +10,17 @@ import 'package:pasaraja_mobile/config/themes/colors.dart';
 import 'package:pasaraja_mobile/config/themes/icons.dart';
 import 'package:pasaraja_mobile/config/themes/images.dart';
 import 'package:pasaraja_mobile/config/widgets/app_bar.dart';
+import 'package:pasaraja_mobile/config/widgets/image_network_error.dart';
+import 'package:pasaraja_mobile/config/widgets/image_network_placeholder.dart';
 import 'package:pasaraja_mobile/config/widgets/loading_indicator.dart';
 import 'package:pasaraja_mobile/config/widgets/page_error_message.dart';
 import 'package:pasaraja_mobile/config/widgets/something_wrong.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/outlined_button.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/myshop/myshop_provider.dart';
 import 'package:pasaraja_mobile/module/merchant/views/myshop/edit_operational_page.dart';
+import 'package:pasaraja_mobile/module/merchant/views/myshop/edit_shop_page.dart';
 import 'package:pasaraja_mobile/module/merchant/views/myshop/profile_page.dart';
 import 'package:pasaraja_mobile/module/merchant/widgets/photo_profile.dart';
 import 'package:provider/provider.dart';
@@ -90,11 +95,17 @@ class _MyShopPageState extends State<MyShopPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      height: 170,
-                      width: 450,
+                      height: 200,
+                      width: Get.width,
                       color: Colors.grey[400],
-                      child: Image.asset(
-                        PasarAjaImage.hitler,
+                      child: CachedNetworkImage(
+                        imageUrl: toko.photo! ?? '',
+                        placeholder: (context, str) {
+                          return const ImageNetworkPlaceholder();
+                        },
+                        errorWidget: (context, d, a) {
+                          return const ImageErrorNetwork();
+                        },
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -328,8 +339,7 @@ class _MyShopPageState extends State<MyShopPage> {
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   "Total Produk:",
-                                  style:
-                                      PasarAjaTypography.sfpdAuthDescription,
+                                  style: PasarAjaTypography.sfpdAuthDescription,
                                 ),
                               ),
                               Container(
@@ -500,11 +510,19 @@ class _MyShopPageState extends State<MyShopPage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 30),
-                    // Text(
-                    //   "data",
-                    //   style: PasarAjaTypography.sfpdBoldAuthInput,
-                    // )
+                    const SizedBox(height: 50),
+                    Center(
+                      child: AuthOutlinedButton(
+                        onPressed: () {
+                          Get.to(
+                            EditShopPage(shopData: toko,),
+                            transition: Transition.downToUp,
+                          );
+                        },
+                        title: 'Edit Toko',
+                      ),
+                    ),
+                    const SizedBox(height: 50),
                   ],
                 ),
               );
@@ -517,4 +535,3 @@ class _MyShopPageState extends State<MyShopPage> {
     );
   }
 }
-
