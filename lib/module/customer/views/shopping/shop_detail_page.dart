@@ -91,15 +91,20 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                           style: PasarAjaTypography.sfpdRegular
                               .copyWith(fontSize: 14),
                         ),
-                       const SizedBox(height: 20),
-                       const Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text('Chat'),
-                            SizedBox(width: 10),
-                            Icon(Icons.chat)
-                          ],
+                        const SizedBox(height: 20),
+                        InkWell(
+                          onTap: () {
+                            provider.chat();
+                          },
+                          child: const Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text('Chat'),
+                              SizedBox(width: 10),
+                              Icon(Icons.chat)
+                            ],
+                          ),
                         )
                       ],
                     ),
@@ -107,40 +112,39 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                   const SizedBox(height: 10),
                   const Divider(),
                   const SizedBox(height: 10),
-                  Visibility(
-                    visible: provider.products.length >= 7,
-                    child: GoFoodSecond(
-                      eventTitle: EventTitleModel(
-                        icon: PasarAjaImage.gofood,
-                        title: 'Rekomenasi Produk',
-                        deskripsi: 'Produk yang direkomendasikan oleh Penjual.',
-                        haveButton: false,
-                        btnTitle: 'Lihat semua',
-                        contentSpace: 10,
-                      ),
-                      models: PasarAjaUtils.shuffleList(provider.products),
+                  GoFoodSecond(
+                    eventTitle: EventTitleModel(
+                      icon: PasarAjaImage.gofood,
+                      title: 'Rekomenasi Produk',
+                      deskripsi: 'Produk yang direkomendasikan oleh Penjual.',
+                      haveButton: false,
+                      btnTitle: 'Lihat semua',
+                      contentSpace: 10,
                     ),
+                    models: provider.bestSelling.length >= 10
+                        ? provider.bestSelling.getRange(0, 10).toList()
+                        : provider.bestSelling,
                   ),
                   const SizedBox(height: 20),
-                  Visibility(
-                    visible: provider.products.length >= 7,
-                    child: GoFoodSecond(
-                      eventTitle: EventTitleModel(
-                        icon: PasarAjaImage.gofood,
-                        title: 'Produk Terlaris',
-                        deskripsi:
-                            'Produk yang Paling Laris di Toko ${shopDtl.shop?.shopName ?? 'null'}',
-                        haveButton: false,
-                        btnTitle: 'Lihat semua',
-                        contentSpace: 10,
-                      ),
-                      models: PasarAjaUtils.shuffleList(provider.products),
+                  GoFoodSecond(
+                    eventTitle: EventTitleModel(
+                      icon: PasarAjaImage.gofood,
+                      title: 'Produk Terlaris',
+                      deskripsi:
+                          'Produk yang Paling Laris di Toko ${shopDtl.shop?.shopName ?? 'null'}',
+                      haveButton: false,
+                      btnTitle: 'Lihat semua',
+                      contentSpace: 10,
                     ),
+                    models: provider.bestSelling.length >= 7
+                        ? provider.bestSelling.getRange(0, 7).toList()
+                        : provider.bestSelling,
                   ),
                   const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.only(left: 15, right: 15),
-                    child: Text('Semua Produk', style: PasarAjaTypography.bold16),
+                    child:
+                        Text('Semua Produk', style: PasarAjaTypography.bold16),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 15, right: 15),
