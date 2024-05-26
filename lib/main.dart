@@ -7,6 +7,7 @@ import 'package:pasaraja_mobile/firebase_options.dart';
 import 'package:pasaraja_mobile/core/services/google_signin_services.dart';
 import 'package:pasaraja_mobile/module/auth/providers/providers.dart';
 import 'package:pasaraja_mobile/module/customer/provider/providers.dart';
+import 'package:pasaraja_mobile/module/merchant/providers/myshop/crop_photo_shop_provider.dart';
 import 'package:pasaraja_mobile/module/merchant/providers/providers.dart';
 import 'package:pasaraja_mobile/splash_screen.dart';
 import 'package:pasaraja_mobile/splash_screen_provider.dart';
@@ -76,9 +77,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CustomerShopDetailProvider()),
         ChangeNotifierProvider(create: (context) => CartProvider()),
         ChangeNotifierProvider(create: (context) => CustomerPromoProvider()),
-        ChangeNotifierProvider(create: (contex) => CustomerOrderPinVerifyProvider()),
+        ChangeNotifierProvider(create: (context) => CustomerOrderPinVerifyProvider()),
         // merchant
         ChangeNotifierProvider(create: (context) => MyShopProvider()),
+        ChangeNotifierProvider(create: (context) => CropPhotoShopProvider()),
+        ChangeNotifierProvider(create: (context) => EditShopProvider()),
         ChangeNotifierProvider(create: (context) => EditOperationalProvider()),
         ChangeNotifierProvider(create: (context) => ProfileProvider()),
         ChangeNotifierProvider(create: (context) => UpdatePhotoProfileProvider()),
