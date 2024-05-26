@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:pasaraja_mobile/core/entities/product_entity.dart';
+import 'package:pasaraja_mobile/core/utils/parsing.dart';
 import 'package:pasaraja_mobile/module/customer/models/product_settings_model.dart';
 import 'package:pasaraja_mobile/module/customer/models/promo_model.dart';
 
@@ -57,7 +58,7 @@ class ProductModel extends ProductEntity {
       price: map['price'] ?? 0,
       totalSold: map['total_sold'] ?? 0,
       photo: map['photo'] ?? '',
-      rating: map['rating'] ?? 0.0,
+      rating:  PasarAjaParsing.tryDouble(map['rating']),
       totalReview: map['total_review'] ?? 0,
       promo: map['promo'] != null
           ? PromoModel.fromJson(map['promo'])

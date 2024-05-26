@@ -7,6 +7,7 @@ import 'package:pasaraja_mobile/config/widgets/page_error_message.dart';
 import 'package:pasaraja_mobile/config/widgets/something_wrong.dart';
 import 'package:pasaraja_mobile/core/constants/constants.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
+import 'package:pasaraja_mobile/module/auth/widgets/textfield.dart';
 import 'package:pasaraja_mobile/module/customer/provider/providers.dart';
 import 'package:pasaraja_mobile/module/customer/views/shopping/product_detail_page.dart';
 import 'package:pasaraja_mobile/module/customer/widgets/item_product.dart';
@@ -59,24 +60,52 @@ class _ProductTabState extends State<ProductTab> {
           }
 
           if (provider.state is OnSuccessState) {
-            var products = provider.products;
-            return ListView.builder(
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                var product = products[index];
-                DMethod.log('id prod : ${product.id}');
-                return ItemProduct(
-                  product: product,
-                  onTap: () {
-                    Get.to(
-                      ProductDetailPage(
-                        idShop: product.idShop ?? 0,
-                        idProduct: product.id ?? 0,
-                      ),
-                    );
-                  },
-                );
-              },
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15, right: 15),
+                    child: AuthTextField(
+                      controller: provider.cariProd,
+                      hintText: 'Cari Produk',
+                      onChanged: (value) {
+                        provider.cari();
+                      },
+                      suffixAction: (){
+                        provider.cariProd.text = '';
+                        provider.cari();
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: provider.cariProd.text.trim().isEmpty
+                        ? provider.products.length
+                        : provider.productsFil.length,
+                    itemBuilder: (context, index) {
+                      var product = provider.cariProd.text.trim().isEmpty
+                          ? provider.products[index]
+                          : provider.productsFil[index];
+                      return ItemProduct(
+                        product: product,
+                        onTap: () {
+                          Get.to(
+                            ProductDetailPage(
+                              idShop: product.idShop ?? 0,
+                              idProduct: product.id ?? 0,
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
             );
           }
 

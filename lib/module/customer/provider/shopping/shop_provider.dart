@@ -9,9 +9,21 @@ import 'package:pasaraja_mobile/module/customer/models/shop_data_model.dart';
 class CustomerShopProvider extends ChangeNotifier {
   final _controller = ShoppingController();
 
+  TextEditingController cariShop = TextEditingController();
+
   ProviderState state = const OnInitState();
   List<ShopDataModel> _shops = [];
   List<ShopDataModel> get shops => _shops;
+
+  List<ShopDataModel> _shopsFil = [];
+  List<ShopDataModel> get shopsFil => _shopsFil;
+
+  void cari(){
+    _shopsFil = shops
+        .where((element) => element.shopName?.toLowerCase().contains(cariShop.text.toLowerCase()) ?? false)
+        .toList();
+    notifyListeners();
+  }
 
   set shops(List<ShopDataModel> s) {
     _shops = s;

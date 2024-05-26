@@ -31,6 +31,10 @@ class CustomerShopDetailProvider extends ChangeNotifier {
   List<ProductModel> get bestSelling => _products;
 
   Future<void> fetchData({required int idShop}) async {
+    _products = [];
+    _recommended = [];
+    _bestSelling = [];
+    notifyListeners();
     try {
       state = const OnLoadingState();
       _products = [];

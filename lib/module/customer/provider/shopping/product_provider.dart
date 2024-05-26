@@ -18,6 +18,18 @@ class CustomerProductProvider extends ChangeNotifier{
   List<ProductCategoryModel> _categories = [];
   List<ProductCategoryModel> get categories => _categories;
 
+  TextEditingController cariProd = TextEditingController();
+
+  List<ProductModel> _productsFil = [];
+  List<ProductModel> get productsFil => _productsFil;
+
+  void cari(){
+    _productsFil = products
+        .where((element) => element.productName?.toLowerCase().contains(cariProd.text.toLowerCase()) ?? false)
+        .toList();
+    notifyListeners();
+  }
+
   bool _isLoaded = false;
 
   Future<void> fetchData() async {
