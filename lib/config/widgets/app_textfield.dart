@@ -22,6 +22,8 @@ class AppTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final VoidCallback? suffixAction;
   final bool? showCounter;
+  final String? prefixText;
+
   const AppTextField({
     super.key,
     required this.controller,
@@ -40,6 +42,7 @@ class AppTextField extends StatelessWidget {
     this.suffixIcon,
     this.suffixAction,
     this.showCounter,
+    this.prefixText,
   });
 
   @override
@@ -68,6 +71,19 @@ class AppTextField extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 7.5,
           vertical: 4.7,
+        ),
+        prefix: Visibility(
+          visible: prefixText != null,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 5),
+            child: Text(
+              prefixText ?? '',
+              style: PasarAjaTypography.sfpdBoldAuthInput.copyWith(
+                color: PasarAjaColor.black,
+                fontSize: fontSize,
+              ),
+            ),
+          ),
         ),
         hintText: hintText,
         hintStyle: PasarAjaTypography.sfpdBoldAuthInput.copyWith(
