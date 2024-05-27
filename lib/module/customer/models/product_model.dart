@@ -42,24 +42,24 @@ class ProductModel extends ProductEntity {
 
   factory ProductModel.fromJson(Map<String, dynamic> map) {
     return ProductModel(
-      idProduct: map['id_product'] ?? 0,
-      idShop: map['id_shop'] ?? 0,
-      idCpProd: map['id_cp_prod'] ?? 0,
+      idProduct:  PasarAjaParsing.tryInt(map['id_product']),
+      idShop:  PasarAjaParsing.tryInt(map['id_shop']),
+      idCpProd:  PasarAjaParsing.tryInt(map['id_cp_prod']),
       categoryName: map['category_name'] ?? '',
       productName: map['product_name'] ?? '',
       description: map['description'] ?? '',
-      sellingUnit: map['selling_unit'] ?? 0,
+      sellingUnit:  PasarAjaParsing.tryInt(map['selling_unit']),
       settings: map['settings'] != null
           ? map['settings'] is Map<String, dynamic>
               ? ProductSettingsModel.fromJson(map['settings'])
               : ProductSettingsModel.fromJson(jsonDecode(map['settings']))
           : const ProductSettingsModel(),
       unit: map['unit'] ?? '',
-      price: map['price'] ?? 0,
-      totalSold: map['total_sold'] ?? 0,
+      price:  PasarAjaParsing.tryInt(map['price']),
+      totalSold:  PasarAjaParsing.tryInt(map['total_sold']),
       photo: map['photo'] ?? '',
       rating:  PasarAjaParsing.tryDouble(map['rating']),
-      totalReview: map['total_review'] ?? 0,
+      totalReview: PasarAjaParsing.tryInt(map['total_review']),
       promo: map['promo'] != null
           ? PromoModel.fromJson(map['promo'])
           : const PromoModel(),

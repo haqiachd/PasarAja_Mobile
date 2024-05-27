@@ -2,6 +2,7 @@ import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:pasaraja_mobile/core/services/user_services.dart';
 import 'package:pasaraja_mobile/core/sources/data_state.dart';
 import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/core/utils/messages.dart';
@@ -61,9 +62,11 @@ class DetailProductProvider extends ChangeNotifier {
       state = const OnLoadingState();
       notifyListeners();
 
+      final idShop = await PasarAjaUserService.getShopId();
+
       // call controller
       final dataState = await _controller.detailProductPage(
-        idShop: 1,
+        idShop: idShop,
         idProd: idProduct,
       );
 

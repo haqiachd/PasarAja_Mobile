@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'package:pasaraja_mobile/config/themes/Typography.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:d_method/d_method.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -59,6 +57,7 @@ class SplashScreenController {
       );
 
       final Map<String, dynamic> payload = response.data;
+      DMethod.log(payload.toString());
 
       if (response.statusCode == HttpStatus.ok) {
         return DataSuccess(ServerStatusModel.fromJson(payload['data']));

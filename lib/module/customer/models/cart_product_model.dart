@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:pasaraja_mobile/core/utils/parsing.dart';
 import 'package:pasaraja_mobile/module/customer/models/product_model.dart';
 
 class CartProductModel {
@@ -30,10 +31,10 @@ class CartProductModel {
 
   factory CartProductModel.fromJson(Map<String, dynamic> json) =>
       CartProductModel(
-        idCart: json['id_cart'] ?? 0,
-        idProduct: json["id_product"] ?? 0,
-        quantity: json["quantity"] ?? 0,
-        promoPrice: json["promo_price"] ?? 0,
+        idCart:  PasarAjaParsing.tryInt(json['id_cart']),
+        idProduct:  PasarAjaParsing.tryInt(json["id_product"]),
+        quantity: PasarAjaParsing.tryInt(json["quantity"]),
+        promoPrice:  PasarAjaParsing.tryInt(json["promo_price"]),
         notes: json["notes"] ?? '',
         productData: ProductModel.fromJson(
           json['product_data'],

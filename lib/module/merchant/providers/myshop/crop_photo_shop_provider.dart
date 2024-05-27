@@ -87,7 +87,7 @@ class CropPhotoShopProvider extends ChangeNotifier {
         await PasarAjaMessage.showInformation("Foto Toko Berhasil Diupdate");
         Get.back();
         Get.back();
-        Get.back();
+        // Get.back();
       }
 
       // jika foto gagal diupdate
