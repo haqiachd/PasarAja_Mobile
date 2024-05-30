@@ -9,6 +9,7 @@ import 'package:pasaraja_mobile/core/sources/provider_state.dart';
 import 'package:pasaraja_mobile/module/auth/widgets/textfield.dart';
 import 'package:pasaraja_mobile/module/customer/provider/providers.dart';
 import 'package:pasaraja_mobile/module/customer/views/shopping/shop_detail_page.dart';
+import 'package:pasaraja_mobile/module/customer/views/shopping/shop_search_page.dart';
 import 'package:pasaraja_mobile/module/customer/widgets/item_shop.dart';
 import 'package:provider/provider.dart';
 
@@ -59,47 +60,68 @@ class _ShopTabState extends State<ShopTab> {
           }
 
           if (provider.state is OnSuccessState) {
-            var shops = provider.shops;
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 15),
-                    child: AuthTextField(
-                      controller: provider.cariShop,
-                      hintText: 'Cari Toko',
-                      onChanged: (value) {
-                        provider.cari();
-                      },
-                      suffixAction: (){
-                        provider.cariShop.text = '';
-                        provider.cari();
+            return Scaffold(
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  Get.to(
+                    ShopSearchPage(
+                      shops: provider.shops,
+                    ),
+                  );
+                },
+                child: const Icon(Icons.search),
+              ),
+              body: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    Visibility(
+                      visible: false,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15, right: 15),
+                            child: AuthTextField(
+                              controller: provider.cariShop,
+                              hintText: 'Cari Toko',
+                              onChanged: (value) {
+                                provider.cari();
+                              },
+                              suffixAction: (){
+                                provider.cariShop.text = '';
+                                provider.cari();
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: provider.cariShop.text.trim().isEmpty
+                          ? provider.shops.length
+                          : provider.shopsFil.length,
+                      itemBuilder: (context, index) {
+                        var shop = provider.cariShop.text.trim().isEmpty
+                            ? provider.shops[index]
+                            : provider.shopsFil[index];
+                        return ItemShop(
+                          shop: shop,
+                          onTap: () {
+                            Get.to(ShopDetailPage(shopdId: shop.idShop!));
+                          },
+                        );
                       },
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: provider.cariShop.text.trim().isEmpty
-                        ? provider.shops.length
-                        : provider.shopsFil.length,
-                    itemBuilder: (context, index) {
-                      var shop = provider.cariShop.text.trim().isEmpty
-                          ? provider.shops[index]
-                          : provider.shopsFil[index];
-                      return ItemShop(
-                        shop: shop,
-                        onTap: () {
-                          Get.to(ShopDetailPage(shopdId: shop.idShop!));
-                        },
-                      );
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           }

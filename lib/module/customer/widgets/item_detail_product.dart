@@ -105,29 +105,41 @@ class ItemDetailProduct extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 5),
-        const Divider(),
-        const SizedBox(height: 5),
         (prod.review?.star ?? '0') != '0'
-            ? MyReview(
-                state: state,
-                prod: prod,
-                idTrx: idTrx,
-                onDeleteReview: onDeleteReview,
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Divider(),
+                  const SizedBox(height: 5),
+                  MyReview(
+                    state: state,
+                    prod: prod,
+                    idTrx: idTrx,
+                    onDeleteReview: onDeleteReview,
+                  ),
+                ],
               )
             : EmptyReview(
                 state: state,
                 prod: prod,
                 orderCode: orderCode,
               ),
-        const SizedBox(height: 5),
         const Divider(),
         const SizedBox(height: 5),
         (prod.complain?.reason ?? '') != ''
-            ? MyComplain(
-                state: state,
-                prod: prod,
-                idTrx: idTrx,
-                onDeleteComplain: onDeleteComplain,
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 5),
+                  MyComplain(
+                    state: state,
+                    prod: prod,
+                    idTrx: idTrx,
+                    onDeleteComplain: onDeleteComplain,
+                  ),
+                ],
               )
             : EmptyComplain(
                 state: state,

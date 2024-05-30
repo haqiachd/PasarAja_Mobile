@@ -13,6 +13,7 @@ class PromoController {
   final Dio _dio = Dio();
   final String _pageRoute = '${PasarAjaConstant.baseUrl}/page/merchant/promo';
   final String _apiRoute = '${PasarAjaConstant.baseUrl}/prod/promo';
+  final String _apiRouteHost = '${PasarAjaConstant.baseUrlHost}/prod/promo';
 
   Future<DataState<List<PromoModel>>> fetchActivePromo(
       {required int idShop}) async {
@@ -200,6 +201,61 @@ class PromoController {
       final Map<String, dynamic> payload = response.data;
 
       if (response.statusCode == HttpStatus.created) {
+        try {
+          await createPromoHost(
+            idShop: idShop,
+            idProduct: idProduct,
+            promoPrice: promoPrice,
+            startDate: startDate,
+            endDate: endDate,
+          );
+        } catch (ex) {
+          return const DataSuccess(true);
+        }
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<bool>> createPromoHost({
+    required int? idShop,
+    required int? idProduct,
+    required int? promoPrice,
+    required DateTime? startDate,
+    required DateTime? endDate,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '$_apiRouteHost/create',
+        data: {
+          'id_shop': idShop,
+          'id_product': idProduct,
+          'promo_price': promoPrice,
+          'start_date': startDate?.toIso8601String().substring(0, 10),
+          'end_date': endDate?.toIso8601String().substring(0, 10),
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.created ||
+                status == HttpStatus.badRequest;
+          },
+        ),
+      );
+
+      final Map<String, dynamic> payload = response.data;
+
+      if (response.statusCode == HttpStatus.created) {
         return const DataSuccess(true);
       } else {
         return DataFailed(
@@ -243,6 +299,60 @@ class PromoController {
       final Map<String, dynamic> payload = response.data;
 
       if (response.statusCode == HttpStatus.ok) {
+        try {
+          await updatePromoHost(
+            idShop: idShop,
+            idPromo: idPromo,
+            promoPrice: promoPrice,
+            startDate: startDate,
+            endDate: endDate,
+          );
+        } catch (ex) {
+          return const DataSuccess(true);
+        }
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<bool>> updatePromoHost({
+    required int? idShop,
+    required int? idPromo,
+    required int? promoPrice,
+    required DateTime? startDate,
+    required DateTime? endDate,
+  }) async {
+    try {
+      final response = await _dio.put(
+        '$_apiRouteHost/update',
+        data: {
+          'id_shop': idShop,
+          'id_promo': idPromo,
+          'promo_price': promoPrice,
+          'start_date': startDate?.toIso8601String().substring(0, 10),
+          'end_date': endDate?.toIso8601String().substring(0, 10),
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok || status == HttpStatus.badRequest;
+          },
+        ),
+      );
+
+      final Map<String, dynamic> payload = response.data;
+
+      if (response.statusCode == HttpStatus.ok) {
         return const DataSuccess(true);
       } else {
         return DataFailed(
@@ -266,6 +376,51 @@ class PromoController {
     try {
       final response = await _dio.delete(
         '$_apiRoute/delete',
+        data: {
+          'id_shop': idShop,
+          'id_promo': idPromo,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok || status == HttpStatus.badRequest;
+          },
+        ),
+      );
+
+      final Map<String, dynamic> payload = response.data;
+
+      if (response.statusCode == HttpStatus.ok) {
+        try {
+          await deletePromoHost(
+            idShop: idShop,
+            idPromo: idPromo,
+          );
+        } catch (ex) {
+          return const DataSuccess(true);
+        }
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<bool>> deletePromoHost({
+    required int? idShop,
+    required int? idPromo,
+  }) async {
+    try {
+      final response = await _dio.delete(
+        '$_apiRouteHost/delete',
         data: {
           'id_shop': idShop,
           'id_promo': idPromo,

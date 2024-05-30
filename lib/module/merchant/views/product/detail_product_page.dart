@@ -98,7 +98,7 @@ class _DetailProductPageState extends State<DetailProductPage> {
                       onPressed: () {
                         Get.back();
                       },
-                      icon: const Icon(Icons.back_hand),
+                      icon: const Icon(Icons.arrow_back_ios_outlined),
                       color: Colors.white,
                     ),
                   ),
@@ -377,17 +377,17 @@ class _DetailProductPageState extends State<DetailProductPage> {
               ),
             ),
             Text(
-              "Ketersediaan Stok : ${value.isAvailable}",
+              "Ketersediaan Stok : ${(value.isAvailable) ? 'Iya' : ' Tidak'}",
               style: PasarAjaTypography.sfpdMedium,
             ),
             const SizedBox(height: 3),
             Text(
-              "Direkomendasikan : ${value.isRecommended}",
+              "Direkomendasikan : ${(value.isRecommended) ? 'Iya' : ' Tidak'}",
               style: PasarAjaTypography.sfpdMedium,
             ),
             const SizedBox(height: 3),
             Text(
-              "Ditampilkan : ${value.isShown}",
+              "Ditampilkan : ${(value.isShown) ? 'Iya' : ' Tidak'}",
               textAlign: TextAlign.justify,
               style: PasarAjaTypography.sfpdMedium,
             ),

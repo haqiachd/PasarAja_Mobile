@@ -31,7 +31,7 @@ class _EditOperationalPageState extends State<EditOperationalPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: merchantSubAppbar('Edit Jam Buka'),
+      appBar: merchantSubAppbar('Edit Hari Buka'),
       body: Consumer<EditOperationalProvider>(
         builder: (context, provider, child) {
           if (provider.state is OnLoadingState) {
@@ -97,7 +97,7 @@ class _EditOperationalPageState extends State<EditOperationalPage> {
           onPressed: () {
             provider.onSaveButton();
           },
-          title: 'Save',
+          title: 'Simpan',
           state: ActionButton.stateEnabledButton,
         );
       },

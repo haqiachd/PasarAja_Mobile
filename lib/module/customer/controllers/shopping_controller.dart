@@ -11,14 +11,15 @@ import 'package:pasaraja_mobile/module/customer/models/shop_data_model.dart';
 class ShoppingController {
   final _dio = Dio();
   String _shopData = '${PasarAjaConstant.baseUrl}/shop';
+  String _shopDataHost = '${PasarAjaConstant.baseUrlHost}/shop';
   final String _userProd = '${PasarAjaConstant.baseUrl}/uprod';
 
   Future<DataState<List<ShopDataModel>>> fetchShopData() async {
-    _shopData = _shopData.replaceAll('/m', '');
+    _shopDataHost = _shopDataHost.replaceAll('/m', '');
 
     try {
       final response = await _dio.get(
-        '$_shopData/list',
+        '$_shopDataHost/list',
         options: Options(
           validateStatus: (status) {
             return status == HttpStatus.ok || status == HttpStatus.notFound;

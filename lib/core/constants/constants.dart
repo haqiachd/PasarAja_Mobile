@@ -5,6 +5,7 @@ class PasarAjaConstant {
   static const int initLoading = 3;
   static const String baseUrl = 'http://192.168.6.152:8000/api/m';
   // static const String baseUrl = 'https://pasaraja.tifnganjuk.com/api/m';
+  static const String baseUrlHost = 'https://pasaraja.smarttrashku.com/api/m';
   static const String npeString = 'Exception : NPE';
   static const String unknownError = 'unknown error';
   static const Duration transitionDuration = Duration(milliseconds: 800);

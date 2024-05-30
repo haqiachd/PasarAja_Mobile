@@ -169,12 +169,10 @@ class _PromoPageState extends State<PromoPage> {
                       (e) => ItemProduct(
                         product: e,
                         onTap: () {
-                          // Get.to(
-                          //   DetailProductPage(
-                          //     idProduct: e.id ?? 0,
-                          //   ),
-                          //   transition: Transition.zoom,
-                          // );
+                          Get.to(
+                            ProductDetailPage(
+                                idShop: e.idShop!, idProduct: e.id!),
+                          );
                         },
                       ),
                     )

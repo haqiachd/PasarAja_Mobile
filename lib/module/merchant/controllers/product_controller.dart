@@ -19,6 +19,7 @@ class ProductController {
   final Dio _dio = Dio();
   final String _pageRoute = '${PasarAjaConstant.baseUrl}/page/merchant/prod';
   final String _apiRoute = '${PasarAjaConstant.baseUrl}/prod';
+  final String _apiRouteHost = '${PasarAjaConstant.baseUrlHost}/prod';
 
   Future<DataState<bool>> addProduct({
     required int idShop,
@@ -65,6 +66,84 @@ class ProductController {
 
       // return status
       if (response.statusCode == HttpStatus.created) {
+        try {
+          await addProductFromHost(
+            idShop: idShop,
+            idCategory: idCategory,
+            productName: productName,
+            description: description,
+            unit: unit,
+            sellingUnit: sellingUnit,
+            photo: photo,
+            price: price,
+            settings: settings,
+          );
+        } catch (ex) {
+          return const DataSuccess(true);
+        }
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<bool>> addProductFromHost({
+    required int idShop,
+    required int idCategory,
+    required String productName,
+    required String description,
+    required String unit,
+    required int sellingUnit,
+    required File photo,
+    required int price,
+    required ProductSettingsModel settings,
+  }) async {
+    try {
+      // Create FormData
+      FormData formData = FormData.fromMap({
+        "id_shop": idShop,
+        "id_cp_prod": idCategory,
+        "product_name": productName,
+        "description": description,
+        "unit": unit,
+        "selling_unit": sellingUnit,
+        "photo":
+            await MultipartFile.fromFile(photo.path, filename: 'product.png'),
+        "price": price,
+        "settings": '${settings.toJson()}',
+      });
+
+      DMethod.log('execute : ${_apiRouteHost}/create');
+
+      // send request
+      final response = await _dio.post(
+        "$_apiRouteHost/create",
+        data: formData,
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.created ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.internalServerError ||
+                status == HttpStatus.ok;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+
+      // return status
+      if (response.statusCode == HttpStatus.created) {
         return const DataSuccess(true);
       } else {
         return DataFailed(
@@ -92,10 +171,79 @@ class ProductController {
     required int price,
     required ProductSettingsModel settings,
   }) async {
-
     try {
       final response = await _dio.post(
         '$_apiRoute/update/data',
+        data: {
+          "id_shop": idShop,
+          "id_product": idProduct,
+          "id_cp_prod": idCategory,
+          "product_name": productName,
+          "description": description,
+          "unit": unit,
+          "selling_unit": sellingUnit,
+          "price": price,
+          "settings": '${settings.toJson()}',
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.notFound ||
+                status == HttpStatus.methodNotAllowed;
+          },
+        ),
+      );
+
+      final Map<String, dynamic> payload = response.data;
+      // DMethod.log("payload : ${response.statusCode} -> $payload");
+
+      if (response.statusCode == HttpStatus.ok) {
+        try {
+          await updateProductHost(
+            idShop: idShop,
+            idProduct: idProduct,
+            idCategory: idCategory,
+            productName: productName,
+            description: description,
+            unit: unit,
+            sellingUnit: sellingUnit,
+            price: price,
+            settings: settings,
+          );
+        } catch (ex) {
+          return const DataSuccess(true);
+        }
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<bool>> updateProductHost({
+    required int idShop,
+    required int idProduct,
+    required int idCategory,
+    required String productName,
+    required String description,
+    required String unit,
+    required int sellingUnit,
+    required int price,
+    required ProductSettingsModel settings,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '$_apiRouteHost/update/data',
         data: {
           "id_shop": idShop,
           "id_product": idProduct,
@@ -148,13 +296,73 @@ class ProductController {
         {
           "id_shop": idShop,
           "id_product": idProduct,
-          "photo": await MultipartFile.fromFile(photo.path, filename: 'product.png'),
+          "photo":
+              await MultipartFile.fromFile(photo.path, filename: 'product.png'),
         },
       );
 
       // call api
       final response = await _dio.post(
         '$_apiRoute/update/photo',
+        data: formData,
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok ||
+                status == HttpStatus.badRequest ||
+                status == HttpStatus.notFound;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+
+      // return response
+      if (response.statusCode == HttpStatus.ok) {
+        try {
+          await updatePhotoHost(
+            idShop: idShop,
+            idProduct: idProduct,
+            photo: photo,
+          );
+        } catch (ex) {
+          return const DataSuccess(true);
+        }
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<bool>> updatePhotoHost({
+    required int idShop,
+    required int idProduct,
+    required File photo,
+  }) async {
+    try {
+      // create form
+      FormData formData = FormData.fromMap(
+        {
+          "id_shop": idShop,
+          "id_product": idProduct,
+          "photo":
+              await MultipartFile.fromFile(photo.path, filename: 'product.png'),
+        },
+      );
+
+      // call api
+      final response = await _dio.post(
+        '$_apiRouteHost/update/photo',
         data: formData,
         options: Options(
           validateStatus: (status) {
@@ -345,6 +553,62 @@ class ProductController {
 
       // return status
       if (response.statusCode == HttpStatus.ok) {
+        try {
+          await deleteProductHost(
+            idShop: idShop,
+            idProduct: idProduct,
+          );
+        } catch (ex) {
+          return const DataSuccess(true);
+        }
+        return const DataSuccess(true);
+      } else {
+        return DataFailed(
+          DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            type: DioExceptionType.badResponse,
+            error: payload['message'],
+          ),
+        );
+      }
+    } on DioException catch (ex) {
+      return DataFailed(ex);
+    }
+  }
+
+  Future<DataState<bool>> deleteProductHost({
+    required int idShop,
+    required int idProduct,
+  }) async {
+    try {
+      // request delete
+      final response = await _dio.delete(
+        "$_apiRouteHost/delete",
+        data: {
+          "id_shop": idShop,
+          "id_product": idProduct,
+        },
+        options: Options(
+          validateStatus: (status) {
+            return status == HttpStatus.ok || status == HttpStatus.badRequest;
+          },
+        ),
+      );
+
+      // get payload
+      final Map<String, dynamic> payload = response.data;
+
+      // return status
+      if (response.statusCode == HttpStatus.ok) {
+        try {
+          await deleteProduct(
+            idShop: idShop,
+            idProduct: idProduct,
+          );
+        } catch (ex) {
+          return const DataSuccess(true);
+        }
         return const DataSuccess(true);
       } else {
         return DataFailed(

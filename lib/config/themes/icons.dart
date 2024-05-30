@@ -21,4 +21,6 @@ class PasarAjaIcon {
   static const String dani2 = '${_dir}dani2.jpg';
   static const String dani3 = '${_dir}dani3.jpg';
   static const String dani4 = '${_dir}dani4.jpg';
+  static const String dani9 = '${_dir}dani9.jpg';
+  static const String dani8 = '${_dir}dani8.jpg';
 }

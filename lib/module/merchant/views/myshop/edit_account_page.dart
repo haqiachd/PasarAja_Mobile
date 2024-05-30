@@ -139,7 +139,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
               color: PasarAjaColor.gray1,
             ),
             suffixAction: () {
-              Fluttertoast.showToast(msg: "Email tidak bisa diedit");
+              Fluttertoast.showToast(msg: "Nomor HP tidak bisa diedit");
             },
           ),
         );

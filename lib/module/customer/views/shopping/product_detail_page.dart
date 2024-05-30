@@ -105,7 +105,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       onPressed: () {
                         Get.back();
                       },
-                      icon: const Icon(Icons.back_hand),
+                      icon: const Icon(Icons.arrow_back_ios_new_outlined),
                       color: Colors.white,
                     ),
                   ),
@@ -178,27 +178,36 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 height: 60,
                 width: double.infinity,
                 decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 5, right: 2.5),
+                        padding: const EdgeInsets.only(left: 0, right: 0),
                         child: InkWell(
-                          onTap: () async{
+                          onTap: () async {
                             await provider.chat();
                           },
                           child: Material(
-                            color: PasarAjaColor.green1,
+                            color: PasarAjaColor.white,
                             child: Center(
-                              child: Text(
-                                'Chat',
-                                style: PasarAjaTypography.sfpdSemibold.copyWith(
-                                  color: Colors.white,
-                                  fontSize: 15.5,
-                                ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.chat),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    'Chat',
+                                    style: PasarAjaTypography.sfpdSemibold
+                                        .copyWith(
+                                      color: Colors.black,
+                                      fontSize: 15.5,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -207,20 +216,27 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 2.5, right: 2.5),
+                        padding: const EdgeInsets.only(left: 1.5, right: 1.5),
                         child: InkWell(
                           onTap: () {
                             _showAlertDialog(provider.productDetail.product!);
                           },
                           child: Material(
-                            color: PasarAjaColor.green1,
+                            color: PasarAjaColor.white,
                             child: Center(
-                              child: Text(
-                                'Beli Sekarang',
-                                style: PasarAjaTypography.sfpdSemibold.copyWith(
-                                  color: Colors.white,
-                                  fontSize: 15.5,
-                                ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Beli Sekarang',
+                                    style: PasarAjaTypography.sfpdSemibold
+                                        .copyWith(
+                                      color: Colors.black,
+                                      fontSize: 15.5,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -229,20 +245,29 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 2.5, right: 5),
+                        padding: const EdgeInsets.only(left: 0, right: 0),
                         child: InkWell(
                           onTap: () {
                             _showSheetCart(provider.productDetail.product!);
                           },
                           child: Material(
-                            color: PasarAjaColor.green1,
+                            color: PasarAjaColor.white,
                             child: Center(
-                              child: Text(
-                                '+ Keranjang',
-                                style: PasarAjaTypography.sfpdSemibold.copyWith(
-                                  color: Colors.white,
-                                  fontSize: 15.5,
-                                ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '+ Keranjang',
+                                    style: PasarAjaTypography.sfpdSemibold
+                                        .copyWith(
+                                      color: Colors.black,
+                                      fontSize: 15.5,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  const Icon(Icons.add_shopping_cart)
+                                ],
                               ),
                             ),
                           ),

@@ -185,12 +185,12 @@ class _MyShopPageState extends State<MyShopPage> {
                                 Container(
                                   margin: const EdgeInsets.only(right: 5),
                                   child: Image.asset(
-                                    PasarAjaIcon.dani4,
+                                    PasarAjaIcon.dani9,
                                     width: 23,
                                   ),
                                 ),
                                 Text(
-                                  "Jam Buka",
+                                  "Operasional",
                                   style: PasarAjaTypography.semibold12_5,
                                 ),
                                 const Icon(Icons.arrow_forward_ios_outlined)
@@ -297,7 +297,7 @@ class _MyShopPageState extends State<MyShopPage> {
                               color: PasarAjaColor.white2,
                             ),
                             margin: const EdgeInsets.only(left: 25),
-                            child: Image.asset(PasarAjaIcon.dani4),
+                            child: Image.asset(PasarAjaIcon.dani8),
                           ),
                           Container(
                             margin: const EdgeInsets.only(left: 5),
@@ -335,8 +335,9 @@ class _MyShopPageState extends State<MyShopPage> {
                           ),
                           child: Column(
                             children: [
+                              const SizedBox(height: 5),
                               Align(
-                                alignment: Alignment.centerLeft,
+                                alignment: Alignment.center,
                                 child: Text(
                                   "Total Produk:",
                                   style: PasarAjaTypography.sfpdAuthDescription,
@@ -363,13 +364,14 @@ class _MyShopPageState extends State<MyShopPage> {
                           ),
                           child: Column(
                             children: [
+                              const SizedBox(height: 5),
                               Align(
-                                alignment: Alignment.centerLeft,
+                                alignment: Alignment.center,
                                 child: RichText(
                                   text: TextSpan(
                                     children: [
                                       TextSpan(
-                                        text: "Total Produk\nTerjual:",
+                                        text: "Total Produk Terjual:",
                                         style: PasarAjaTypography
                                             .sfpdAuthDescription,
                                       )
@@ -400,8 +402,9 @@ class _MyShopPageState extends State<MyShopPage> {
                           ),
                           child: Column(
                             children: [
+                              const SizedBox(height: 5),
                               Align(
-                                alignment: Alignment.centerLeft,
+                                alignment: Alignment.center,
                                 child: Text(
                                   "Total Promo:",
                                   style: PasarAjaTypography.sfpdAuthDescription,
@@ -428,8 +431,9 @@ class _MyShopPageState extends State<MyShopPage> {
                           ),
                           child: Column(
                             children: [
+                              const SizedBox(height: 5),
                               Align(
-                                alignment: Alignment.centerLeft,
+                                alignment: Alignment.center,
                                 child: Text(
                                   "Total Transaksi :",
                                   style: PasarAjaTypography.sfpdAuthDescription,
@@ -461,8 +465,9 @@ class _MyShopPageState extends State<MyShopPage> {
                           ),
                           child: Column(
                             children: [
+                              const SizedBox(height: 5),
                               Align(
-                                alignment: Alignment.centerLeft,
+                                alignment: Alignment.center,
                                 child: Text(
                                   "Total Review:",
                                   style: PasarAjaTypography.sfpdAuthDescription,
@@ -491,8 +496,9 @@ class _MyShopPageState extends State<MyShopPage> {
                           ),
                           child: Column(
                             children: [
+                              const SizedBox(height: 5),
                               Align(
-                                alignment: Alignment.centerLeft,
+                                alignment: Alignment.center,
                                 child: Text(
                                   "Total Complain:",
                                   style: PasarAjaTypography.sfpdAuthDescription,
