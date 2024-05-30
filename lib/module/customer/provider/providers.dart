@@ -9,6 +9,8 @@ export 'shopping/product_provider.dart';
 export 'shopping/shop_provider.dart';
 export 'shopping/shop_detail_provider.dart';
 export 'shopping/shopping_provider.dart';
+export 'shopping/product_search_provider.dart';
+export 'shopping/shop_search_provider.dart';
 export 'order/order_cancel_customer_provider.dart';
 export 'order/order_cancel_merchant_provider.dart';
 export 'order/order_confirmed_provider.dart';

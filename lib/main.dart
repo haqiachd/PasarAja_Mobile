@@ -78,6 +78,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CartProvider()),
         ChangeNotifierProvider(create: (context) => CustomerPromoProvider()),
         ChangeNotifierProvider(create: (context) => CustomerOrderPinVerifyProvider()),
+        ChangeNotifierProvider(create: (context) => ProductSearchProvider()),
+        ChangeNotifierProvider(create: (context) => ShopSearchProvider()),
         // merchant
         ChangeNotifierProvider(create: (context) => MyShopProvider()),
         ChangeNotifierProvider(create: (context) => CropPhotoShopProvider()),
